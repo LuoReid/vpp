@@ -33,7 +33,7 @@
               <a-button
                 class="btn-confirm"
                 :class="{ filled: formFilled }"
-                @click="login('ruleForm')"
+                @click="loginsubmit('ruleForm')"
                 type="success"
                 >确认登录</a-button
               >
@@ -68,16 +68,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["setUser"]),
-    login(formName) {
+    ...mapActions(["login"]),
+    loginsubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$api.login(this.ruleForm).then(res => {
+          console.log("user:", this.login, this.ruleForm);
+          this.login(this.ruleForm).then(res => {
             if (res.code === 200) {
-              localStorage.setItem("token", res.token);
-              localStorage.setItem("user", JSON.stringify(res.user));
-              this.setUser(res.user);
-              this.$router.push({ path: this.$route.query.redirect || "/" });
+              this.$router.replace({ path: this.$route.query.redirect || "/" });
             } else {
               return false;
             }

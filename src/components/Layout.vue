@@ -1,6 +1,11 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider v-model="collapsed" :trigger="null" style="min-height:100vh;" collapsible>
+    <a-layout-sider
+      v-model="collapsed"
+      :trigger="null"
+      style="min-height:100vh;"
+      collapsible
+    >
       <div class="logo" />
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
@@ -23,7 +28,14 @@
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="() => (collapsed = !collapsed)"
-        /><span>Welcome,Grace:)</span>
+        /><span
+          >Welcome,<a-tag
+            color="pink"
+            style="cursor: pointer;"
+            @click="toLogout"
+            >{{ user.name }} </a-tag
+          >:)</span
+        >
       </a-layout-header>
       <a-layout-content
         :style="{
@@ -39,11 +51,28 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
       collapsed: false
     };
+  },
+  computed: {
+    ...mapGetters(["user"])
+  },
+  methods: {
+    ...mapActions(["logout"]),
+    toLogout() {
+      this.$confirm({
+        title: "Do you want to logout the site?",
+        onOk: () => {
+          this.logout().then(res =>{
+            this.$router.push({ name: "login" });
+          });
+        }
+      });
+    }
   }
 };
 </script>
