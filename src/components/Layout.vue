@@ -1,6 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
+    <a-layout-sider v-model="collapsed" :trigger="null" style="min-height:100vh;" collapsible>
       <div class="logo" />
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
@@ -18,12 +18,12 @@
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
+      <a-layout-header style="display:flex;background: #fff; padding: 0">
         <a-icon
           class="trigger"
           :type="collapsed ? 'menu-unfold' : 'menu-fold'"
           @click="() => (collapsed = !collapsed)"
-        />
+        /><span>Welcome,Grace:)</span>
       </a-layout-header>
       <a-layout-content
         :style="{
@@ -32,8 +32,7 @@
           background: '#fff',
           minHeight: '280px'
         }"
-      >
-        Content
+        ><router-view />
       </a-layout-content>
     </a-layout>
   </a-layout>
