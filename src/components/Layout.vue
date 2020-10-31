@@ -9,33 +9,33 @@
       <div class="logo" />
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
-          <a-icon type="user" />
-          <span>nav 1</span>
+          <a-icon type="home" />
+          <span>Plant</span>
         </a-menu-item>
         <a-menu-item key="2">
-          <a-icon type="video-camera" />
-          <span>nav 2</span>
+          <a-icon type="thunderbolt" />
+          <span>Electricity</span>
         </a-menu-item>
         <a-menu-item key="3">
-          <a-icon type="upload" />
-          <span>nav 3</span>
+          <a-icon type="usergroup-add" />
+          <span>Customer</span>
+        </a-menu-item>
+        <a-menu-item key="4">
+          <a-icon type="setting" />
+          <span>Account</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header style="display:flex;background: #fff; padding: 0">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="() => (collapsed = !collapsed)"
-        /><span
-          >Welcome,<a-tag
-            color="pink"
-            style="cursor: pointer;"
-            @click="toLogout"
-            >{{ user.name }} </a-tag
-          >:)</span
+      <a-layout-header class="header">
+        <span
+          ><a-icon
+            class="trigger"
+            :type="collapsed ? 'menu-unfold' : 'menu-fold'"
+            @click="() => (collapsed = !collapsed)"
+          />Welcome, {{ user.name }} :)</span
         >
+        <a-button type="link" @click="toLogout">Log out</a-button>
       </a-layout-header>
       <a-layout-content
         :style="{
@@ -67,7 +67,7 @@ export default {
       this.$confirm({
         title: "Do you want to logout the site?",
         onOk: () => {
-          this.logout().then(res =>{
+          this.logout().then(res => {
             this.$router.push({ name: "login" });
           });
         }
@@ -89,10 +89,17 @@ export default {
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
 }
-
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 0;
+}
 #components-layout-demo-custom-trigger .logo {
   height: 32px;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.2) url(./../assets/logo.png) center/auto
+    100%;
   margin: 16px;
 }
 </style>
