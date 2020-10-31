@@ -2,7 +2,9 @@
   <div class="login">
     <div class="login-pancel">
       <div class="login-form">
-        <h2 class="title" title="释空内部管理系统"></h2>
+        <h2 class="title" title="GoSolar">
+          <img src="@/assets/logo.png" />
+        </h2>
         <a-form-model
           :model="ruleForm"
           :rules="rules"
@@ -88,5 +90,70 @@ export default {
   }
 };
 </script>
-<style   scoped>
+<style scoped>
+.login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+.form-pancel {
+  padding: 5px;
+  margin: 0;
+}
+.el-form-item {
+  display: flex;
+  flex-direction: row;
+}
+.login-btn {
+  width: 100%;
+  /* // height: 40px; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.login-btn .btn {
+  text-align: center;
+  width: 100%;
+}
+.login-pancel {
+  display: flex;
+  justify-content: center;
+  width: 30%;
+}
+.login-input {
+  width: 300px;
+  height: 50px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border: none;
+}
+.login-btn .btn-confirm {
+  width: 300px;
+  height: 50px;
+  border-radius: 4px;
+  background: rgba(52, 139, 218, 0.5);
+  border: none;
+}
+.login-btn .btn-confirm.filled {
+  background: rgba(52, 139, 218, 1);
+}
+
+.title img {
+  width: 309px;
+  height: 57px;
+}
+@media screen and (max-width: 1201px) {
+  .login-pancel {
+    width: 100%;
+  }
+}
 </style>
