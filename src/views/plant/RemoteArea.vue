@@ -7,13 +7,13 @@
       </div>
       <div class="box">
         Select by:<a-radio-group
-          v-model="areaType"
+          v-model="search.type"
           :options="optionArea"
           button-style="solid"
         >
         </a-radio-group>
       </div>
-      <div class="box" v-if="areaType == 'state'">
+      <div class="box" v-if="search.type == 'state'">
         State:<a-select
           v-model="search.state"
           :options="allState"
@@ -21,7 +21,7 @@
         >
         </a-select>
       </div>
-      <div class="box" v-if="areaType == 'suburb'">
+      <div class="box" v-if="search.type == 'suburb'">
         <a-input-search
           placeholder="input search text"
           size="large"
@@ -33,7 +33,7 @@
           </a-button>
         </a-input-search>
       </div>
-      <div class="box" v-if="areaType == 'postcode'">
+      <div class="box" v-if="search.type == 'postcode'">
         <a-input-search
           placeholder="input search text"
           size="large"
@@ -45,18 +45,34 @@
           </a-button>
         </a-input-search>
       </div>
-      <div class="box" v-if="areaType == 'asset'">
-        <a-input-search
-          placeholder="Enter Inverter SN (separator ',' like 182kurr,iuwkd908,kdkdf21)"
-          size="large"
-          @search="onSearch"
-          style="width:350px;"
-        >
-          <a-button slot="enterButton">
-            <a-icon type="search" />Search
-          </a-button>
-        </a-input-search> <a-button @click="toUpload">Upload <a-icon type="upload" /></a-button>
-      </div>
+      <template v-if="search.type == 'asset'">
+        <div class="box">
+          <a-input-search
+            placeholder="Enter Inverter SN (separator ',' like 182kurr,iuwkd908,kdkdf21)"
+            size="large"
+            allow-clear
+            @search="onSearchInverter"
+            style="width:550px;"
+          >
+            <a-button slot="enterButton" type="primary">
+              <a-icon type="search" />Search
+            </a-button>
+          </a-input-search>
+          <a-button type="" @click="toUpload"
+            >Upload <a-icon type="upload"
+          /></a-button>
+        </div>
+        <div class="box">
+          <a-tag
+            v-for="(t, idx) in search.inverters"
+            :key="t.id"
+            closable
+            color="blue"
+            @close="remove(idx, t)"
+            >{{ t.device_sn }}</a-tag
+          >
+        </div>
+      </template>
     </div>
     <div class="box">
       <p>
@@ -66,7 +82,7 @@
       <div class="map">need to do</div>
     </div>
     <div class="box">
-      <a-button type="primary" @click="$emit('next',{type:'check'})"
+      <a-button type="primary" @click="saveAndCheck"
         >Save and Check <a-icon type="right-circle"
       /></a-button>
     </div>
@@ -85,15 +101,42 @@ export default {
         { label: "Targeted assets", value: "asset" }
       ],
       areaType: "state",
-      search: {},
+      search: { inverters: [], type: "state" },
       allState: states.map(m => ({ label: m, value: m })),
-
+      inverters: []
     };
   },
   created() {},
   methods: {
     onSearch() {},
-    toUpload(){
+    remove(idx, t) {
+      console.log("remove inverter:", idx, t);
+      this.inverters.splice(idx, 1);
+    },
+    onSearchInverter(val) {
+      //test sn: NTCKA20001,DKE0A10041,XTD7A1904F,NTCIA19047
+      console.log("search:", val);
+      this.$store
+        .dispatch("remote/inverters", { kind: "inverter_sn", inverter_sn: val })
+        .then(res => {
+          this.search.inverters = res.data;
+        });
+    },
+    valid() {
+      const s = this.search;
+      console.log("valid:", s);
+      if (!s.state && !s.suburb && !s.postcode && s.inverters.length < 1) {
+        this.$message.error({ content: "请选择范围" });
+        return false;
+      }
+      return true;
+    },
+    saveAndCheck() {
+      if (this.valid()) {
+        this.$emit("next", { step: 1, obj: this.search });
+      }
+    },
+    toUpload() {
       //todo upload Inverter SN
     }
   }

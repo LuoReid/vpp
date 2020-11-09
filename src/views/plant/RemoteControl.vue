@@ -18,13 +18,7 @@
         <a-step title="Operation feedback" />
       </a-steps>
     </div>
-    <component
-      :is="curcom"
-      :step="curstep"
-      @next="toNext"
-      @toExecute="toExecute"
-      @toFeedback="toFeedback"
-    />
+    <component :is="curcom" :data="form" :step="curstep" @next="toStep" />
   </div>
 </template>
 
@@ -38,14 +32,14 @@ export default {
     return {
       kind: "p",
       curstep: 0,
-      curcom: "RemoteArea"
+      curcom: "RemoteArea",
+      form:{}
     };
   },
   methods: {
     toNext(val) {
       if ((val.type = "check")) {
         this.curstep = 1;
-        this.curcom = "RemoteConfirm";
       } else if (val.type == "execute") {
         this.curstep = 2;
         this.curcom = "RemoteOperation";
@@ -54,7 +48,30 @@ export default {
         this.curcom = "RemoteOperation";
       } else if (val.type == "finish") {
         this.curstep = 0;
+      } else if (val.type == "back") {
+        const nstep = this.curstep + val.step;
+        this.curstep = this.curstep + val.step;
       }
+    },
+    toExcute(val){
+      this.form
+    },
+    toStep({ step, obj }) {
+      console.log("toStep:", step, obj);
+      if (step == 0) {
+        this.curcom = "RemoteArea";
+        this.form = obj
+      } else if (step == 1) {
+        this.curcom = "RemoteConfirm";
+      } else if (step == 2) {
+        this.curcom = "RemoteOperation";
+      } else if (step == 3) {
+        this.curcom = "RemoteOperation";
+      } else {
+        this.curcom = "RemoteArea";
+        step = 0;
+      }
+      this.curstep = step;
     }
   }
 };

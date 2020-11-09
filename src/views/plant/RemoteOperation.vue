@@ -32,6 +32,7 @@
       <a-button type="primary" :disabled="step !== 3" @click="toClose"
         >Close and Back</a-button
       >
+      <a-button @click="$emit('next', { step: 3 })">next</a-button>
     </div>
   </div>
 </template>
