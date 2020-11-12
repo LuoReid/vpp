@@ -133,7 +133,7 @@ export default {
   height: 50px;
   border-radius: 4px;
   background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  color: #333;
   border: none;
 }
 .login-btn .btn-confirm {

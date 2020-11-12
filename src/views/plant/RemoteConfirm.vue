@@ -28,25 +28,23 @@
     </div>
     <div class="box">
       Start time:
-      <a-date-picker 
-      format="YYYY-MM-DD HH:mm:ss"
+      <a-date-picker
         v-model="form.start_time"
         :disabled-date="disabledDate"
-        :show-time="{ defaultValue: moment() }"
+        format="YYYY-MM-DD HH:mm:ss"
       />
     </div>
     <div class="box">
       End time:
       <a-date-picker
-      format="YYYY-MM-DD HH:mm:ss"
         v-model="form.end_time"
         :disabled-date="disabledDate"
-        :show-time="{ defaultValue: moment() }"
+        format="YYYY-MM-DD HH:mm:ss"
       />
     </div>
     <div class="box">
       <a-button @click="$emit('next', { step: 0 })">Back to select</a-button>
-      <a-button type="primary" @click="toExcute"
+      <a-button type="primary" @click="toExcute" :loading="loading"
         >Execute <a-icon type="right-circle"
       /></a-button>
     </div>
@@ -58,10 +56,8 @@ export default {
   props: { data: Object },
   data() {
     return {
-      form: {
-        con: true,
-        capacity: ""
-      }
+      loading: false,
+      form: {}
     };
   },
   methods: {
@@ -80,21 +76,24 @@ export default {
     },
     toExcute() {
       if (this.valid()) {
-
         console.log("form:", this.data, this.form);
-            this.$emit("next", { step: 2, obj: this.form });
+        // this.$emit("next", { step: 2, obj: this.form });
         const data = {
           kind: "remote",
-          ...this.data.inverters,
+          ...this.data,
           ...this.form,
-          data: JSON.stringify(this.form.inverters)
+          data: JSON.stringify(this.data.inverters)
         };
-        // this.$store.dispatch("remote/control", data).then(res => {
-        //   if (res.code == 20) {
-        //     this.$message.success({ content: res.msg });
-        //     this.$emit("next", { step: 2, obj: this.form });
-        //   }
-        // });
+        data.start_time = data.start_time.format('YYYY-MM-DD HH:mm:ss')
+        data.end_time = data.end_time.format('YYYY-MM-DD HH:mm:ss')
+        this.loading = true;
+        this.$store.dispatch("remote/control", data).then(res => {
+          this.loading = false;
+          if (res.code == 200) {
+            this.$message.success({ content: res.msg });
+            this.$emit("next", { step: 2, obj: this.form });
+          }
+        });
       }
     }
   }

@@ -2,7 +2,7 @@
 module.exports = {
   lintOnSave: false,
   devServer: {
-    port: 8080,
+    port: 8085,
     open: true,
     proxy: {
       [process.env.VUE_APP_BASE_API]: {

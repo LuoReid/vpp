@@ -62,6 +62,7 @@ export default {
         this.curcom = "RemoteArea";
         this.form = obj
       } else if (step == 1) {
+        this.form = obj
         this.curcom = "RemoteConfirm";
       } else if (step == 2) {
         this.curcom = "RemoteOperation";
