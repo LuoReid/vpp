@@ -2,9 +2,7 @@
   <div>
     <div class="box">
       <a-radio-group v-model="kind">
-        <a-radio-button value="p">
-          Soloar PV System Control
-        </a-radio-button>
+        <a-radio-button value="p"> Soloar PV System Control </a-radio-button>
         <a-radio-button value="b">
           Battery Charging / Discharging Control
         </a-radio-button>
@@ -33,7 +31,7 @@ export default {
       kind: "p",
       curstep: 0,
       curcom: "RemoteArea",
-      form:{}
+      form: {},
     };
   },
   methods: {
@@ -53,16 +51,16 @@ export default {
         this.curstep = this.curstep + val.step;
       }
     },
-    toExcute(val){
-      this.form
+    toExcute(val) {
+      this.form;
     },
     toStep({ step, obj }) {
       console.log("toStep:", step, obj);
       if (step == 0) {
         this.curcom = "RemoteArea";
-        this.form = obj
+        this.form = obj;
       } else if (step == 1) {
-        this.form = obj
+        this.form = obj;
         this.curcom = "RemoteConfirm";
       } else if (step == 2) {
         this.curcom = "RemoteOperation";
@@ -73,8 +71,8 @@ export default {
         step = 0;
       }
       this.curstep = step;
-    }
-  }
+    },
+  },
 };
 </script>
 

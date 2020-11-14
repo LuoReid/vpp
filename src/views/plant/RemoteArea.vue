@@ -18,6 +18,7 @@
           v-model="search.state"
           :options="allState"
           style="width: 120px"
+          @change="onSearch"
         >
         </a-select>
       </div>
@@ -25,8 +26,9 @@
         <a-input-search
           placeholder="input search text"
           size="large"
+          v-model="search.suburb"
           @search="onSearch"
-          style="width:350px;"
+          style="width: 350px"
         >
           <a-button slot="enterButton">
             <a-icon type="search" />Search
@@ -37,8 +39,9 @@
         <a-input-search
           placeholder="input search text"
           size="large"
+          v-model="search.postcode"
           @search="onSearch"
-          style="width:350px;"
+          style="width: 350px"
         >
           <a-button slot="enterButton">
             <a-icon type="search" />Search
@@ -51,8 +54,9 @@
             placeholder="Enter Inverter SN (separator ',' like 182kurr,iuwkd908,kdkdf21)"
             size="large"
             allow-clear
+            v-model="search.asset"
             @search="onSearchInverter"
-            style="width:550px;"
+            style="width: 550px"
           >
             <a-button slot="enterButton" type="primary">
               <a-icon type="search" />Search
@@ -79,7 +83,7 @@
         Map Select: Select and add one or more Suburb you would like to check
         plants.
       </p>
-      <div class="map">need to do</div>
+      <div class="map"><Map :places="plants"></Map></div>
     </div>
     <div class="box">
       <a-button type="primary" @click="saveAndCheck"
@@ -91,24 +95,41 @@
 
 <script>
 import { states } from "@/util";
+import Map from "./Map";
 export default {
+  components: { Map },
   data() {
     return {
       optionArea: [
         { label: "State", value: "state" },
         { label: "Suburb", value: "suburb" },
         { label: "Postcode", value: "postcode" },
-        { label: "Targeted assets", value: "asset" }
+        { label: "Targeted assets", value: "asset" },
       ],
       areaType: "state",
       search: { inverters: [], type: "state" },
-      allState: states.map(m => ({ label: m, value: m })),
-      inverters: []
+      allState: states.map((m) => ({ label: m, value: m })),
+      inverters: [],
+      plants: [],
     };
   },
   created() {},
   methods: {
-    onSearch() {},
+    onSearch() {
+      const param = {};
+      if (this.search.state) {
+        param.state = this.search.state;
+      }
+      if (this.search.suburb) {
+        param.suburb = this.search.suburb;
+      }
+      if (this.search.postcode) {
+        param.postcode = this.search.postcode;
+      }
+      this.$store.dispatch("remote/plants", param).then((res) => {
+        this.plants = res.data;
+      });
+    },
     remove(idx, t) {
       console.log("remove inverter:", idx, t);
       this.inverters.splice(idx, 1);
@@ -118,7 +139,7 @@ export default {
       console.log("search:", val);
       this.$store
         .dispatch("remote/inverters", { kind: "inverter_sn", inverter_sn: val })
-        .then(res => {
+        .then((res) => {
           this.search.inverters = res.data;
         });
     },
@@ -138,8 +159,8 @@ export default {
     },
     toUpload() {
       //todo upload Inverter SN
-    }
-  }
+    },
+  },
 };
 </script>
 

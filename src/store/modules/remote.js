@@ -14,6 +14,9 @@ export default {
     },
     control({ }, param) {
       return remote.control(param)
+    },
+    plants({ }, param) {
+      return remote.plants(param)
     }
   }
 }

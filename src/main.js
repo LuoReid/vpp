@@ -17,6 +17,9 @@ Vue.use(Antd);
 
 Vue.prototype.$api = api
 
+// import * as VueGoogleMaps from 'vue2-google-maps'
+// Vue.use(VueGoogleMaps,{load:{key:'AIzaSyBTAHJaBcMaESWwHLgdqGSJt4JCBM2WA6o',libraries:'places'}})
+
 new Vue({
   router,
   store,
