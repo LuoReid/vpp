@@ -16,7 +16,14 @@
         <a-step title="Operation feedback" />
       </a-steps>
     </div>
-    <component :is="curcom" :data="form" :step="curstep" @next="toStep" />
+    <component
+      :is="curcom"
+      :data="form"
+      :plants="plants"
+      :step="curstep"
+      @next="toStep"
+      @toFindPlants="getPlants"
+    />
   </div>
 </template>
 
@@ -32,9 +39,16 @@ export default {
       curstep: 0,
       curcom: "RemoteArea",
       form: {},
+      plants: [],
     };
   },
   methods: {
+    getPlants(param) {
+      console.log("param:", param);
+      this.$store.dispatch("remote/plants", param).then((res) => {
+        this.plants = res.data;
+      });
+    },
     toNext(val) {
       if ((val.type = "check")) {
         this.curstep = 1;
@@ -63,6 +77,7 @@ export default {
         this.form = obj;
         this.curcom = "RemoteConfirm";
       } else if (step == 2) {
+        this.plants = obj.ps
         this.curcom = "RemoteOperation";
       } else if (step == 3) {
         this.curcom = "RemoteOperation";

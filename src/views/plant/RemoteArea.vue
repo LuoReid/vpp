@@ -10,6 +10,7 @@
           v-model="search.type"
           :options="optionArea"
           button-style="solid"
+          @change="toClearSearch"
         >
         </a-radio-group>
       </div>
@@ -18,6 +19,7 @@
           v-model="search.state"
           :options="allState"
           style="width: 120px"
+          allow-clear
           @change="onSearch"
         >
         </a-select>
@@ -28,6 +30,7 @@
           size="large"
           v-model="search.suburb"
           @search="onSearch"
+          allow-clear
           style="width: 350px"
         >
           <a-button slot="enterButton">
@@ -41,6 +44,7 @@
           size="large"
           v-model="search.postcode"
           @search="onSearch"
+          allow-clear
           style="width: 350px"
         >
           <a-button slot="enterButton">
@@ -79,6 +83,7 @@
       </template>
     </div>
     <div class="box">
+      <p>Plants:{{ plants.length }}</p>
       <p>
         Map Select: Select and add one or more Suburb you would like to check
         plants.
@@ -97,6 +102,7 @@
 import { states } from "@/util";
 import Map from "./Map";
 export default {
+  props: { plants: Array },
   components: { Map },
   data() {
     return {
@@ -110,11 +116,14 @@ export default {
       search: { inverters: [], type: "state" },
       allState: states.map((m) => ({ label: m, value: m })),
       inverters: [],
-      plants: [],
+      // plants: [],
     };
   },
   created() {},
   methods: {
+    toClearSearch() {
+      this.search = { type: this.search.type };
+    },
     onSearch() {
       const param = {};
       if (this.search.state) {
@@ -126,9 +135,7 @@ export default {
       if (this.search.postcode) {
         param.postcode = this.search.postcode;
       }
-      this.$store.dispatch("remote/plants", param).then((res) => {
-        this.plants = res.data;
-      });
+      this.$emit("toFindPlants", param);
     },
     remove(idx, t) {
       console.log("remove inverter:", idx, t);

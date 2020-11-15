@@ -2,12 +2,12 @@
   <div>
     <div class="box" v-if="step === 2">
       <div class="spin-content">
-        <a-spin style="margin-right:15px;"></a-spin>Processing
+        <a-spin style="margin-right: 15px"></a-spin>Processing
       </div>
     </div>
     <template v-if="step === 3">
       <div class="box">
-        <a-icon type="like" style="color:green;font-size:32px;" /> All
+        <a-icon type="like" style="color: green; font-size: 32px" /> All
         Successfully Done!
       </div>
       <div class="box">
@@ -15,7 +15,7 @@
         the implementation period as estimated.
       </div>
       <div class="box">
-        <span style="margin-right:10px;"
+        <span style="margin-right: 10px"
           ><img width="20" src="../../assets/p1.png" /> Offline and
           Linked:xxx</span
         >
@@ -26,7 +26,7 @@
       </div>
     </template>
     <div class="box">
-      <div class="map">need to do</div>
+      <div class="map"><Map :places="plants"></Map></div>
     </div>
     <div class="box">
       <a-button type="primary" :disabled="step !== 3" @click="toClose"
@@ -38,21 +38,23 @@
 </template>
 
 <script>
+import Map from "./Map";
 export default {
-  props: { step: [Number] },
+  components: { Map },
+  props: { step: [Number] ,plants:Array},
   data() {
     return {
-      timer: null
+      timer: null,
     };
   },
   watch: {
-    step: function(newVal) {
+    step: function (newVal) {
       if (newVal && newVal == 2) {
         this.timer = setTimeout(() => {
           this.$emit("toFeedback");
         });
       }
-    }
+    },
   },
   created() {
     this.timer = setTimeout(() => {
@@ -62,8 +64,8 @@ export default {
   methods: {
     toClose() {
       this.$emit("next", { type: "finish" });
-    }
-  }
+    },
+  },
 };
 </script>
 
