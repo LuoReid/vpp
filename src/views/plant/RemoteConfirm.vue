@@ -88,6 +88,7 @@ export default {
               user_id: m.user_id,
             }))
           ),
+          kind:'remote'
         };
         data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
         data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
@@ -102,11 +103,14 @@ export default {
           if (res.code == 200) {
             this.$message.success({ content: res.msg });
             this.$emit("next", {
-              step: 2,
+              step: 3,
               obj: { ...this.form, ps: res.data },
             });
+          }else{
+            this.$emit('next',{step:1})
           }
         });
+        this.$emit('next',{step:2})
       }
     },
   },

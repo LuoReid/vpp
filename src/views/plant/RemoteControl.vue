@@ -20,7 +20,7 @@
       :is="curcom"
       :data="form"
       :plants="plants"
-      :step="$route.query.step|0"
+      :step="$route.query.step||0"
       @next="toStep"
       @toFindPlants="getPlants"
       @setPlants="setPlants"
