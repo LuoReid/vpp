@@ -29,7 +29,7 @@
       <a-table-column data-index="end_time" title="End time" />
       <a-table-column data-index="action1" title="Action">
         <template slot-scope="text, record">
-          <a-button type="link">Task report</a-button>
+          <a-button type="link" @click="$router.push({name:'plantReportDetail',params:{id:record.id}})">Task report</a-button>
         </template>
       </a-table-column>
     </a-table>
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { RS,allRS } from "@/util";
+import { RS, allRS } from "@/util";
 export default {
   filters: { remoteStatus: RS },
   data() {
@@ -49,7 +49,7 @@ export default {
     };
   },
   created() {
-    console.log('rs:',allRS,RS)
+    // console.log('rs:',allRS,RS)
     this.fetchReports();
   },
   methods: {

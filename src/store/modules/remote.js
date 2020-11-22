@@ -20,6 +20,7 @@ export default {
     },
     reports({ }, param) {
       return remote.reports(param)
-    }
+    },
+    reportById: ({ }, id) => remote.reportById(id)
   }
 }

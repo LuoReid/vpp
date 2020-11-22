@@ -15,6 +15,7 @@ const createRouter = [
           { path: 'remote', name: 'plantControl', component: load('plant/RemoteControl') },
           { path: 'trading', name: 'plantTrading', component: load('plant/PowerTrading') },
           { path: 'report', name: 'plantReport', component: load('plant/Report') },
+          { path: 'report/:id', name: 'plantReportDetail',props:true, component: load('plant/ReportDetail') },
         ]
       }
     ]
