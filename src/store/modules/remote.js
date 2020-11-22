@@ -17,6 +17,9 @@ export default {
     },
     plants({ }, param) {
       return remote.plants(param)
+    },
+    reports({ }, param) {
+      return remote.reports(param)
     }
   }
 }

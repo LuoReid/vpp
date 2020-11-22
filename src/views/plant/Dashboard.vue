@@ -84,7 +84,7 @@ export default {
     handleTableChange(pagination, filters, sorter) {
       console.log('change:',pagination,filters,sorter);
       const pager = { page:pagination.current,limit:pagination.pageSize };
-      pager.current = pagination.current;
+      // pager.current = pagination.current;
       this.pagination = pager;
       this.fetchPlants(pager);
       // this.fetch({

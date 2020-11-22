@@ -9,6 +9,7 @@ const remote = {
   },
   plants: param => {
     return request.get('/web/plants', { params: param })
-  }
+  },
+  reports: param => request.get(`/web/remotes`, { params: param })
 }
 export default remote
