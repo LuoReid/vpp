@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="box">
-      <a-radio-group v-model="kind">
+      <a-radio-group v-model="kind" button-style="solid">
         <a-radio-button value="p"> Soloar PV System Control </a-radio-button>
         <a-radio-button value="b">
           Battery Charging / Discharging Control
@@ -9,7 +9,7 @@
       </a-radio-group>
     </div>
     <div class="box">
-      <a-steps :current="curstep">
+      <a-steps :current="$route.query.step || 0">
         <a-step title="Select area" />
         <a-step title="Confirm area" />
         <a-step title="Operation setting" />
@@ -20,13 +20,13 @@
       :is="curcom"
       :data="form"
       :plants="plants"
-      :step="curstep"
+      :step="$route.query.step|0"
       @next="toStep"
       @toFindPlants="getPlants"
+      @setPlants="setPlants"
     />
   </div>
 </template>
-
 <script>
 import RemoteArea from "./RemoteArea";
 import RemoteConfirm from "./RemoteConfirm";
@@ -35,35 +35,36 @@ export default {
   components: { RemoteArea, RemoteConfirm, RemoteOperation },
   data() {
     return {
-      kind: "p",
+      // kind: "p",
       curstep: 0,
       curcom: "RemoteArea",
       form: {},
       plants: [],
     };
   },
+  computed: {
+    kind: {
+      get() {
+        return this.$route.query.kind || "p";
+      },
+      set(v) {
+        this.$router.replace({
+          name: this.$route.name,
+          query: { ...this.$route.query, kind: v },
+        });
+      },
+    },
+  },
   methods: {
+    setPlants(d) {
+      console.log("plants:", d);
+      this.plants = d
+    },
     getPlants(param) {
       console.log("param:", param);
       this.$store.dispatch("remote/plants", param).then((res) => {
         this.plants = res.data;
       });
-    },
-    toNext(val) {
-      if ((val.type = "check")) {
-        this.curstep = 1;
-      } else if (val.type == "execute") {
-        this.curstep = 2;
-        this.curcom = "RemoteOperation";
-      } else if (val.type == "feedback") {
-        this.curstep = 3;
-        this.curcom = "RemoteOperation";
-      } else if (val.type == "finish") {
-        this.curstep = 0;
-      } else if (val.type == "back") {
-        const nstep = this.curstep + val.step;
-        this.curstep = this.curstep + val.step;
-      }
     },
     toExcute(val) {
       this.form;
@@ -77,7 +78,7 @@ export default {
         this.form = obj;
         this.curcom = "RemoteConfirm";
       } else if (step == 2) {
-        this.plants = obj.ps
+        // this.plants = obj.ps;
         this.curcom = "RemoteOperation";
       } else if (step == 3) {
         this.curcom = "RemoteOperation";
@@ -85,7 +86,8 @@ export default {
         this.curcom = "RemoteArea";
         step = 0;
       }
-      this.curstep = step;
+      // this.curstep = step;
+      this.$router.push({ name: this.$route.name, query: { step: step } });
     },
   },
 };

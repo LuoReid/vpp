@@ -11,7 +11,7 @@
     <h4>Pant management</h4>
     <div class="filter">
       Filter Satate:
-      <a-select default-value="" style="width: 120px">
+      <a-select default-value="" v-model="search.state" style="width: 120px" allow-clear>
         <a-select-option value=""> All areas </a-select-option>
         <a-select-option value="sa"> SA-South Australia </a-select-option>
         <a-select-option value="wa" disabled>
@@ -19,21 +19,22 @@
         </a-select-option>
         <a-select-option value="vic"> VIC-Victoria </a-select-option>
       </a-select>
-      Postcode/Suburb <a-input style="width: 100px"></a-input> Plants status:
-      <a-select default-value="" style="width: 120px">
+      Suburb <a-input style="width: 100px" v-model="search.installation_suburb" allow-clear></a-input>
+      Postcode<a-input style="width: 100px" v-model="search.installation_postcode" allow-clear></a-input> Plants status:
+      <a-select default-value="" style="width: 120px" v-model="search.status" allow-clears>
         <a-select-option value=""> All Plants </a-select-option>
-        <a-select-option value="sa"> Online </a-select-option>
-        <a-select-option value="wa" disabled> Notconnected </a-select-option>
-        <a-select-option value="vic"> Unknown </a-select-option>
+        <a-select-option value="online"> Online </a-select-option>
+        <a-select-option value="offline" > Notconnected </a-select-option>
+        <a-select-option value="unknown"> Unknown </a-select-option>
       </a-select>
-      Batteries status:<a-select style="width:120px;"
+      Batteries status:<a-select style="width:120px;" v-model="search.state1" allow-clear
         ><a-select-option value=""> All Batteries </a-select-option>
         <a-select-option value="sa"> Charging </a-select-option>
         <a-select-option value="wa" disabled> Discharging </a-select-option>
         <a-select-option value="vic"> Unclear </a-select-option>
       </a-select>
       <a-button type="link">More filters</a-button>
-      <a-button type="primary" icon="search">Search</a-button>
+      <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="page" :loading="loading" @change="handleTableChange">
        <a-table-column data-index="id" title="Plant ID"/>
@@ -62,6 +63,7 @@ export default {
       plants:[],
       page:{},
       loading:false,
+      search:{},
       data: [
         { text: "PV production", value: 359, unit: "MW" },
         { text: "Export to grid", value: 5.3, unit: "MW" },
@@ -84,6 +86,7 @@ export default {
       const pager = { page:pagination.current,limit:pagination.pageSize };
       pager.current = pagination.current;
       this.pagination = pager;
+      this.fetchPlants(pager);
       // this.fetch({
       //   results: pagination.pageSize,
       //   page: pagination.current,
@@ -95,6 +98,18 @@ export default {
     fetchPlants(param={}){
       param.kind='page'
       this.loading = true
+      if (this.search.state){
+        param.state = this.search.state
+      }
+      if (this.search.status){
+        param.status = this.search.status
+      }
+      if (this.search.installation_suburb){
+        param.installation_suburb = this.search.installation_suburb
+      }
+      if (this.search.installation_postcode){
+        param.installation_postcode = this.search.installation_postcode
+      }
       this.$store.dispatch('remote/plants',param).then(res => {
         this.loading = false
         this.plants = res.data

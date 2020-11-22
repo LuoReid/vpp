@@ -3,19 +3,10 @@
     <div class="box">
       <div class="box">
         Intructions: You can select area by State / by State / by Suburb / by
-        PostCode or by Targeted asset list.
+        PostCode / by NMI or by Inverter SN.
       </div>
       <div class="box">
-        Select by:<a-radio-group
-          v-model="search.type"
-          :options="optionArea"
-          button-style="solid"
-          @change="toClearSearch"
-        >
-        </a-radio-group>
-      </div>
-      <div class="box" v-if="search.type == 'state'">
-        State:<a-select
+        Select by State:<a-select
           v-model="search.state"
           :options="allState"
           style="width: 120px"
@@ -24,63 +15,60 @@
         >
         </a-select>
       </div>
-      <div class="box" v-if="search.type == 'suburb'">
+      <div class="box">
+        and by:
+        <a-select
+          v-model="search.key"
+          :options="optionArea"
+          style="width: 120px"
+          allow-clear
+        >
+        </a-select>
         <a-input-search
-          placeholder="input search text"
-          size="large"
-          v-model="search.suburb"
+          :placeholder="`input ${
+            optionArea.find((f) => f.value == search.key).label
+          }(separated by ,)`"
+          v-model="search.value"
           @search="onSearch"
           allow-clear
           style="width: 350px"
         >
-          <a-button slot="enterButton">
+          <a-button slot="enterButton" type="primary">
             <a-icon type="search" />Search
           </a-button>
         </a-input-search>
+        <a-popover trigger="hover">
+          <template slot="content">
+            Plase use the standard template to search plants
+            <a
+              href="/static/QueryPlantsTemplate.csv"
+              download="QueryPlantsTemplate.csv"
+              >Search template file</a
+            >
+          </template>
+          <a-upload
+            :action="findPlants"
+            :headers="header"
+            :data="search"
+            :showUploadList="false"
+            @change="handleChange"
+          >
+            <a-button type="" @click="toUpload"
+              >Upload <a-icon type="upload"
+            /></a-button>
+          </a-upload>
+        </a-popover>
       </div>
-      <div class="box" v-if="search.type == 'postcode'">
-        <a-input-search
-          placeholder="input search text"
-          size="large"
-          v-model="search.postcode"
-          @search="onSearch"
-          allow-clear
-          style="width: 350px"
+      <div class="box" v-if="false">
+        <a-tag
+          v-for="(t, idx) in plants"
+          :key="t.id"
+          closable
+          color="blue"
+          @close="remove(idx, t)"
+          >{{ t.id }}</a-tag
         >
-          <a-button slot="enterButton">
-            <a-icon type="search" />Search
-          </a-button>
-        </a-input-search>
       </div>
-      <template v-if="search.type == 'asset'">
-        <div class="box">
-          <a-input-search
-            placeholder="Enter Inverter SN (separator ',' like 182kurr,iuwkd908,kdkdf21)"
-            size="large"
-            allow-clear
-            v-model="search.asset"
-            @search="onSearchInverter"
-            style="width: 550px"
-          >
-            <a-button slot="enterButton" type="primary">
-              <a-icon type="search" />Search
-            </a-button>
-          </a-input-search>
-          <a-button type="" @click="toUpload"
-            >Upload <a-icon type="upload"
-          /></a-button>
-        </div>
-        <div class="box">
-          <a-tag
-            v-for="(t, idx) in search.inverters"
-            :key="t.id"
-            closable
-            color="blue"
-            @close="remove(idx, t)"
-            >{{ t.device_sn }}</a-tag
-          >
-        </div>
-      </template>
     </div>
     <div class="box">
       <p>Plants:{{ plants.length }}</p>
@@ -107,14 +95,15 @@ export default {
   data() {
     return {
       optionArea: [
-        { label: "State", value: "state" },
         { label: "Suburb", value: "suburb" },
         { label: "Postcode", value: "postcode" },
         { label: "NMI", value: "nmi" },
         { label: "Inverter SN", value: "invertersn" },
       ],
-      areaType: "state",
-      search: { inverters: [], type: "state" },
+      areaType: "suburb",
+      search: { state: "SA", key: "suburb", kind: "get_plants" },
+      findPlants: `${process.env.VUE_APP_BASE_URL}/web/plants_query`,
+      header: { Authorization: localStorage.getItem("token") },
       allState: states.map((m) => ({ label: m, value: m })),
       inverters: [],
       // plants: [],
@@ -122,21 +111,14 @@ export default {
   },
   created() {},
   methods: {
-    toClearSearch() {
-      this.search = { type: this.search.type };
+    handleChange({ file,event }) {
+      console.log("log change:", file,event);
+      if (file.status == "done" && file.response && file.response.code == 200) {
+        this.$emit("setPlants", file.response.data);
+      }
     },
     onSearch() {
-      const param = {};
-      if (this.search.state) {
-        param.state = this.search.state;
-      }
-      if (this.search.suburb) {
-        param.suburb = this.search.suburb;
-      }
-      if (this.search.postcode) {
-        param.postcode = this.search.postcode;
-      }
-      this.$emit("toFindPlants", param);
+      this.$emit("toFindPlants", { ...this.search });
     },
     remove(idx, t) {
       console.log("remove inverter:", idx, t);
@@ -144,6 +126,10 @@ export default {
     },
     onSearchInverter(val) {
       //test sn: NTCKA20001,DKE0A10041,XTD7A1904F,NTCIA19047
+      //test suburb: Truro,Modbury,Glenelg South
+      //test postcode: 5045,5074,5049
+      //test nmi: 20010127568,20013482537,20011475353
+      //test inverter: CHAE9143E2,JZD29390B6,NTCB91707F
       console.log("search:", val);
       this.$store
         .dispatch("remote/inverters", { kind: "inverter_sn", inverter_sn: val })
@@ -154,7 +140,7 @@ export default {
     valid() {
       const s = this.search;
       console.log("valid:", s);
-      if (!s.state && !s.suburb && !s.postcode && s.inverters.length < 1) {
+      if (!s.state || (!s.value && this.plants.length < 1)) {
         this.$message.error({ content: "请选择范围" });
         return false;
       }

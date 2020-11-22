@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       Operation Selection:
-      <a-radio-group v-model="form.action">
+      <a-radio-group v-model="form.action" button-style="solid">
         <a-radio-button value="on"> Switch on - Connect </a-radio-button>
         <a-radio-button value="off"> Switch off - Disconnect </a-radio-button>
         <a-radio-button value="limit"> Zero export </a-radio-button>
