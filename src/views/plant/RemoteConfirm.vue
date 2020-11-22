@@ -88,7 +88,7 @@ export default {
               user_id: m.user_id,
             }))
           ),
-          kind:'remote'
+          kind: "remote",
         };
         data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
         data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
@@ -96,21 +96,7 @@ export default {
           this.$message.error({ content: "所选电站丢失，请重新选择" });
           return;
         }
-        this.loading = true;
-
-        this.$store.dispatch("remote/control", data).then((res) => {
-          this.loading = false;
-          if (res.code == 200) {
-            this.$message.success({ content: res.msg });
-            this.$emit("next", {
-              step: 3,
-              obj: { ...this.form, ps: res.data },
-            });
-          }else{
-            this.$emit('next',{step:1})
-          }
-        });
-        this.$emit('next',{step:2})
+        this.$emit("next", { step: 2, remote: data });
       }
     },
   },
