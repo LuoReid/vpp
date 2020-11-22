@@ -9,30 +9,61 @@
       </a-radio-group>
     </div>
     <div class="box">
-      <a-steps :current="$route.query.step || 0">
+      <a-steps :current="step">
         <a-step title="Select area" />
         <a-step title="Confirm area" />
         <a-step title="Operation setting" />
         <a-step title="Operation feedback" />
       </a-steps>
     </div>
-    <component
-      :is="curcom"
-      :data="form"
-      :plants="plants"
-      :step="$route.query.step || 0"
-      @next="toStep"
-      @toFindPlants="getPlants"
-      @setPlants="setPlants"
-    />
+    <div class="box" v-if="step == 0">
+      <RemoteArea
+        :data="form"
+        :plants="plants"
+        @next="toStep"
+        @toFindPlants="getPlants"
+        @setPlants="setPlants"
+      />
+    </div>
+    <div class="box" v-if="step == 1">
+      <RemoteConfirm
+        :data="form"
+        :plants="plants"
+        @next="toStep"
+        @toFindPlants="getPlants"
+        @setPlants="setPlants"
+      />
+    </div>
+    <div class="box" v-if="step == 2">
+      <RemoteOperation
+        :data="form"
+        :plants="plants"
+        @next="toStep"
+        @toFindPlants="getPlants"
+        @setPlants="setPlants"
+      />
+    </div>
+    <div class="box" v-if="step == 3">
+      <RemoteSummary
+        :data="form"
+        :plants="plants"
+        @next="toStep"
+        @toFindPlants="getPlants"
+        @setPlants="setPlants"
+        :remote="remote"
+        :remotePlants="remotePlants"
+        :remoteInverters="remoteInverters"
+      />
+    </div>
   </div>
 </template>
 <script>
 import RemoteArea from "./RemoteArea";
 import RemoteConfirm from "./RemoteConfirm";
 import RemoteOperation from "./RemoteOperation";
+import RemoteSummary from "./RemoteSummary";
 export default {
-  components: { RemoteArea, RemoteConfirm, RemoteOperation },
+  components: { RemoteArea, RemoteConfirm, RemoteOperation, RemoteSummary },
   data() {
     return {
       // kind: "p",
@@ -40,9 +71,15 @@ export default {
       curcom: "RemoteArea",
       form: {},
       plants: [],
+      remote: {},
+      remotePlants: [],
+      remoteInverters: [],
     };
   },
   computed: {
+    step() {
+      return this.$route.query.step-0 || 0;
+    },
     kind: {
       get() {
         return this.$route.query.kind || "p";
@@ -72,6 +109,9 @@ export default {
         this.loading = false;
         if (res.code == 200) {
           this.$message.success({ content: res.msg });
+          this.remote = res.remote;
+          this.remotePlants = res.remote_plants;
+          this.remoteInverters = res.remote_inverters;
           this.toStep({
             step: 3,
             obj: { ...this.form, ps: res.data },
@@ -94,7 +134,7 @@ export default {
         this.toExcute(remote);
         this.curcom = "RemoteOperation";
       } else if (step == 3) {
-        this.curcom = "RemoteOperation";
+        this.curcom = "RemoteSummary";
       } else {
         this.curcom = "RemoteArea";
         step = 0;

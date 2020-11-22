@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box" v-if="step === 2">
+    <div class="box">
       <div class="spin-content">
         <a-spin style="margin-right: 15px"></a-spin>Processing
       </div>
@@ -28,12 +28,7 @@
     <div class="box">
       <div class="map"><Map :places="plants"></Map></div>
     </div>
-    <div class="box">
-      <a-button type="primary" :disabled="step !== 3" @click="toClose"
-        >Close and Back</a-button
-      >
-      <a-button v-if="false" @click="$emit('next', { step: 3 })">next</a-button>
-    </div>
+    
   </div>
 </template>
 
@@ -41,7 +36,7 @@
 import Map from "./Map";
 export default {
   components: { Map },
-  props: { step: [Number] ,plants:Array},
+  props: { step: [Number], plants: Array },
   data() {
     return {
       timer: null,
@@ -57,14 +52,11 @@ export default {
     },
   },
   created() {
-    this.timer = setTimeout(() => {
-      this.$emit("toFeedback");
-    }, 5000);
+    // this.timer = setTimeout(() => {
+    //   this.$emit("toFeedback");
+    // }, 5000);
   },
   methods: {
-    toClose() {
-      this.$emit("next", { type: "finish" });
-    },
   },
 };
 </script>
