@@ -32,7 +32,7 @@ const createRouter = [
   { path: '*', name: '404', component: NotFound }
 ]
 
-const r = () => new Router({ mode: 'history', routes: createRouter })
+const r = () => new Router({ mode: 'history',base:'/vpp/', routes: createRouter })
 
 const router = r()
 export default router

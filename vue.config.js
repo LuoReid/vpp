@@ -1,5 +1,6 @@
 'use strict'
 module.exports = {
+  publicPath:'/vpp/',
   lintOnSave: false,
   devServer: {
     port: 8085,
