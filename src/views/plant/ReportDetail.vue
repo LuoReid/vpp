@@ -92,7 +92,7 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-
+<!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions :title="`Offline(${inverterOffline.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterOffline" row-key="id" :pagination="false"  :loading="loading">

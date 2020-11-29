@@ -86,6 +86,7 @@ export default {
               id: m.id,
               plant_id: m.plant_id,
               user_id: m.user_id,
+              address:m.address
             }))
           ),
           kind: "remote",

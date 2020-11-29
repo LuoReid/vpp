@@ -1,6 +1,6 @@
 {
   "name": "vpp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -28,5 +28,21 @@
     "eslint-plugin-vue": "^6.2.2",
     "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11"
-  }
+  },
+  "description": "## Project setup ``` yarn install ```",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LuoReid/vpp.git"
+  },
+  "keywords": [
+    "Gosoalr",
+    "VPP"
+  ],
+  "author": "cheng.long",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LuoReid/vpp/issues"
+  },
+  "homepage": "https://github.com/LuoReid/vpp#readme"
 }
