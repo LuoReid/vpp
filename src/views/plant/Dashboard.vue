@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-row :gutter="30">
+    <a-row :gutter="30" v-if="false">
       <a-col :span="14">
         <DashSummary title="Daily Overview" :data="data" />
       </a-col>

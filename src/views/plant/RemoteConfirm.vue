@@ -23,7 +23,7 @@
     <div class="box">
       Start time:
       <a-date-picker
-        v-model="form.start_time"
+        v-model="form.start_time" showTime
         :disabled-date="disabledDate"
         format="YYYY-MM-DD HH:mm:ss"
       />
@@ -31,7 +31,7 @@
     <div class="box">
       End time:
       <a-date-picker
-        v-model="form.end_time"
+        v-model="form.end_time" showTime
         :disabled-date="disabledDate"
         format="YYYY-MM-DD HH:mm:ss"
       />
