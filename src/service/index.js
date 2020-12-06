@@ -2,6 +2,7 @@
 import axios from 'axios'
 // create an axios instance
 import router from '../router'
+import store from '../store'
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   withCredentials: true, // send cookies when cross-domain requests
@@ -36,10 +37,11 @@ service.interceptors.response.use(
     const res = response.data
     if (res.code !== 200) {
       if (res.code === 419) {
-        router.push({
-          name: "login",
-          query: { redirect: router.app._route.fullPath }
+        // console.log('log store:',store)
+        store.dispatch('logout').then(() => {
+          router.push({ name: "login", })
         })
+
         return res
       }
       if ([422].includes(res.code)) {

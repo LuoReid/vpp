@@ -2,8 +2,8 @@
   <div>
     <div class="box">
       <div class="box">
-        Intructions: You can select area by State / by State / by Suburb / by
-        PostCode / by NMI or by Inverter SN.
+        Intructions: You can select area by State and by Suburb / by PostCode /
+        by NMI or by Inverter SN.
       </div>
       <div class="box">
         Select by State:<a-select
@@ -14,9 +14,6 @@
           @change="onSearch"
         >
         </a-select>
-      </div>
-      <div class="box">
-        and by:
         <a-select
           v-model="search.key"
           :options="optionArea"
@@ -31,7 +28,7 @@
           v-model="search.value"
           @search="onSearch"
           allow-clear
-          style="width: 350px"
+          style="width: 450px"
         >
           <a-button slot="enterButton" type="primary">
             <a-icon type="search" />Search
@@ -71,8 +68,12 @@
       </div>
     </div>
     <div class="box">
-      <p>Plants:{{ plants.length }}</p>
       <p>
+        Search results: Total {{ all }} Inverters,{{
+          onlineCnt
+        }}-online,{{ offlineCnt }}-offline,{{ abnormalCnt }}-abnormal
+      </p>
+      <p v-if="false">
         Map Select: Select and add one or more Suburb you would like to check
         plants.
       </p>
@@ -100,8 +101,8 @@ export default {
         { label: "NMI", value: "nmi" },
         { label: "Inverter SN", value: "invertersn" },
       ],
-      areaType: "suburb",
-      search: { state: "SA", key: "suburb", kind: "get_plants" },
+      areaType: "postcode",
+      search: { state: "SA", key: "postcode", kind: "get_plants" },
       findPlants: `${process.env.VUE_APP_BASE_URL}/web/plants_query`,
       header: { Authorization: localStorage.getItem("token") },
       allState: states.map((m) => ({ label: m, value: m })),
@@ -109,10 +110,26 @@ export default {
       // plants: [],
     };
   },
-  created() {},
+  computed: {
+    all(){
+      return this.plants.reduce((p,c) => p+c.devices.length,0)
+    },
+    onlineCnt() {
+      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 1).length,0);
+    },
+    offlineCnt() {
+      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 0).length,0);
+    },
+    abnormalCnt() {
+      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 2).length,0);
+    },
+  },
+  created() {
+    this.onSearch();
+  },
   methods: {
-    handleChange({ file,event }) {
-      console.log("log change:", file,event);
+    handleChange({ file, event }) {
+      console.log("log change:", file, event);
       if (file.status == "done" && file.response && file.response.code == 200) {
         this.$emit("setPlants", file.response.data);
       }
@@ -141,7 +158,7 @@ export default {
       const s = this.search;
       console.log("valid:", s);
       if (!s.state || (!s.value && this.plants.length < 1)) {
-        this.$message.error({ content: "请选择范围" });
+        this.$message.error({ content: "Please choose area" });
         return false;
       }
       return true;

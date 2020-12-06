@@ -2,7 +2,7 @@
   <div>
     <div class="box">
       <a-radio-group v-model="kind" button-style="solid">
-        <a-radio-button value="p"> Soloar PV System Control </a-radio-button>
+        <a-radio-button value="p"> Solar PV System Control </a-radio-button>
         <a-radio-button value="b">
           Battery Charging / Discharging Control
         </a-radio-button>
@@ -10,8 +10,7 @@
     </div>
     <div class="box">
       <a-steps :current="step">
-        <a-step title="Select area" />
-        <a-step title="Confirm area" />
+        <a-step title="Select area" /> 
         <a-step title="Operation setting" />
         <a-step title="Operation feedback" />
       </a-steps>
@@ -35,16 +34,14 @@
       />
     </div>
     <div class="box" v-if="step == 2">
-      <RemoteOperation
+      <RemoteOperation v-if="loading"
         :data="form"
         :plants="plants"
         @next="toStep"
         @toFindPlants="getPlants"
         @setPlants="setPlants"
       />
-    </div>
-    <div class="box" v-if="step == 3">
-      <RemoteSummary
+      <RemoteSummary v-else
         :data="form"
         :plants="plants"
         @next="toStep"
@@ -54,7 +51,7 @@
         :remotePlants="remotePlants"
         :remoteInverters="remoteInverters"
       />
-    </div>
+    </div> 
   </div>
 </template>
 <script>
@@ -68,7 +65,7 @@ export default {
     return {
       // kind: "p",
       curstep: 0,
-      curcom: "RemoteArea",
+      loading:false,
       form: {},
       plants: [],
       remote: {},
@@ -78,7 +75,7 @@ export default {
   },
   computed: {
     step() {
-      return this.$route.query.step-0 || 0;
+      return this.$route.query.step - 0 || 0;
     },
     kind: {
       get() {
@@ -92,6 +89,9 @@ export default {
       },
     },
   },
+  created() {
+    // this.getPlants();
+  },
   methods: {
     setPlants(d) {
       console.log("plants:", d);
@@ -100,7 +100,10 @@ export default {
     getPlants(param) {
       console.log("param:", param);
       this.$store.dispatch("remote/plants", param).then((res) => {
-        this.plants = res.data;
+        this.plants = res.data.map((m) => {
+          const { latitude, longitude } = m;
+          return { ...m, latitude: latitude - 0, longitude: longitude - 0 };
+        });
       });
     },
     toExcute(remote) {
@@ -112,31 +115,26 @@ export default {
           this.remote = res.remote;
           this.remotePlants = res.remote_plants;
           this.remoteInverters = res.remote_inverters;
-          this.toStep({
-            step: 3,
-            obj: { ...this.form, ps: res.data },
-          });
+          // this.toStep({
+          //   step: 2,
+          //   obj: { ...this.form, ps: res.data },
+          // });
         } else {
           this.toStep({ step: 1 });
         }
       });
     },
     toStep({ step, obj, remote }) {
-      console.log("toStep:", step, obj);
+      console.log("toStep:", step, obj,remote);
       if (step == 0) {
-        this.curcom = "RemoteArea";
         this.form = obj;
       } else if (step == 1) {
         this.form = { ...this.form, ...obj };
-        this.curcom = "RemoteConfirm";
       } else if (step == 2) {
         // this.plants = obj.ps;
-        this.toExcute(remote);
-        this.curcom = "RemoteOperation";
-      } else if (step == 3) {
-        this.curcom = "RemoteSummary";
+        // this.loading = true
+        this.toExcute(remote); 
       } else {
-        this.curcom = "RemoteArea";
         step = 0;
       }
       // this.curstep = step;
@@ -151,7 +149,7 @@ export default {
 
 <style scoped>
 .box {
-  margin: 15px 0;
+  margin: 20px 0;
 }
 .map {
   border: 1px dashed orange;

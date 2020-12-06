@@ -51,15 +51,19 @@ export default {
       });
     },
     setMarker() {
-      this.places.forEach((e) => {
+      this.places.forEach((e,idx) => {
         const option = {
           position: { lat: e.latitude, lng: e.longitude },
           map: this.map,
         };
-        if (e.status) {
+        // if (e.status) {
           option.icon = e.status == "on" ? this.imgNolinked : this.imgLinked;
-        }
+        // }
         e.marker = new google.maps.Marker(option);
+        if(idx == this.places.length -1 && this.map){
+          const {latitude,longitude} = e
+          this.map.setCenter(new google.maps.LatLng(latitude,longitude))
+        }
       });
     },
   },

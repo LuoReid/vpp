@@ -5,7 +5,9 @@
       <a-radio-group v-model="form.action" button-style="solid">
         <a-radio-button value="on"> Switch on - Connect </a-radio-button>
         <a-radio-button value="off"> Switch off - Disconnect </a-radio-button>
-        <a-radio-button value="limit"> Zero export </a-radio-button>
+        <a-radio-button value="limit" v-if="false">
+          Zero export
+        </a-radio-button>
       </a-radio-group>
     </div>
     <div class="box" v-if="false && form.action == 'limit'">
@@ -23,7 +25,8 @@
     <div class="box">
       Start time:
       <a-date-picker
-        v-model="form.start_time" showTime
+        v-model="form.start_time"
+        showTime
         :disabled-date="disabledDate"
         format="YYYY-MM-DD HH:mm:ss"
       />
@@ -31,7 +34,8 @@
     <div class="box">
       End time:
       <a-date-picker
-        v-model="form.end_time" showTime
+        v-model="form.end_time"
+        showTime
         :disabled-date="disabledDate"
         format="YYYY-MM-DD HH:mm:ss"
       />
@@ -64,13 +68,13 @@ export default {
     valid() {
       const f = this.form;
       if (!f.action) {
-        this.$message.error({ content: "请选择操作类型" });
+        this.$message.error({ content: "Please choose operation type" });
         return false;
       }
-      if (!f.start_time && !f.start_time) {
-        this.$message.error({ content: "请选择时间" });
-        return false;
-      }
+      // if (!f.start_time && !f.start_time) {
+      //   this.$message.error({ content: "请选择时间" });
+      //   return false;
+      // }
       return true;
     },
     toExcute() {
@@ -86,15 +90,21 @@ export default {
               id: m.id,
               plant_id: m.plant_id,
               user_id: m.user_id,
-              address:m.address
+              address: m.address,
             }))
           ),
           kind: "remote",
         };
-        data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
-        data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
+        if (data.start_time) {
+          data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
+        }
+        if (data.end_time) {
+          data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
+        }
         if (!this.plants || this.plants.length < 1) {
-          this.$message.error({ content: "所选电站丢失，请重新选择" });
+          this.$message.error({
+            content: "The choosed inverters lost, please rechoose them",
+          });
           return;
         }
         this.$emit("next", { step: 2, remote: data });

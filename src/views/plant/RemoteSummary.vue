@@ -36,7 +36,7 @@
         {{ remote.invertersn }}
       </a-descriptions-item>
       <a-descriptions-item label="Total plants" span="2">
-        {{ remotePlants.length }} plants,{{ onlineCount }} of plants are online,
+        {{ remoteInverters.length }} inverters,{{ onlineCount }} of plants are online,
         {{ offlineCount }} of plants are offline.
       </a-descriptions-item>
     </a-descriptions>
@@ -61,10 +61,10 @@ export default {
   props: { remote: Object, remotePlants: Array, remoteInverters: Array },
   computed: {
     onlineCount() {
-      return this.remotePlants.filter((f) => f.status == "online").length;
+      return this.remoteInverters.filter((f) => f.state == 1).length;
     },
     offlineCount() {
-      return this.remotePlants.filter((f) => f.status == "offline").length;
+      return this.remoteInverters.filter((f) => f.status == 0).length;
     },
   },
   methods: {

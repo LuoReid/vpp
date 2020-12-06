@@ -37,26 +37,20 @@
     <a-descriptions title="Task Scope" :column="1">
       <a-descriptions-item :label="remote.scope">
         {{ remote[remote.scope] }}</a-descriptions-item
-      >
-      <a-descriptions-item label="Total plants:">
-        {{ plants.length }}</a-descriptions-item
-      >
-      <a-descriptions-item label="online">
-        {{ onlineCount }}</a-descriptions-item
-      >
-      <a-descriptions-item label="offline">
-        {{ offlineCount }}</a-descriptions-item
-      >
+      > 
     </a-descriptions>
     <a-descriptions title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
-        {{ remote[remote.scope] }}</a-descriptions-item
+        {{ inverters.length}}</a-descriptions-item
       >
-      <a-descriptions-item label="Success Execution:">
-        {{ plants.length }}</a-descriptions-item
+      <a-descriptions-item label="Success Execution">
+        {{ inverters.length }}</a-descriptions-item
+      >
+      <a-descriptions-item label="Online">
+        {{ onlineCount }}</a-descriptions-item
       >
       <a-descriptions-item label="Anomaly">
-        {{ onlineCount }}</a-descriptions-item
+        {{ abnormalCount }}</a-descriptions-item
       >
       <a-descriptions-item label="Offline">
         {{ offlineCount }}</a-descriptions-item
@@ -125,19 +119,22 @@ export default {
   },
   computed: {
     onlineCount() {
-      return this.plants.filter((f) => f.status == "online").length;
+      return this.inverters.filter((f) => f.state == 1).length;
     },
     offlineCount() {
-      return this.plants.filter((f) => f.status == "offline").length;
+      return this.inverters.filter((f) => f.state == 0).length;
+    },
+    abnormalCount() {
+      return this.inverters.filter((f) => f.state == 2).length;
     },
     inverterOnline(){
-      return this.inverters.filter(f => f.lost == 1 && f.status_remote == 1)
+      return this.inverters.filter(f =>  f.state == 1)
     },
     inverterAnomaly(){
-      return this.inverters.filter(f => f.lost == 1 && f.status_remote != 1)
+      return this.inverters.filter(f => f.state == 0)
     },
     inverterOffline(){
-      return this.inverters.filter(f => f.lost != 1)
+      return this.inverters.filter(f => f.state == 2)
     }
   },
   created() {
