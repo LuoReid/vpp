@@ -3,20 +3,20 @@
     <a-layout-sider
       v-model="collapsed"
       :trigger="null"
-      style="min-height:100vh;background:#fff;"
+      style="min-height: 100vh; background: #fff"
       collapsible
     >
       <div class="logo" />
-      <a-menu  mode="inline" :default-selected-keys="['1']">
-        <a-menu-item key="1">
+      <a-menu mode="inline" :default-selected-keys="['1']" @click="toPage">
+        <a-menu-item key="plant">
           <a-icon type="home" />
           <span>Plant</span>
         </a-menu-item>
-        <a-menu-item key="2">
+        <a-menu-item key="data">
           <a-icon type="line-chart" />
           <span>Data</span>
-        </a-menu-item> 
-        <a-menu-item key="3">
+        </a-menu-item>
+        <a-menu-item key="account">
           <a-icon type="setting" />
           <span>Account</span>
         </a-menu-item>
@@ -35,10 +35,10 @@
       </a-layout-header>
       <a-layout-content
         :style="{
-          margin: '24px 16px',
+          margin: '16px 16px',
           padding: '24px',
           background: '#fff',
-          minHeight: '280px'
+          minHeight: '280px',
         }"
         ><router-view />
       </a-layout-content>
@@ -51,25 +51,33 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
-      collapsed: false
+      collapsed: false,
     };
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user"]),
   },
   methods: {
     ...mapActions(["logout"]),
+    toPage({ item, key, keyPath }) {
+      // console.log("menu click:", item, key, keyPath);
+      if (this.$route.name == key) {
+        // this.$router.replace({ name: key });
+      } else {
+        this.$router.push({ name: key });
+      }
+    },
     toLogout() {
       this.$confirm({
         title: "Do you want to logout the site?",
         onOk: () => {
-          this.logout().then(res => {
+          this.logout().then((res) => {
             this.$router.push({ name: "login" });
           });
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

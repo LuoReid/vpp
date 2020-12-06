@@ -17,22 +17,22 @@
         <a-select-option value="WA">WA-West Australia</a-select-option>
         <a-select-option value="VIC"> VIC-Victoria </a-select-option>
       </a-select>
-      Suburb <a-input style="width: 100px" v-model="search.suburb" allow-clear @change="fetchPlants()"></a-input>
-      Postcode<a-input style="width: 100px" v-model="search.postcode" allow-clear @change="fetchPlants()"></a-input> Plants status:
+      Suburb:<a-input style="width: 100px" v-model="search.suburb" allow-clear @change="fetchPlants()"></a-input>
+      Postcode:<a-input style="width: 100px" v-model="search.postcode" allow-clear @change="fetchPlants()"></a-input> Plants status:
       <a-select default-value="" style="width: 120px" v-model="search.status" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Plants </a-select-option>
         <a-select-option value="online"> Online </a-select-option>
         <a-select-option value="offline" > Notconnected </a-select-option>
         <a-select-option value="unknown"> Unknown </a-select-option>
       </a-select>
-      <template v-if="false"> status:<a-select style="width:120px;" v-model="search.state1" allow-clear @change="fetchPlants()">
+      <template v-if="false"> Status:<a-select style="width:120px;" v-model="search.state1" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Batteries </a-select-option>
         <a-select-option value="sa"> Charging </a-select-option>
         <a-select-option value="wa" disabled> Discharging </a-select-option>
         <a-select-option value="vic"> Unclear </a-select-option>
       </a-select>
       </template>
-      <a-button type="link">More filters</a-button>
+      <a-button type="link" v-if="false">More filters</a-button>
       <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="page" :loading="loading" @change="handleTableChange">
@@ -122,7 +122,11 @@ export default {
 
 <style scoped>
 .filter{
+  margin: 10px 0;
   display: flex;
   align-items: center;
+}
+.filter > *{
+  margin: 0 10px;
 }
 </style>

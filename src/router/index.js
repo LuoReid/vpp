@@ -21,11 +21,13 @@ const createRouter = [
         path: 'plant', name: 'plant', redirect: { name: 'plantDashboard' }, component: PlantLayout, children: [
           { path: 'dashboard', name: 'plantDashboard', component: Dashboard },
           { path: 'remote', name: 'plantControl', component: Control },
-          { path: 'trading', name: 'plantTrading', component:PowerTrading },
+          { path: 'alert', name: 'plantAlert', component:PowerTrading },
           { path: 'report', name: 'plantReport', component:Report },
           { path: 'report/:id', name: 'plantReportDetail', props: true, component: ReportDetail },
         ]
-      }
+      },
+      {path:'data',name:'data',component:load('dashboard/Index')},
+      {path:'account',name:'account',component:load('account/Index')},
     ]
   },
   { path: '/login', name: 'login',component: Login },

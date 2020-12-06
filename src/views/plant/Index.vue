@@ -14,8 +14,8 @@ export default {
       navLinks: [
         { name: "plantDashboard", text: "Dashboard" },
         { name: "plantControl", text: "Remote control" },
-        { name: "plantTrading", text: "Power trading" },
         { name: "plantReport", text: "Report" },
+        { name: "plantAlert", text: "Alert" },
       ]
     };
   }
