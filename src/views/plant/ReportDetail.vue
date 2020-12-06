@@ -37,11 +37,11 @@
     <a-descriptions title="Task Scope" :column="1">
       <a-descriptions-item :label="remote.scope">
         {{ remote[remote.scope] }}</a-descriptions-item
-      > 
+      >
     </a-descriptions>
     <a-descriptions title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
-        {{ inverters.length}}</a-descriptions-item
+        {{ inverters.length }}</a-descriptions-item
       >
       <a-descriptions-item label="Success Execution">
         {{ inverters.length }}</a-descriptions-item
@@ -56,48 +56,81 @@
         {{ offlineCount }}</a-descriptions-item
       >
     </a-descriptions>
-    <a-descriptions :title="`Success Execution(${inverterOnline.length})`" :column="1">
+    <a-descriptions
+      :title="`Success Execution(${inverterOnline.length})`"
+      :column="1"
+    >
       <a-descriptions-item>
-        <a-table :data-source="inverterOnline" row-key="id" :pagination="false" :loading="loading">
+        <a-table
+          :data-source="inverterOnline"
+          row-key="id"
+          :pagination="false"
+          :loading="loading"
+        >
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="lost" title="Inverter Status" >
-            <span slot-scope="text">{{text == 1?'Online':'Offline'}}</span>
+          <a-table-column data-index="state" title="Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="status_remote" title="Status" >
-            <span slot-scope="text">{{text == 1?'Successful':'Failed'}}</span>
+          <a-table-column data-index="status_remote" title="Execute Status">
+            <span slot-scope="text">{{
+              text == 1 ? "Successful" : "Failed"
+            }}</span>
+          </a-table-column>
+          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
     <a-descriptions :title="`Anomaly(${inverterAnomaly.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterAnomaly" row-key="id" :pagination="false"  :loading="loading">
+        <a-table
+          :data-source="inverterAnomaly"
+          row-key="id"
+          :pagination="false"
+          :loading="loading"
+        >
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="lost" title="Inverter Status" >
-            <span slot-scope="text">{{text == 1?'Online':'Offline'}}</span>
+          <a-table-column data-index="state" title="Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="status_remote" title="Status" >
-            <span slot-scope="text">{{text == 1?'Successful':'Failed'}}</span>
+          <a-table-column data-index="status_remote" title="Execute Status">
+            <span slot-scope="text">{{
+              text == 1 ? "Successful" : "Failed"
+            }}</span>
+          </a-table-column>
+          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-<!-- Gosolar#20 vppadmin Gosolar+1-->
+    <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions :title="`Offline(${inverterOffline.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterOffline" row-key="id" :pagination="false"  :loading="loading">
+        <a-table
+          :data-source="inverterOffline"
+          row-key="id"
+          :pagination="false"
+          :loading="loading"
+        >
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="lost" title="Inverter Status" >
-            <span slot-scope="text">{{text == 1?'Online':'Offline'}}</span>
+          <a-table-column data-index="state" title="Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="status_remote" title="Status" >
-            <span slot-scope="text">{{text == 1?'Successful':'Failed'}}</span>
+          <a-table-column data-index="status_remote" title="Execute Status">
+            <span slot-scope="text">{{
+              text == 1 ? "Successful" : "Failed"
+            }}</span>
+          </a-table-column>
+          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+            <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
       </a-descriptions-item>
@@ -105,16 +138,18 @@
   </div>
 </template>
 <script>
-import { RS } from "@/util";
+import { RS,IS } from "@/util";
 export default {
-  filters: { remoteStatus: RS },
+  filters: {
+    remoteStatus: RS, inverterState:IS
+  },
   props: { id: [String, Number] },
   data() {
     return {
       remote: {},
       plants: [],
       inverters: [],
-      loading:false,
+      loading: false,
     };
   },
   computed: {
@@ -127,15 +162,15 @@ export default {
     abnormalCount() {
       return this.inverters.filter((f) => f.state == 2).length;
     },
-    inverterOnline(){
-      return this.inverters.filter(f =>  f.state == 1)
+    inverterOnline() {
+      return this.inverters.filter((f) => f.state == 1);
     },
-    inverterAnomaly(){
-      return this.inverters.filter(f => f.state == 0)
+    inverterAnomaly() {
+      return this.inverters.filter((f) => f.state == 0);
     },
-    inverterOffline(){
-      return this.inverters.filter(f => f.state == 2)
-    }
+    inverterOffline() {
+      return this.inverters.filter((f) => f.state == 2);
+    },
   },
   created() {
     this.fetchRemote();
