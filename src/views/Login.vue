@@ -1,9 +1,18 @@
 <template>
   <div class="login">
+    <div class="slogan">
+      <img src="@/assets/slogan1.png" />
+      <div class="slogan-content"> 
+        <img src="@/assets/slogan-login.png" />
+      </div>
+      <img src="@/assets/slogan2.png" class="slogan-right" />
+    </div>
+    <div class="main"> 
     <div class="login-pancel">
       <div class="login-form">
         <h2 class="title" title="GoSolar">
-          <img src="@/assets/logo.png" />
+          <img src="@/assets/logo.png" v-if="false" />
+          Login your Gosolar Account
         </h2>
         <a-form-model
           :model="ruleForm"
@@ -16,7 +25,7 @@
               class="login-input"
               v-model="ruleForm.login_name"
               :autofocus="true"
-              placeholder="请输入工号或手机号"
+              placeholder="Email"
               clearable
             ></a-input>
           </a-form-model-item>
@@ -25,7 +34,7 @@
               class="login-input"
               v-model="ruleForm.password"
               type="password"
-              placeholder="请输入密码"
+              placeholder="Password"
               clearable
               @keyup.enter.native="login"
             ></a-input>
@@ -37,12 +46,16 @@
                 :class="{ filled: formFilled }"
                 @click="loginsubmit('ruleForm')"
                 type="success"
-                >确认登录</a-button
+                >Login</a-button
               >
             </div>
           </a-form-model-item>
+          <a-form-model-item>
+            <a-button type="link">Forget password?</a-button>
+          </a-form-model-item>
         </a-form-model>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -54,12 +67,12 @@ export default {
       ruleForm: { login_name: "", password: "" },
       rules: {
         login_name: [
-          { required: true, message: "请输入工号或手机号", trigger: "change" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { required: true, message: "Please input your email", trigger: "change" },
+          // { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "change" },
-          { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
+          { required: true, message: "Please input your passwrod", trigger: "change" },
+          // { min: 3, max: 20, message: "长度在3到20个字符", trigger: "blur" }
         ]
       }
     };
@@ -95,7 +108,31 @@ export default {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+}
+.slogan{
+  width: 35%;
+  height: 100vh;
+  background: #449CEB;
+  position: relative;
+}
+.slogan-content{
+  position: absolute;
+  left: 50%;
+  top:50%;
+  transform: translate(-50%,-70%);
+}
+.slogan-right{
+  /* width:78% ; */
+  position: absolute;
+  bottom: 0;
+  right: -15%;
+}
+.main{
+  width:65% ;
+  display: flex;
+  padding-left: 20%;
+  /* justify-content: center; */
 }
 .login-form {
   display: flex;
@@ -131,22 +168,28 @@ export default {
 .login-input {
   width: 300px;
   height: 50px;
-  border-radius: 4px;
+  border-radius: 0;
   background: rgba(255, 255, 255, 0.2);
   color: #333;
   border: none;
+  border-bottom: 1px solid #979797;
 }
 .login-btn .btn-confirm {
   width: 300px;
   height: 50px;
   border-radius: 4px;
+  font-weight: bold;
   background: rgba(52, 139, 218, 0.5);
   border: none;
 }
 .login-btn .btn-confirm.filled {
+  font-weight: bold;
   background: rgba(52, 139, 218, 1);
 }
-
+.title{
+  font-weight: bold;
+  font-size: 36px;
+}
 .title img {
   width: 309px;
   height: 57px;
