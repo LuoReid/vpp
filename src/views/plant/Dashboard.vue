@@ -25,6 +25,7 @@
         <a-select-option value="offline" > Notconnected </a-select-option>
         <a-select-option value="unknown"> Unknown </a-select-option>
       </a-select>
+      PlantId:<a-input style="width:100px;" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
       <template v-if="false"> Status:<a-select style="width:120px;" v-model="search.state1" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Batteries </a-select-option>
         <a-select-option value="sa"> Charging </a-select-option>
@@ -36,18 +37,24 @@
       <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="page" :loading="loading" @change="handleTableChange">
-       <a-table-column data-index="id" title="Plant ID"/>
-       <a-table-column data-index="state" title="Plants status"/>
+       <a-table-column data-index="plant_id" title="Plant ID"/>
        <a-table-column data-index="total_component_power" title="Total component power"/>
        <a-table-column data-index="postcode" title="Postcode"/>
        <a-table-column data-index="suburb" title="Suburb"/>
-       <a-table-column data-index="inverter_sn" title="Inverter SN"/>
-       <a-table-column data-index="create_date" title="Installation date"/>
-       <a-table-column data-index="total_generation" title="Total generation"/>
-       <a-table-column data-index="status" title="Plants status"/>
-       <a-table-column data-index="action" title="Operations" v-if="false">
+       <a-table-column data-index="address" title="Address"/>
+       <a-table-column data-index="inverter_sn" title="Inverter SN">
          <template slot-scope="text,record">
-           <a-button type="link">Switch off plant</a-button>
+           <a-tag v-for="i in record.devices" :key="i.id" :color="i.state == 1?'green':i.state == 2?'orange':'red'">{{i.device_sn}}</a-tag>
+         </template>
+       </a-table-column>
+       <a-table-column data-index="create_date" title="Installation date">
+         <template slot-scope="text,record">{{text|day}}</template>
+       </a-table-column>
+       <a-table-column data-index="total_generation" title="Total generation"/>
+       <a-table-column data-index="status" title="Plants status" v-if="false"/>
+       <a-table-column data-index="action" title="Operations" >
+         <template slot-scope="text,record">
+           <a-button type="link" @click="$router.push({name:'plantDetail',params:{id:record.plant_id}})">Detail</a-button>
          </template>
        </a-table-column>
     </a-table>
@@ -55,8 +62,10 @@
 </template>
 
 <script> 
+import {day} from '@/util'
 import DashSummary from "./DashSummary";
 export default {
+  filters:{day},
   components: { DashSummary },
   data() {
     return {
@@ -82,7 +91,7 @@ export default {
   },
   methods:{
     handleTableChange(pagination, filters, sorter) {
-      console.log('change:',pagination,filters,sorter);
+      // console.log('change:',pagination,filters,sorter);
       const pager = { page:pagination.current,limit:pagination.pageSize };
       // pager.current = pagination.current;
       this.pagination = pager;
@@ -109,6 +118,9 @@ export default {
       }
       if (this.search.postcode){
         param.postcode = this.search.postcode
+      }
+      if (this.search.plant_id){
+        param.plant_id = this.search.plant_id
       }
       this.$store.dispatch('remote/plants',param).then(res => {
         this.loading = false

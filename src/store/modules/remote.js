@@ -21,6 +21,7 @@ export default {
     reports({ }, param) {
       return remote.reports(param)
     },
-    reportById: ({ }, id) => remote.reportById(id)
+    reportById: ({ }, id) => remote.reportById(id),
+    inverterAlert: ({ }, param) => remote.inverterAlert(param),
   }
 }
