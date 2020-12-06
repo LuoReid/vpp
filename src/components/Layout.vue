@@ -3,24 +3,20 @@
     <a-layout-sider
       v-model="collapsed"
       :trigger="null"
-      style="min-height:100vh;"
+      style="min-height:100vh;background:#fff;"
       collapsible
     >
       <div class="logo" />
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
+      <a-menu  mode="inline" :default-selected-keys="['1']">
         <a-menu-item key="1">
           <a-icon type="home" />
           <span>Plant</span>
         </a-menu-item>
         <a-menu-item key="2">
-          <a-icon type="thunderbolt" />
-          <span>Electricity</span>
-        </a-menu-item>
+          <a-icon type="line-chart" />
+          <span>Data</span>
+        </a-menu-item> 
         <a-menu-item key="3">
-          <a-icon type="usergroup-add" />
-          <span>Customer</span>
-        </a-menu-item>
-        <a-menu-item key="4">
           <a-icon type="setting" />
           <span>Account</span>
         </a-menu-item>

@@ -5,6 +5,7 @@
       <div class="slogan-content"> 
         <img src="@/assets/slogan-login.png" />
       </div>
+      <span class="copy-right">© gosolar.com.au</span>
       <img src="@/assets/slogan2.png" class="slogan-right" />
     </div>
     <div class="main"> 
@@ -193,6 +194,15 @@ export default {
 .title img {
   width: 309px;
   height: 57px;
+}
+.copy-right{
+  position: absolute;
+  left: 50%;
+  bottom:35px ;
+  transform: translateX(-50%);
+  font-weight: bold;
+  font-size: 20px;
+  color: #fff;
 }
 @media screen and (max-width: 1201px) {
   .login-pancel {
