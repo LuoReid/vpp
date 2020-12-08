@@ -44,7 +44,7 @@ export default {
     initMap() {
       this.map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: -34.9260551, lng: 138.5989762 },
-        zoom: 15,
+        zoom: 13,
         maxZoom: 18,
         minZoom: 5,
         mapTypeControl: false,
@@ -62,7 +62,7 @@ export default {
         e.marker = new google.maps.Marker(option);
         if(idx == this.places.length -1 && this.map){
           const {latitude,longitude} = e
-          this.map.setCenter(new google.maps.LatLng(latitude,longitude))
+          // this.map.setCenter(new google.maps.LatLng(latitude,longitude))
         }
       });
     },
@@ -74,6 +74,6 @@ export default {
 .google-map {
   width: 100%;
   min-height: 50vh;
-  height: 400px;
+  height: 450px;
 }
 </style>

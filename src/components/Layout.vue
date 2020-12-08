@@ -12,6 +12,10 @@
           <a-icon type="home" />
           <span>Plant</span>
         </a-menu-item>
+        <a-menu-item key="plantMap">
+          <a-icon type="home" />
+          <span>Plant Map</span>
+        </a-menu-item>
         <a-menu-item key="data">
           <a-icon type="line-chart" />
           <span>Data</span>

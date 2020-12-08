@@ -27,6 +27,7 @@ const createRouter = [
           { path: ':id', name: 'plantDetail', props: true, component: load('plant/Detail') },
         ]
       },
+      {path:'plantMap',name:'plantMap',component:load('plant/PlantMap')},
       {path:'data',name:'data',component:load('dashboard/Index')},
       {path:'account',name:'account',component:load('account/Index')},
     ]
