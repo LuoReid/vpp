@@ -13,5 +13,6 @@ const remote = {
   reports: param => request.get(`/web/remotes`, { params: param }),
   reportById: id => request.get(`/web/remotes/${id}`),
   inverterAlert: param => request.get(`/web/inverters`, { params: { ...param, kind: 'alert' } }),
+  syncDevice: () => request.post('/web/devices', { kind: 'sync' })
 }
 export default remote

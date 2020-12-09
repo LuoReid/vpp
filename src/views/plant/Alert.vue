@@ -37,7 +37,7 @@
       <a-table-column data-index="state" title="Device SN">
         <template slot-scope="text, record">
           <a-tag 
-            :color="[text == 1 ? 'green' : text == 2 ? 'orange' : 'red']"
+            :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
             >{{ record.device_sn }}</a-tag
           >
         </template>

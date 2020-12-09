@@ -44,7 +44,7 @@ export default {
     initMap() {
       this.map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: -34.9260551, lng: 138.5989762 },
-        zoom: 13,
+        zoom: 10,
         maxZoom: 18,
         minZoom: 5,
         mapTypeControl: false,

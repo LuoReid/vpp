@@ -10,69 +10,135 @@
     </a-row>
     <h4>Pant management</h4>
     <div class="filter">
-      Filter Satate:
-      <a-select default-value="" v-model="search.state" style="width: 120px" allow-clear @change="fetchPlants()">
+      State:
+      <a-select
+        default-value=""
+        v-model="search.state"
+        style="width: 200px"
+        allow-clear
+        @change="fetchPlants()"
+      >
         <a-select-option value=""> All areas </a-select-option>
         <a-select-option value="SA"> SA-South Australia </a-select-option>
         <a-select-option value="WA">WA-West Australia</a-select-option>
         <a-select-option value="VIC"> VIC-Victoria </a-select-option>
       </a-select>
-      Suburb:<a-input style="width: 100px" v-model="search.suburb" allow-clear @change="fetchPlants()"></a-input>
-      Postcode:<a-input style="width: 100px" v-model="search.postcode" allow-clear @change="fetchPlants()"></a-input> Plants status:
-      <a-select default-value="" style="width: 120px" v-model="search.status" allow-clear @change="fetchPlants()">
+      Suburb:<a-input
+        style="width: 100px"
+        v-model="search.suburb"
+        allow-clear
+        @change="fetchPlants()"
+      ></a-input>
+      Postcode:<a-input
+        style="width: 100px"
+        v-model="search.postcode"
+        allow-clear
+        @change="fetchPlants()"
+      ></a-input>
+      Plants status:
+      <a-select
+        default-value=""
+        style="width: 120px"
+        v-model="search.status"
+        allow-clear
+        @change="fetchPlants()"
+      >
         <a-select-option value=""> All Plants </a-select-option>
         <a-select-option value="online"> Online </a-select-option>
-        <a-select-option value="offline" > Notconnected </a-select-option>
+        <a-select-option value="offline"> Notconnected </a-select-option>
         <a-select-option value="unknown"> Unknown </a-select-option>
       </a-select>
-      PlantId:<a-input style="width:100px;" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
-      <template v-if="false"> Status:<a-select style="width:120px;" v-model="search.state1" allow-clear @change="fetchPlants()">
-        <a-select-option value=""> All Batteries </a-select-option>
-        <a-select-option value="sa"> Charging </a-select-option>
-        <a-select-option value="wa" disabled> Discharging </a-select-option>
-        <a-select-option value="vic"> Unclear </a-select-option>
-      </a-select>
+      PlantId:<a-input
+        style="width: 100px"
+        v-model="search.plant_id"
+        allow-clear
+        @change="fetchPlants()"
+      ></a-input>
+      <template v-if="false">
+        Status:<a-select
+          style="width: 120px"
+          v-model="search.state1"
+          allow-clear
+          @change="fetchPlants()"
+        >
+          <a-select-option value=""> All Batteries </a-select-option>
+          <a-select-option value="sa"> Charging </a-select-option>
+          <a-select-option value="wa" disabled> Discharging </a-select-option>
+          <a-select-option value="vic"> Unclear </a-select-option>
+        </a-select>
       </template>
       <a-button type="link" v-if="false">More filters</a-button>
-      <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
+      <a-button type="primary" icon="search" @click="fetchPlants()"
+        >Search</a-button
+      >
+      <a-button
+        type="danger" 
+        title="Sync from Growatt"
+        :loading="loading"
+        @click="syncDevice()"
+        >Sync</a-button
+      >
     </div>
-    <a-table :data-source="plants" row-key="id" :pagination="page" :loading="loading" @change="handleTableChange">
-       <a-table-column data-index="plant_id" title="Plant ID"/>
-       <a-table-column data-index="total_component_power" title="Total component power"/>
-       <a-table-column data-index="postcode" title="Postcode"/>
-       <a-table-column data-index="suburb" title="Suburb"/>
-       <a-table-column data-index="address" title="Address"/>
-       <a-table-column data-index="inverter_sn" title="Inverter SN">
-         <template slot-scope="text,record">
-           <a-tag v-for="i in record.devices" :key="i.id" :color="i.state == 1?'green':i.state == 2?'orange':'red'">{{i.device_sn}}</a-tag>
-         </template>
-       </a-table-column>
-       <a-table-column data-index="create_date" title="Installation date">
-         <template slot-scope="text,record">{{text|day}}</template>
-       </a-table-column>
-       <a-table-column data-index="total_generation" title="Total generation"/>
-       <a-table-column data-index="status" title="Plants status" v-if="false"/>
-       <a-table-column data-index="action" title="Operations" >
-         <template slot-scope="text,record">
-           <a-button type="link" @click="$router.push({name:'plantDetail',params:{id:record.plant_id}})">Detail</a-button>
-         </template>
-       </a-table-column>
+    <a-table
+      :data-source="plants"
+      row-key="id"
+      :pagination="page"
+      :loading="loading"
+      @change="handleTableChange"
+    >
+      <a-table-column data-index="plant_id" title="Plant ID" />
+      <a-table-column
+        data-index="total_component_power"
+        title="Total component power"
+      />
+      <a-table-column data-index="postcode" title="Postcode" />
+      <a-table-column data-index="suburb" title="Suburb" />
+      <a-table-column data-index="address" title="Address" />
+      <a-table-column data-index="inverter_sn" title="Inverter SN">
+        <template slot-scope="text, record">
+          <a-tag
+            v-for="i in record.devices"
+            :key="i.id"
+            :color="i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'"
+            >{{ i.device_sn }}</a-tag
+          >
+        </template>
+      </a-table-column>
+      <a-table-column data-index="create_date" title="Installation date">
+        <template slot-scope="text, record">{{ text | day }}</template>
+      </a-table-column>
+      <a-table-column data-index="total_generation" title="Total generation" />
+      <a-table-column data-index="status" title="Plants status" v-if="false" />
+      <a-table-column data-index="action" title="Operations">
+        <template slot-scope="text, record">
+          <a-button
+            type="link"
+            @click="
+              $router.push({
+                name: 'plantDetail',
+                params: { id: record.plant_id },
+              })
+            "
+            >Detail</a-button
+          >
+        </template>
+      </a-table-column>
     </a-table>
   </div>
 </template>
 
-<script> 
-import {day} from '@/util'
+<script>
+import { day } from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters:{day},
+  filters: { day },
   components: { DashSummary },
   data() {
     return {
-      plants:[],
-      page:{},
-      loading:false,
-      search:{},
+      plants: [],
+      page: {},
+      loading: false,
+      search: {},
       data: [
         { text: "PV production", value: 359, unit: "MW" },
         { text: "Export to grid", value: 5.3, unit: "MW" },
@@ -86,13 +152,20 @@ export default {
       ],
     };
   },
-  created(){
-    this.fetchPlants()
+  created() {
+    this.fetchPlants();
   },
-  methods:{
+  methods: {
+    syncDevice() {
+      this.loading = true
+      this.$store.dispatch("remote/syncDevice").then((res) => {
+        this.loading = false
+        console.log("res:", res);
+      });
+    },
     handleTableChange(pagination, filters, sorter) {
       // console.log('change:',pagination,filters,sorter);
-      const pager = { page:pagination.current,limit:pagination.pageSize };
+      const pager = { page: pagination.current, limit: pagination.pageSize };
       // pager.current = pagination.current;
       this.pagination = pager;
       this.fetchPlants(pager);
@@ -104,41 +177,41 @@ export default {
       //   ...filters,
       // });
     },
-    fetchPlants(param={}){
-      param.kind='page'
-      this.loading = true
-      if (this.search.state){
-        param.state = this.search.state
+    fetchPlants(param = {}) {
+      param.kind = "page";
+      this.loading = true;
+      if (this.search.state) {
+        param.state = this.search.state;
       }
-      if (this.search.status){
-        param.status = this.search.status
+      if (this.search.status) {
+        param.status = this.search.status;
       }
-      if (this.search.suburb){
-        param.suburb = this.search.suburb
+      if (this.search.suburb) {
+        param.suburb = this.search.suburb;
       }
-      if (this.search.postcode){
-        param.postcode = this.search.postcode
+      if (this.search.postcode) {
+        param.postcode = this.search.postcode;
       }
-      if (this.search.plant_id){
-        param.plant_id = this.search.plant_id
+      if (this.search.plant_id) {
+        param.plant_id = this.search.plant_id;
       }
-      this.$store.dispatch('remote/plants',param).then(res => {
-        this.loading = false
-        this.plants = res.data
-        this.page = res.page
-      })
-    }
-  }
+      this.$store.dispatch("remote/plants", param).then((res) => {
+        this.loading = false;
+        this.plants = res.data;
+        this.page = res.page;
+      });
+    },
+  },
 };
 </script>
 
 <style scoped>
-.filter{
+.filter {
   margin: 10px 0;
   display: flex;
   align-items: center;
 }
-.filter > *{
+.filter > * {
   margin: 0 10px;
 }
 </style>
