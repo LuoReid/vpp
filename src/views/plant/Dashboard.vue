@@ -8,7 +8,7 @@
         <DashSummary title="Summary" :data="data1" />
       </a-col>
     </a-row>
-    <h4>Pant management</h4>
+    <h4>Plant management</h4>
     <div class="filter">
       State:
       <a-select

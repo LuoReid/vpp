@@ -1,5 +1,6 @@
 <template>
   <div class="map">
+    <h4>Plant map</h4>
     <div class="box">
       Select by State:<a-select
         v-model="search.state"

@@ -14,7 +14,7 @@
         </a-menu-item>
         <a-menu-item key="plantMap">
           <a-icon type="home" />
-          <span>Plant Map</span>
+          <span>Map</span>
         </a-menu-item>
         <a-menu-item key="data">
           <a-icon type="line-chart" />

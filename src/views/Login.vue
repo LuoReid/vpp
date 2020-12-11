@@ -1,9 +1,9 @@
 <template>
   <div class="login">
     <div class="slogan">
-      <img src="@/assets/slogan1.png" />
+      <img src="@/assets/slogan1.png"  class="slogan-left"/>
       <div class="slogan-content"> 
-        <img src="@/assets/slogan-login.png" />
+        <img src="@/assets/slogan-login.png" class="slogan-content-img" />
       </div>
       <span class="copy-right">© gosolar.com.au</span>
       <img src="@/assets/slogan2.png" class="slogan-right" />
@@ -117,14 +117,28 @@ export default {
   background: #449CEB;
   position: relative;
 }
+
 .slogan-content{
   position: absolute;
+  /* width: 58.5%; */
+  height: 27vh;
   left: 50%;
-  top:50%;
-  transform: translate(-50%,-70%);
+  top:27.8%;
+  transform: translateX(-50%);
+}
+.slogan-content-img{
+  /* width: 100%; */
+  object-fit: contain;
+}
+.slogan-left{
+  /* width: 38.5%; */
+  height: 24vh;
+  object-fit: contain;
 }
 .slogan-right{
-  /* width:78% ; */
+  /* width:63%; */
+  height: 35vh;
+  object-fit: contain;
   position: absolute;
   bottom: 0;
   right: -15%;
