@@ -20,6 +20,7 @@ function time(t){
 function DT(v){
   return inverterType[v]
 }
+
 const allRS = () => Object.fromEntities(remoteStatus).map((k, v) => ({ value: k, label: v }))()
 
 export { states, RS, allRS,IS ,day,time,DT};

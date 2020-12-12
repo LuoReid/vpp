@@ -96,12 +96,11 @@
       <a-table-column data-index="address" title="Address" />
       <a-table-column data-index="inverter_sn" title="Inverter SN">
         <template slot-scope="text, record">
-          <a-tag
-            v-for="i in record.devices"
-            :key="i.id"
+        <div  v-for="i in record.devices" :key="i.id">
+          <a-tag style="margin-bottom: 10px;"
             :color="i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'"
-            >{{ i.device_sn }}</a-tag
-          >
+            >{{ i.device_sn }}</a-tag>{{i.type|DT}}
+        </div>
         </template>
       </a-table-column>
       <a-table-column data-index="create_date" title="Installation date">
@@ -128,10 +127,10 @@
 </template>
 
 <script>
-import { day } from "@/util";
+import { day,DT } from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day },
+  filters: { day,DT },
   components: { DashSummary },
   data() {
     return {
