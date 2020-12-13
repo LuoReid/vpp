@@ -106,7 +106,7 @@
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
       <a-table-column data-index="status" title="Plant status">
-        <template slot-scope="text">{{ text | DT }}</template>
+        <template slot-scope="text">{{ text | IS }}</template>
       </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
       <a-table-column
@@ -148,10 +148,10 @@
 </template>
 
 <script>
-import { day,DT ,PT,has} from "@/util";
+import { day,DT ,PT,has,IS} from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day,DT,PT,has },
+  filters: { day,DT,PT,has,IS },
   components: { DashSummary },
   data() {
     return {

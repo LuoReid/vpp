@@ -44,7 +44,7 @@
         <template slot-scope="text, record">
           <a-tag 
             :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
-            >{{ record.type|DT }}</a-tag
+            >{{ record.type|IS }}</a-tag
           >
         </template>
       </a-table-column>
@@ -67,9 +67,9 @@
 </template>
 
 <script>
-import { day,DT ,PT,has} from "@/util";
+import { day,DT ,PT,has,IS} from "@/util";
 export default {
-  filters:{day,DT,PT,has},
+  filters:{day,DT,PT,has,IS},
   props: { id: [String, Number] },
   data() {
     return {
