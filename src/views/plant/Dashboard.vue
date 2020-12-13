@@ -136,7 +136,7 @@
             @click="
               $router.push({
                 name: 'plantDetail',
-                params: { id: record.plant_id },
+                params: { id: record.id },
               })
             "
             >Detail</a-button

@@ -18,6 +18,7 @@ export default {
     plants({ }, param) {
       return remote.plants(param)
     },
+    getPlant:({},id)=> remote.getPlant(id),
     reports({ }, param) {
       return remote.reports(param)
     },
