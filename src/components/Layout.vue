@@ -3,11 +3,11 @@
     <a-layout-sider
       v-model="collapsed"
       :trigger="null"
-      style="min-height: 100vh; background: #fff"
+      style="min-height: 100vh;"
       collapsible
     >
       <div class="logo" />
-      <a-menu mode="inline" :default-selected-keys="['1']" @click="toPage">
+      <a-menu mode="inline" theme="dark" :default-selected-keys="['1']" @click="toPage">
         <a-menu-item key="plant">
           <a-icon type="home" />
           <span>Plant</span>
@@ -106,8 +106,7 @@ export default {
 }
 #components-layout-demo-custom-trigger .logo {
   height: 32px;
-  background: rgba(255, 255, 255, 0.2) url(./../assets/logo.png) center/auto
-    100%;
+  background: url(./../assets/logo.png) center/auto 100%;
   margin: 16px;
 }
 </style>

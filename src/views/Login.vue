@@ -120,14 +120,14 @@ export default {
 
 .slogan-content{
   position: absolute;
-  /* width: 58.5%; */
-  height: 27vh;
+  max-width: 58%;
+  max-height: 27vh;
   left: 50%;
   top:27.8%;
   transform: translateX(-50%);
 }
 .slogan-content-img{
-  /* width: 100%; */
+  width: 100%;
   object-fit: contain;
 }
 .slogan-left{

@@ -23,7 +23,7 @@
         </a-select>
         <a-input-search
           :placeholder="`input ${
-            optionArea.find((f) => f.value == search.key).label
+            (optionArea.find((f) => f.value == search.key)||{}).label
           }(separated by ,)`"
           v-model="search.value"
           @search="onSearch"
