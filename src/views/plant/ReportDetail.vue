@@ -1,6 +1,6 @@
 <template>
   <div class="report">
-    <div class="logo"><img src="@/assets/logo.png" alt="Gosolar Logo" /></div>
+    <div class="logo"><img src="@/assets/logo.png" width="100" alt="Gosolar Logo" /></div>
     <h4>Task No.{{ remote.id }} Execution Report</h4>
     <a-descriptions title="Access Declaration" :column="1">
       <a-descriptions-item>
@@ -21,16 +21,16 @@
       <a-descriptions-item label="Operation">
         {{ remote.action }}</a-descriptions-item
       >
-      <a-descriptions-item label="Export limit:">
+      <a-descriptions-item v-if="false" label="Export limit:">
         {{ remote.capacity }}</a-descriptions-item
       >
       <a-descriptions-item label="Status">
         {{ remote.status | remoteStatus }}</a-descriptions-item
       >
-      <a-descriptions-item label="Start time">
+      <a-descriptions-item v-if="remote.start_time" label="Start time">
         {{ remote.start_time }}</a-descriptions-item
       >
-      <a-descriptions-item label="End time">
+      <a-descriptions-item  v-if="remote.end_time" label="End time">
         {{ remote.end_time }}</a-descriptions-item
       >
     </a-descriptions>
@@ -70,7 +70,7 @@
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="state" title="Inverter Status">
+          <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
@@ -78,7 +78,7 @@
               text == 1 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
-          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+          <a-table-column data-index="state_remote" title="Current status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
@@ -95,7 +95,7 @@
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="state" title="Inverter Status">
+          <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
@@ -103,7 +103,7 @@
               text == 1 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
-          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+          <a-table-column data-index="state_remote" title="Current status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
@@ -121,7 +121,7 @@
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="state" title="Inverter Status">
+          <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
@@ -129,7 +129,7 @@
               text == 1 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
-          <a-table-column data-index="state_remote" title="After Control Inverter Status">
+          <a-table-column data-index="state_remote" title="Current status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
@@ -154,22 +154,22 @@ export default {
   },
   computed: {
     onlineCount() {
-      return this.inverters.filter((f) => f.state == 1).length;
+      return this.inverters.filter((f) => f.state_remote == 1).length;
     },
     offlineCount() {
-      return this.inverters.filter((f) => f.state == 0).length;
+      return this.inverters.filter((f) => f.state_remote == 0).length;
     },
     abnormalCount() {
-      return this.inverters.filter((f) => f.state == 2).length;
+      return this.inverters.filter((f) => f.state_remote == 2).length;
     },
     inverterOnline() {
-      return this.inverters.filter((f) => f.state == 1);
+      return this.inverters.filter((f) => f.state_remote == 1);
     },
     inverterAnomaly() {
-      return this.inverters.filter((f) => f.state == 0);
+      return this.inverters.filter((f) => f.state_remote == 0);
     },
     inverterOffline() {
-      return this.inverters.filter((f) => f.state == 2);
+      return this.inverters.filter((f) => f.state_remote == 2);
     },
   },
   created() {
@@ -188,6 +188,13 @@ export default {
 </script>
 
 <style scoped>
+.logo {
+  /* width: 100px; */
+}
+.report{
+  max-width: 297mm;
+  margin: 10 auto;
+}
 .report h4 {
   font-weight: 500;
   font-size: 32px;

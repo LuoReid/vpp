@@ -44,10 +44,23 @@
         @change="fetchPlants()"
       >
         <a-select-option value=""> All Plants </a-select-option>
-        <a-select-option value="online"> Online </a-select-option>
-        <a-select-option value="offline"> Notconnected </a-select-option>
-        <a-select-option value="unknown"> Unknown </a-select-option>
+        <a-select-option value="1"> Online </a-select-option>
+        <a-select-option value="0"> Offline </a-select-option>
+        <a-select-option value="2"> Unknown </a-select-option>
       </a-select>
+      <!-- Inverter status:
+      <a-select
+        default-value=""
+        style="width: 120px"
+        v-model="search.status"
+        allow-clear
+        @change="fetchPlants()"
+      >
+        <a-select-option value=""> All Plants </a-select-option>
+        <a-select-option value="1"> Online </a-select-option>
+        <a-select-option value="0"> Offline </a-select-option>
+        <a-select-option value="2"> Unknown </a-select-option>
+      </a-select> -->
       PlantId:<a-input
         style="width: 100px"
         v-model="search.plant_id"
@@ -86,10 +99,19 @@
       :loading="loading"
       @change="handleTableChange"
     >
+      <a-table-column data-index="plant_type" title="Plant type" >
+        <template slot-scope="text">{{text|PT}}</template>
+      </a-table-column>
+      <a-table-column data-index="create_date" title="Installation date">
+        <template slot-scope="text, record">{{ text | day }}</template>
+      </a-table-column>
+      <a-table-column data-index="status" title="Plant status">
+        <template slot-scope="text">{{ text | DT }}</template>
+      </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
       <a-table-column
         data-index="total_component_power"
-        title="Total component power"
+        title="System size(kW)"
       />
       <a-table-column data-index="postcode" title="Postcode" />
       <a-table-column data-index="suburb" title="Suburb" />
@@ -103,11 +125,10 @@
         </div>
         </template>
       </a-table-column>
-      <a-table-column data-index="create_date" title="Installation date">
-        <template slot-scope="text, record">{{ text | day }}</template>
+      <a-table-column data-index="smart_meter" title="Smart meter">
+        <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-      <a-table-column data-index="total_generation" title="Total generation" />
-      <a-table-column data-index="status" title="Plants status" v-if="false" />
+      <a-table-column data-index="total_generation" title="Total generation(kW/h)" />
       <a-table-column data-index="action" title="Operations">
         <template slot-scope="text, record">
           <a-button
@@ -127,10 +148,10 @@
 </template>
 
 <script>
-import { day,DT } from "@/util";
+import { day,DT ,PT,has} from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day,DT },
+  filters: { day,DT,PT,has },
   components: { DashSummary },
   data() {
     return {

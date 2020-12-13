@@ -73,5 +73,8 @@ export default {
   border: 1px solid #91d5ff;
   background-color: #e6f7ff;
   padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
