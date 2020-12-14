@@ -99,7 +99,8 @@ export default {
     },
     getPlants(param) {
       console.log("param:", param);
-      this.$store.dispatch("remote/plants", param).then((res) => {
+      param.kind = 'map'
+      this.$store.dispatch("remote/inverters", param).then((res) => {
         this.plants = res.data.map((m) => {
           const { latitude, longitude } = m;
           return { ...m, latitude: latitude - 0, longitude: longitude - 0 };

@@ -50,18 +50,40 @@ export default {
         mapTypeControl: false,
       });
     },
+    toUrl(e) {
+      console.log("data:", e);
+    },
     setMarker() {
-      this.places.forEach((e,idx) => {
+      this.places.forEach((e, idx) => {
         const option = {
           position: { lat: e.latitude, lng: e.longitude },
           map: this.map,
+          data: e,
+          id:e.id
         };
         // if (e.status) {
-          option.icon = e.status == "on" ? this.imgNolinked : this.imgLinked;
+        option.icon = e.state == 1 ? this.imgLinked : this.imgNolinked;
         // }
         e.marker = new google.maps.Marker(option);
-        if(idx == this.places.length -1 && this.map){
-          const {latitude,longitude} = e
+        // e.marker.addListener("click", (e) => {
+        //   console.log('marker click:',e,this)
+        //     this.$router.push({name:'plantDetail',parmas:{id:e.id}})
+        // } );
+        const that = this;
+        const toUrl = function (e) {
+          that.$router.push({ name: "plantDetail", parmas: { id: e.id } });
+        };
+
+        (function (marker, id, that) {
+          google.maps.event.addListener(marker, "click", function (evt) {
+            console.log("click:",marker.id,id, that,evt);
+            that.$router.push({ name: "plantDetail", params: { id: id} });
+            // that.toUrl(e)
+            // toUrl(e);
+          });
+        })(e.marker, e.id, that);
+        if (idx == this.places.length - 1 && this.map) {
+          const { latitude, longitude } = e;
           // this.map.setCenter(new google.maps.LatLng(latitude,longitude))
         }
       });

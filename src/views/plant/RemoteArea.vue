@@ -91,7 +91,7 @@
 import { states } from "@/util";
 import Map from "./Map";
 export default {
-  props: { plants: Array },
+  props: { plants: Array,default:[] },
   components: { Map },
   data() {
     return {
@@ -111,17 +111,17 @@ export default {
     };
   },
   computed: {
-    all(){
-      return this.plants.reduce((p,c) => p+c.devices.length,0)
+    all() {
+      return this.plants.length;
     },
     onlineCnt() {
-      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 1).length,0);
+      return this.plants.filter((f) => f.state == 1).length;
     },
     offlineCnt() {
-      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 0).length,0);
+      return this.plants.filter((f) => f.state == 0).length;;
     },
     abnormalCnt() {
-      return this.plants.reduce((p,c) => p + c.devices.filter((f) => f.state == 2).length,0);
+      return this.plants.filter((f) => f.state == 2).length;;
     },
   },
   created() {
@@ -131,7 +131,7 @@ export default {
     handleChange({ file, event }) {
       console.log("log change:", file, event);
       if (file.status == "done" && file.response && file.response.code == 200) {
-        this.$emit("setPlants", file.response.data);
+        this.$emit("setPlants", file.response.data.map(m => ({...m,latitude: m.latitude - 0, longitude: m.longitude - 0})));
       }
     },
     onSearch() {

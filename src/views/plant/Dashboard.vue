@@ -35,6 +35,12 @@
         allow-clear
         @change="fetchPlants()"
       ></a-input>
+      Plant ID:<a-input
+        style="width: 100px"
+        v-model="search.plant_id"
+        allow-clear
+        @change="fetchPlants()"
+      ></a-input>
       Plants status:
       <a-select
         default-value=""
@@ -48,25 +54,25 @@
         <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="2"> Unknown </a-select-option>
       </a-select>
-      <!-- Inverter status:
-      <a-select
-        default-value=""
-        style="width: 120px"
-        v-model="search.status"
-        allow-clear
-        @change="fetchPlants()"
-      >
-        <a-select-option value=""> All Plants </a-select-option>
-        <a-select-option value="1"> Online </a-select-option>
-        <a-select-option value="0"> Offline </a-select-option>
-        <a-select-option value="2"> Unknown </a-select-option>
-      </a-select> -->
-      PlantId:<a-input
+      Inverter SN:<a-input
         style="width: 100px"
-        v-model="search.plant_id"
+        v-model="search.inverter_sn"
         allow-clear
         @change="fetchPlants()"
       ></a-input>
+      Inverter status:
+      <a-select
+        default-value=""
+        style="width: 120px"
+        v-model="search.inverter_state"
+        allow-clear
+        @change="fetchPlants()"
+      >
+        <a-select-option value=""> All Inverter </a-select-option>
+        <a-select-option value="1"> Online </a-select-option>
+        <a-select-option value="0"> Offline </a-select-option>
+        <a-select-option value="2"> Unknown </a-select-option>
+      </a-select>
       <template v-if="false">
         Status:<a-select
           style="width: 120px"
@@ -106,7 +112,11 @@
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
       <a-table-column data-index="status" title="Plant status">
-        <template slot-scope="text">{{ text | IS }}</template>
+        <template slot-scope="text">
+          <a-tag style="margin-bottom: 10px;"
+            :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
+            >{{ text | IS }}</a-tag>
+        </template>
       </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
       <a-table-column

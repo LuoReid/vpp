@@ -44,7 +44,7 @@
         <template slot-scope="text, record">
           <a-tag 
             :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
-            >{{ record.type|IS }}</a-tag
+            >{{ record.type|DT }}</a-tag
           >
         </template>
       </a-table-column>

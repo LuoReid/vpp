@@ -31,7 +31,7 @@
         </a-button>
       </a-input-search>
     </div>
-    <div class="box">
+    <div class="box" style="margin-top:20px;">
       <p>
         Search results: Total {{ all }} Inverters,{{ onlineCnt }}-online,{{
           offlineCnt
@@ -66,25 +66,16 @@ export default {
   },
   computed: {
     all() {
-      return this.plants.reduce((p, c) => p + c.devices.length, 0);
+      return this.plants.length;
     },
     onlineCnt() {
-      return this.plants.reduce(
-        (p, c) => p + c.devices.filter((f) => f.state == 1).length,
-        0
-      );
+      return this.plants.filter((f) => f.state == 1).length;
     },
     offlineCnt() {
-      return this.plants.reduce(
-        (p, c) => p + c.devices.filter((f) => f.state == 0).length,
-        0
-      );
+      return this.plants.filter((f) => f.state == 0).length;;
     },
     abnormalCnt() {
-      return this.plants.reduce(
-        (p, c) => p + c.devices.filter((f) => f.state == 2).length,
-        0
-      );
+      return this.plants.filter((f) => f.state == 2).length;;
     },
   },
   created() {
@@ -92,10 +83,9 @@ export default {
   },
   methods: {
     getPlants(param = {}) {
-      param = { ...this.search };
+      param = { ...this.search,kind:'map' };
       console.log("param:", param);
-
-      this.$store.dispatch("remote/plants", param).then((res) => {
+      this.$store.dispatch("remote/inverters", param).then((res) => {
         this.plants = res.data.map((m) => {
           const { latitude, longitude } = m;
           return { ...m, latitude: latitude - 0, longitude: longitude - 0 };
