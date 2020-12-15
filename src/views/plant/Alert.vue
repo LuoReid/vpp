@@ -29,7 +29,7 @@
     <a-table
       :data-source="plants"
       row-key="id"
-      :pagination="page"
+      :pagination="false"
       :loading="loading"
       @change="handleTableChange"
     >
@@ -49,6 +49,7 @@
       <a-table-column data-index="last_update_time" title="Last upate time">
       </a-table-column>
     </a-table>
+    <a-pagination :total="page.total" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} inverters`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
@@ -59,16 +60,20 @@ export default {
   data() {
     return {
       plants: [],
-      page: {},
+      page: {total:0},
       loading: false,
       search: {},
     };
   },
   created() {
-    this.fetchPlants();
+    this.fetchPlants({limit:15});
   },
 
   methods: {
+    changePage(page,pageSize){
+      console.log('chage page:',page,pageSize)
+      this.fetchPlants({limit:pageSize||15,page:page||1})
+    },
     handleTableChange(pagination, filters, sorter) {
       console.log("change:", pagination, filters, sorter);
       const pager = { page: pagination.current, limit: pagination.pageSize };
@@ -86,6 +91,9 @@ export default {
     fetchPlants(param = {}) {
       param.kind = "page";
       this.loading = true;
+      if(!param.limit){
+        param.limit = 15
+      }
       if (this.search.state) {
         param.state = this.search.state;
       }

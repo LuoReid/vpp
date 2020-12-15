@@ -13,7 +13,7 @@
     <a-table
       :data-source="data"
       row-key="id"
-      :pagination="page"
+      :pagination="false"
       :loading="loading"
       @change="pageChange"
     >
@@ -33,6 +33,7 @@
         </template>
       </a-table-column>
     </a-table>
+    <a-pagination :total="page.total" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} reports`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
@@ -43,22 +44,29 @@ export default {
   data() {
     return {
       data: [],
-      page: {},
+      page: {total:0,pageSize:15},
       search: {},
       loading: false,
     };
   },
   created() {
     // console.log('rs:',allRS,RS)
-    this.fetchReports();
+    this.fetchReports({limit:15});
   },
   methods: {
+    changePage(page,pageSize){
+      console.log('chage page:',page,pageSize)
+      this.fetchReports({limit:pageSize||15,page:page||1})
+    },
     pageChange(pageination, filters, sorter) {
       const page = { page: pageination.current, limit: pageination, pageSize };
       this.fetchReports(page);
     },
     fetchReports(param = {}) {
       param = { ...param, ...this.search };
+      if(!param.limit){
+        param.limit = 15
+      }
       this.$store.dispatch("remote/reports", param).then((res) => {
         this.page = res.page;
         this.data = res.data;

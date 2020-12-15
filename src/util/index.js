@@ -6,7 +6,6 @@ const inverterType = { '1': 'Inverter', '3': 'Other', '2': 'Battery','4':'Max','
 const plantType = { 'S': 'Solar only', 'SB': 'Solar+Battery' }
 
 function RS(v) {
-  console.log('all:', v, remoteStatus)
   return remoteStatus[v]
 }
 function IS(v){
