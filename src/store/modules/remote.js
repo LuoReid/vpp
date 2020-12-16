@@ -24,6 +24,7 @@ export default {
     },
     reportById: ({ }, id) => remote.reportById(id),
     inverterAlert: ({ }, param) => remote.inverterAlert(param),
-    syncDevice:({}) => remote.syncDevice()
+    syncDevice:({}) => remote.syncDevice(),
+    syncLogs:({},param) => remote.syncLogs(param)
   }
 }

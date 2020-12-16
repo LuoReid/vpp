@@ -191,6 +191,7 @@ export default {
       this.loading = true
       this.$store.dispatch("remote/syncDevice").then((res) => {
         this.loading = false
+          this.$message.success({ content: res.msg });
         console.log("res:", res);
       });
     },

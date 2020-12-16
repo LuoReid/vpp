@@ -30,6 +30,7 @@ const createRouter = [
       {path:'plantMap',name:'plantMap',component:load('plant/PlantMap')},
       {path:'data',name:'data',component:load('dashboard/Index')},
       {path:'account',name:'account',component:load('account/Index')},
+      {path:'log',name:'log',component:load('plant/Log')},
     ]
   },
   { path: '/login', name: 'login',component: Login },

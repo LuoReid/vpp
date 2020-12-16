@@ -24,6 +24,10 @@
           <a-icon type="setting" />
           <span>Account</span>
         </a-menu-item>
+        <a-menu-item key="log">
+          <a-icon type="info-circle" />
+          <span>Logs</span>
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
     <a-layout>
