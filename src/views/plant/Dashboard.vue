@@ -91,7 +91,7 @@
         >Search</a-button
       >
       <a-button
-        type="danger" 
+        type="danger"
         title="Sync from Growatt"
         :loading="loading"
         @click="syncDevice()"
@@ -105,17 +105,19 @@
       :loading="loading"
       @change="handleTableChange"
     >
-      <a-table-column data-index="plant_type" title="Plant type" >
-        <template slot-scope="text">{{text|PT}}</template>
+      <a-table-column data-index="plant_type" title="Plant type">
+        <template slot-scope="text">{{ text | PT }}</template>
       </a-table-column>
       <a-table-column data-index="create_date" title="Installation date">
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
       <a-table-column data-index="status" title="Plant status">
         <template slot-scope="text">
-          <a-tag style="margin-bottom: 10px;"
+          <a-tag
+            style="margin-bottom: 10px"
             :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
-            >{{ text | IS }}</a-tag>
+            >{{ text | IS }}</a-tag
+          >
         </template>
       </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
@@ -128,17 +130,22 @@
       <a-table-column data-index="address" title="Address" />
       <a-table-column data-index="inverter_sn" title="Inverter SN">
         <template slot-scope="text, record">
-        <div  v-for="i in record.devices" :key="i.id">
-          <a-tag style="margin-bottom: 10px;"
-            :color="i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'"
-            >{{ i.device_sn }}</a-tag>{{i.type|DT}}
-        </div>
+          <div v-for="i in record.devices" :key="i.id">
+            <a-tag
+              style="margin-bottom: 10px"
+              :color="i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'"
+              >{{ i.device_sn }}</a-tag
+            >{{ i.type | DT }}
+          </div>
         </template>
       </a-table-column>
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-      <a-table-column data-index="total_generation" title="Total generation(kW/h)" />
+      <a-table-column
+        data-index="total_generation"
+        title="Total generation(kW/h)"
+      />
       <a-table-column data-index="action" title="Operations">
         <template slot-scope="text, record">
           <a-button
@@ -154,20 +161,28 @@
         </template>
       </a-table-column>
     </a-table>
-    <a-pagination :total="page.total" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} plants`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
+    <a-pagination
+      :total="page.total"
+      :pageSizeOptions="['15', '30', '50', '70', '100']"
+      :show-total="(total) => `Total ${total} plants`"
+      @change="changePage"
+      @showSizeChange="changePage"
+      show-size-changer
+      show-quick-jumper
+    />
   </div>
 </template>
 
 <script>
-import { day,DT ,PT,has,IS} from "@/util";
+import { day, DT, PT, has, IS ,time} from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day,DT,PT,has,IS },
+  filters: { day, DT, PT, has, IS,time },
   components: { DashSummary },
   data() {
     return {
       plants: [],
-      page: {total:0},
+      page: { total: 0 },
       loading: false,
       search: {},
       data: [
@@ -184,20 +199,25 @@ export default {
     };
   },
   created() {
-    this.fetchPlants({limit:15});
+    this.fetchPlants({ limit: 15 });
   },
   methods: {
     syncDevice() {
-      this.loading = true
-      this.$store.dispatch("remote/syncDevice").then((res) => {
-        this.loading = false
+      this.loading = true;
+      this.$store
+        .dispatch("remote/syncDevice")
+        .then((res) => {
+          this.loading = false;
           this.$message.success({ content: res.msg });
-        console.log("res:", res);
-      });
+          console.log("res:", res);
+        })
+        .catch(() => {
+          this.loading = false;
+        });
     },
-    changePage(page,pageSize){
-      console.log('chage page:',page,pageSize)
-      this.fetchPlants({limit:pageSize||15,page:page||1})
+    changePage(page, pageSize) {
+      console.log("chage page:", page, pageSize);
+      this.fetchPlants({ limit: pageSize || 15, page: page || 1 });
     },
     handleTableChange(pagination, filters, sorter) {
       // console.log('change:',pagination,filters,sorter);
@@ -216,8 +236,8 @@ export default {
     fetchPlants(param = {}) {
       param.kind = "page";
       this.loading = true;
-      if(!param.limit){
-        param.limit = 15
+      if (!param.limit) {
+        param.limit = 15;
       }
       if (this.search.state) {
         param.state = this.search.state;

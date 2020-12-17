@@ -85,6 +85,7 @@ export default {
           kind: "remote",
           ...this.data,
           ...this.form,
+          pids:[...new Set(this.plants.map(m => m.plant_id))].join(','),
           data: JSON.stringify(
             this.plants.map((m) => ({
               id: m.id,

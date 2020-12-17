@@ -19,23 +19,27 @@
     >
       <a-table-column data-index="id" title="Log ID" />
       <a-table-column data-index="kind" title="Kind" />
-      <a-table-column data-index="param" title="Param">
+      <a-table-column data-index="param" title="Param" v-if="false">
         <template slot-scope="text, record">  {{ text }} </template>
       </a-table-column>
       <a-table-column data-index="result" title="Result">
-        <a-tag slot-scope="text, record">{{ text  }}</a-tag>
+        <!-- <a-tag slot-scope="text, record">{{ text  }}</a-tag> -->
       </a-table-column>
-      <a-table-column data-index="call_time" title="Call time" />
-      <a-table-column data-index="updated_at" title="Update time" />
+      <a-table-column data-index="call_time" title="Call time" >
+        <template slot-scope="text">{{text|time}}</template>
+      </a-table-column>
+      <a-table-column data-index="updated_at" title="Update time" width="180px" >
+        <template slot-scope="text">{{text*1000|time}}</template>
+      </a-table-column>
     </a-table>
     <a-pagination :total="page.total" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} reports`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
 <script>
-import { RS, allRS } from "@/util";
+import { RS, allRS,time } from "@/util";
 export default {
-  filters: { remoteStatus: RS },
+  filters: { remoteStatus: RS,time },
   data() {
     return {
       data: [],
@@ -62,7 +66,9 @@ export default {
       if(!param.limit){
         param.limit = 15
       }
+      this.loading = true
       this.$store.dispatch("remote/syncLogs", param).then((res) => {
+        this.loading = false
         this.page = res.page;
         this.data = res.data;
       });
