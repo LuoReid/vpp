@@ -70,13 +70,21 @@ export default {
         // } );
         const that = this;
         const toUrl = function (e) {
-          that.$router.push({ name: "plantDetail", parmas: { id: e.id } });
+          // that.$router.push({ name: "plantDetail", parmas: { id: e.id } });
+          let routeData = that.$router.resolve({
+            name:'plantDetail',params:{id:e.id}
+          });
+          window.open(routeData.href,'_blank')
         };
 
         (function (marker, id, that) {
           google.maps.event.addListener(marker, "click", function (evt) {
-            console.log("click:",marker.id,id, that,evt);
-            that.$router.push({ name: "plantDetail", params: { id: id} });
+            // console.log("click:",marker.id,id, that,evt);
+            // that.$router.push({ name: "plantDetail", params: { id: id} });
+            let routeData = that.$router.resolve({
+            name:'plantDetail',params:{id:e.id}
+          });
+          window.open(routeData.href,'_blank')
             // that.toUrl(e)
             // toUrl(e);
           });

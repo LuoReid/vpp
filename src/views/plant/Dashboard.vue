@@ -69,9 +69,10 @@
         @change="fetchPlants()"
       >
         <a-select-option value=""> All Inverter </a-select-option>
-        <a-select-option value="1"> Online </a-select-option>
         <a-select-option value="0"> Offline </a-select-option>
-        <a-select-option value="2"> Unknown </a-select-option>
+        <a-select-option value="1"> Online </a-select-option>
+        <a-select-option value="2"> Standby </a-select-option>
+        <a-select-option value="3"> Abnormal </a-select-option>
       </a-select>
       <template v-if="false">
         Status:<a-select
@@ -174,7 +175,7 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS ,time} from "@/util";
+import { day, DT, PT, has, IS ,time,allIS} from "@/util";
 import DashSummary from "./DashSummary";
 export default {
   filters: { day, DT, PT, has, IS,time },
@@ -253,6 +254,12 @@ export default {
       }
       if (this.search.plant_id) {
         param.plant_id = this.search.plant_id;
+      }
+      if (this.search.inverter_state) {
+        param.inverter_state = this.search.inverter_state;
+      }
+      if (this.search.inverter_sn) {
+        param.inverter_sn = this.search.inverter_sn;
       }
       this.$store.dispatch("remote/plants", param).then((res) => {
         this.loading = false;

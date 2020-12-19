@@ -75,7 +75,7 @@
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
-              text == 1 ? "Successful" : "Failed"
+              text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
           <a-table-column data-index="state_remote" title="Current status">
@@ -100,7 +100,7 @@
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
-              text == 1 ? "Successful" : "Failed"
+              text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
           <a-table-column data-index="state_remote" title="Current status">
@@ -126,7 +126,7 @@
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
-              text == 1 ? "Successful" : "Failed"
+              text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
           <a-table-column data-index="state_remote" title="Current status">
@@ -154,22 +154,22 @@ export default {
   },
   computed: {
     onlineCount() {
-      return this.inverters.filter((f) => f.state_remote == 1).length;
+      return this.inverters.filter((f) => f.state == 1).length;
     },
     offlineCount() {
-      return this.inverters.filter((f) => f.state_remote == 0).length;
+      return this.inverters.filter((f) => f.state == 0).length;
     },
     abnormalCount() {
-      return this.inverters.filter((f) => f.state_remote == 2).length;
+      return this.inverters.filter((f) => f.state == 2).length;
     },
     inverterOnline() {
-      return this.inverters.filter((f) => f.state_remote == 1);
+      return this.inverters.filter((f) => f.state == 1);
     },
     inverterAnomaly() {
-      return this.inverters.filter((f) => f.state_remote == 0);
+      return this.inverters.filter((f) => f.state == 0);
     },
     inverterOffline() {
-      return this.inverters.filter((f) => f.state_remote == 2);
+      return this.inverters.filter((f) => f.state == 2);
     },
   },
   created() {
