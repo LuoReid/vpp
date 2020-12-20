@@ -8,7 +8,7 @@
         v-model="search.param"
         allow-clear
         placeholder="call type"
-        @change="fetchPlants()"
+        @change="fetchReports()"
       >
         <a-select-option value="0"> query inveter </a-select-option>
         <a-select-option value="1"> set inverter </a-select-option>
