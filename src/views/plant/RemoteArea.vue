@@ -77,7 +77,7 @@
         Map Select: Select and add one or more Suburb you would like to check
         plants.
       </p>
-      <div class="map"><Map :places="plants"></Map></div>
+      <div class="map"><Map :places="plants" class="map-view"></Map></div>
     </div>
     <div class="box">
       <a-button type="primary" @click="saveAndCheck"
@@ -182,5 +182,8 @@ export default {
 .map {
   border: 1px dashed orange;
   min-height: 50vh;
+}
+.map-view {
+  height: 80vh;
 }
 </style>
