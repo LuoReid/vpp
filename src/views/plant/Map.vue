@@ -103,6 +103,6 @@ export default {
 .google-map {
   width: 100%;
   min-height: 50vh;
-  height: 450px;
+  height: 500px;
 }
 </style>
