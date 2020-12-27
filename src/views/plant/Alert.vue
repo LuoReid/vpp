@@ -37,7 +37,7 @@
       <a-table-column data-index="state" title="Device SN">
         <template slot-scope="text, record">
           <a-tag 
-            :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
+            :color="text|ISColor"
             >{{ record.device_sn }}</a-tag
           >
         </template>
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import { time,DT } from "@/util";
+import { time,DT,ISColor } from "@/util";
 export default {
-  filters: { time ,DT},
+  filters: { time ,DT,ISColor},
   data() {
     return {
       plants: [],

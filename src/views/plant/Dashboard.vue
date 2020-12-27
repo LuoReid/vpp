@@ -134,7 +134,7 @@
           <div v-for="i in record.devices" :key="i.id">
             <a-tag
               style="margin-bottom: 10px"
-              :color="i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'"
+              :color="i.state|ISColor"
               >{{ i.device_sn }}</a-tag
             >{{ i.type | DT }}
           </div>
@@ -175,10 +175,10 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS ,time,allIS} from "@/util";
+import { day, DT, PT, has, IS ,time,allIS,ISColor} from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day, DT, PT, has, IS,time },
+  filters: { day, DT, PT, has, IS,time,ISColor },
   components: { DashSummary },
   data() {
     return {
@@ -203,6 +203,10 @@ export default {
     this.fetchPlants({ limit: 15 });
   },
   methods: {
+    // getColor(i){
+    //   switch(i.state)
+    //   i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'
+    // },
     syncDevice() {
       this.loading = true;
       this.$store
