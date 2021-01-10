@@ -1,6 +1,6 @@
 import moment from 'moment'
 const states = ['SA', 'WA', 'VIC', 'NSW', 'QLD']
-const remoteStatus = { '0': 'Darft', '1': 'Processing', '2': 'Scheduled', '9': 'Completed' }
+const remoteStatus = { '0': 'Darft', '1': 'Processing', '2': 'Scheduled', '3': 'Scheduled', '9': 'Completed' }
 const inverterState = { '0': 'Offline', '1': 'Online','2':'Standby', '3': 'Abnormal' }
 const inverterType = { '1': 'Inverter', '3': 'Other', '2': 'Battery','4':'Max','5':'Mix','6':'SPA','7':'Min' }
 const plantType = { 'S': 'Solar only', 'SB': 'Solar+Battery' }
