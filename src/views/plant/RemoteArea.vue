@@ -26,6 +26,7 @@
             (optionArea.find((f) => f.value == search.key)||{}).label
           }(separated by ,)`"
           v-model="search.value"
+          :disabled="search.key==''"
           @search="onSearch"
           allow-clear
           style="width: 450px"
@@ -48,9 +49,10 @@
             :headers="header"
             :data="search"
             :showUploadList="false"
+            :disabled="search.key==''"
             @change="handleChange"
           >
-            <a-button type="" @click="toUpload"
+            <a-button type="" @click="toUpload" :disabled="search.key==''"
               >Upload <a-icon type="upload"
             /></a-button>
           </a-upload>
@@ -96,6 +98,7 @@ export default {
   data() {
     return {
       optionArea: [
+        { label: "All", value: "" },
         { label: "Suburb", value: "suburb" },
         { label: "Postcode", value: "postcode" },
         { label: "NMI", value: "nmi" },
