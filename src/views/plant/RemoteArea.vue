@@ -52,7 +52,7 @@
             :disabled="search.key==''"
             @change="handleChange"
           >
-            <a-button type="" @click="toUpload" :disabled="search.key==''"
+            <a-button type="" @click="toUpload" 
               >Upload <a-icon type="upload"
             /></a-button>
           </a-upload>

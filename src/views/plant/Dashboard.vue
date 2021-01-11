@@ -98,6 +98,23 @@
         @click="syncDevice()"
         >Sync</a-button
       >
+      <a-popover trigger="hover">
+        <template slot="content">
+          Plase use the standard template to add plants
+          <a href="/static/AddPlantTemplate.csv" download="AddPlantTemplate.csv"
+            >Add plant template file</a
+          >
+        </template>
+        <a-upload
+          :action="plantAdd"
+          :headers="header"
+          :data="plant"
+          :showUploadList="false"
+          @change="handleChange"
+        >
+          <a-button type="">Upload <a-icon type="upload" /></a-button>
+        </a-upload>
+      </a-popover>
     </div>
     <a-table
       :data-source="plants"
@@ -132,10 +149,9 @@
       <a-table-column data-index="inverter_sn" title="Inverter SN">
         <template slot-scope="text, record">
           <div v-for="i in record.devices" :key="i.id">
-            <a-tag
-              style="margin-bottom: 10px"
-              :color="i.state|ISColor"
-              >{{ i.device_sn }}</a-tag
+            <a-tag style="margin-bottom: 10px" :color="i.state | ISColor">{{
+              i.device_sn
+            }}</a-tag
             >{{ i.type | DT }}
           </div>
         </template>
@@ -175,10 +191,10 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS ,time,allIS,ISColor} from "@/util";
+import { day, DT, PT, has, IS, time, allIS, ISColor } from "@/util";
 import DashSummary from "./DashSummary";
 export default {
-  filters: { day, DT, PT, has, IS,time,ISColor },
+  filters: { day, DT, PT, has, IS, time, ISColor },
   components: { DashSummary },
   data() {
     return {
@@ -197,16 +213,22 @@ export default {
         { text: "Total component power", value: 27734, unit: "kWh" },
         { text: "Total revenue(estimated)", value: 273832.39, unit: "$" },
       ],
+      plantAdd: `${process.env.VUE_APP_BASE_URL}/web/plants`,
+      header: { Authorization: localStorage.getItem("token") },
+      plant: {},
     };
   },
   created() {
     this.fetchPlants({ limit: 15 });
   },
   methods: {
-    // getColor(i){
-    //   switch(i.state)
-    //   i.state == 1 ? 'green' : i.state == 2 ? 'orange' : 'gray'
-    // },
+    handleChange({ file, event }) {
+      const res = file && file.response;
+      if (res && res.code == 200) {
+        // console.log("log change:", res, file, event);
+        this.$message.success(res.msg);
+      }
+    },
     syncDevice() {
       this.loading = true;
       this.$store
@@ -280,6 +302,7 @@ export default {
   margin: 10px 0;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 .filter > * {
   margin: 0 10px;
