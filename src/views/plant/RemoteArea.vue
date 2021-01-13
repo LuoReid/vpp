@@ -73,7 +73,7 @@
       <p>
         Search results: Total {{ all }} Inverters,{{
           onlineCnt
-        }}-online,{{ offlineCnt }}-offline,{{ abnormalCnt }}-abnormal
+        }}-online,{{ offlineCnt }}-offline,{{ abnormalCnt }}-abnormal,{{ standbyCnt }}-standby
       </p>
       <p v-if="false">
         Map Select: Select and add one or more Suburb you would like to check
@@ -121,11 +121,12 @@ export default {
       return this.plants.filter((f) => f.state == 1).length;
     },
     offlineCnt() {
-      return this.plants.filter((f) => f.state == 0).length;;
+      return this.plants.filter((f) => f.state == 0).length;
     },
     abnormalCnt() {
-      return this.plants.filter((f) => f.state == 2).length;;
+      return this.plants.filter((f) => f.state == 3).length;
     },
+    standbyCnt:() => this.plants.filter(f => f.state = 2).length
   },
   created() {
     this.onSearch();
