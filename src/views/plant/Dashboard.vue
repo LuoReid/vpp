@@ -160,7 +160,7 @@
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
       <a-table-column
-        data-index="total_generation"
+        data-index="total_power"
         title="Total generation(kW/h)"
       />
       <a-table-column data-index="action" title="Operations">

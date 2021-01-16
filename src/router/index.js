@@ -21,19 +21,20 @@ const createRouter = [
         path: 'plant', name: 'plant', redirect: { name: 'plantDashboard' }, component: PlantLayout, children: [
           { path: 'dashboard', name: 'plantDashboard', component: Dashboard },
           { path: 'remote', name: 'plantControl', component: Control },
-          { path: 'alert', name: 'plantAlert', component:load('plant/Alert') },
-          { path: 'report', name: 'plantReport', component:Report },
+          { path: 'alert', name: 'plantAlert', component: load('plant/Alert') },
+          { path: 'report', name: 'plantReport', component: Report },
           { path: 'report/:id', name: 'plantReportDetail', props: true, component: ReportDetail },
           { path: ':id', name: 'plantDetail', props: true, component: load('plant/Detail') },
         ]
       },
-      {path:'plantMap',name:'plantMap',component:load('plant/PlantMap')},
-      {path:'data',name:'data',component:load('dashboard/Index')},
-      {path:'account',name:'account',component:load('account/Index')},
-      {path:'log',name:'log',component:load('plant/Log')},
+      { path: 'plantMap', name: 'plantMap', component: load('plant/PlantMap') },
+      { path: 'data', name: 'data', component: load('dashboard/Index') },
+      { path: 'account', name: 'account', component: load('account/Index') },
+      { path: 'account/:id', name: 'accountEdit', component: load('account/Edit') },
+      { path: 'log', name: 'log', component: load('plant/Log') },
     ]
   },
-  { path: '/login', name: 'login',component: Login },
+  { path: '/login', name: 'login', component: Login },
   { path: '*', name: '404', component: NotFound }
 ]
 
