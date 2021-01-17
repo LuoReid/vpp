@@ -148,7 +148,7 @@
       <a-table-column data-index="address" title="Address" />
       <a-table-column data-index="inverter_sn" title="Inverter SN">
         <template slot-scope="text, record">
-          <div v-for="i in record.devices" :key="i.id">
+          <div v-for="i in record.devices" :key="i.id" style="min-width:150px;">
             <a-tag style="margin-bottom: 10px" :color="i.state | ISColor">{{
               i.device_sn
             }}</a-tag
