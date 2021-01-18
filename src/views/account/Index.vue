@@ -2,7 +2,7 @@
   <div class="user">
     <h2>Account</h2>
     <div class="filter">
-      <a-button type="primary" @click="addAccount">添加</a-button>
+      <a-button type="primary" @click="addAccount">Add user</a-button>
     </div>
     <a-table
       :data-source="data"

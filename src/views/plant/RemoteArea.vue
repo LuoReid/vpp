@@ -126,7 +126,7 @@ export default {
     abnormalCnt() {
       return this.plants.filter((f) => f.state == 3).length;
     },
-    standbyCnt(){ return  this.plants.filter(f => f.state = 2).length; } 
+    standbyCnt(){ return  this.plants.filter(f => f.state == 2).length; } 
   },
   created() {
     this.onSearch();
