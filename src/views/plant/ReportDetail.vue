@@ -1,6 +1,9 @@
 <template>
   <div class="report">
     <div class="logo"><img src="@/assets/logo.png" width="100" alt="Gosolar Logo" /></div>
+    <div class="toolbar">
+      <a-button @click="toDownload">Download</a-button>
+    </div>
     <h4>Task No.{{ remote.id }} Execution Report</h4>
     <a-descriptions title="Access Declaration" :column="1">
       <a-descriptions-item>
@@ -19,54 +22,35 @@
     </a-descriptions>
     <a-descriptions title="Task Description" :column="1">
       <a-descriptions-item label="Operation">
-        {{ remote.action }}</a-descriptions-item
-      >
+        {{ remote.action }}</a-descriptions-item>
       <a-descriptions-item v-if="false" label="Export limit:">
-        {{ remote.capacity }}</a-descriptions-item
-      >
+        {{ remote.capacity }}</a-descriptions-item>
       <a-descriptions-item label="Status">
-        {{ remote.status | remoteStatus }}</a-descriptions-item
-      >
+        {{ remote.status | remoteStatus }}</a-descriptions-item>
       <a-descriptions-item v-if="remote.start_time" label="Start time">
-        {{ remote.start_time }}</a-descriptions-item
-      >
-      <a-descriptions-item  v-if="remote.end_time" label="End time">
-        {{ remote.end_time }}</a-descriptions-item
-      >
+        {{ remote.start_time }}</a-descriptions-item>
+      <a-descriptions-item v-if="remote.end_time" label="End time">
+        {{ remote.end_time }}</a-descriptions-item>
     </a-descriptions>
     <a-descriptions title="Task Scope" :column="1">
       <a-descriptions-item :label="remote.scope">
-        {{ remote[remote.scope] }}</a-descriptions-item
-      >
+        {{ remote[remote.scope] }}</a-descriptions-item>
     </a-descriptions>
     <a-descriptions title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
-        {{ inverters.length }}</a-descriptions-item
-      >
+        {{ inverters.length }}</a-descriptions-item>
       <a-descriptions-item label="Success Execution">
-        {{ inverters.length }}</a-descriptions-item
-      >
+        {{ inverters.length }}</a-descriptions-item>
       <a-descriptions-item label="Online">
-        {{ onlineCount }}</a-descriptions-item
-      >
+        {{ onlineCount }}</a-descriptions-item>
       <a-descriptions-item label="Anomaly">
-        {{ abnormalCount }}</a-descriptions-item
-      >
+        {{ abnormalCount }}</a-descriptions-item>
       <a-descriptions-item label="Offline">
-        {{ offlineCount }}</a-descriptions-item
-      >
+        {{ offlineCount }}</a-descriptions-item>
     </a-descriptions>
-    <a-descriptions
-      :title="`Success Execution(${inverterOnline.length})`"
-      :column="1"
-    >
+    <a-descriptions :title="`Success Execution(${inverterOnline.length})`" :column="1">
       <a-descriptions-item>
-        <a-table
-          :data-source="inverterOnline"
-          row-key="id"
-          :pagination="false"
-          :loading="loading"
-        >
+        <a-table :data-source="inverterOnline" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -86,12 +70,7 @@
     </a-descriptions>
     <a-descriptions :title="`Anomaly(${inverterAnomaly.length})`" :column="1">
       <a-descriptions-item>
-        <a-table
-          :data-source="inverterAnomaly"
-          row-key="id"
-          :pagination="false"
-          :loading="loading"
-        >
+        <a-table :data-source="inverterAnomaly" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -112,12 +91,7 @@
     <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions :title="`Offline(${inverterOffline.length})`" :column="1">
       <a-descriptions-item>
-        <a-table
-          :data-source="inverterOffline"
-          row-key="id"
-          :pagination="false"
-          :loading="loading"
-        >
+        <a-table :data-source="inverterOffline" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -138,10 +112,11 @@
   </div>
 </template>
 <script>
-import { RS,IS } from "@/util";
+import { RS, IS } from "@/util";
 export default {
   filters: {
-    remoteStatus: RS, inverterState:IS
+    remoteStatus: RS,
+    inverterState: IS,
   },
   props: { id: [String, Number] },
   data() {
@@ -176,6 +151,9 @@ export default {
     this.fetchRemote();
   },
   methods: {
+    toDownload() {
+      window.print();
+    },
     fetchRemote(param = {}) {
       this.$store.dispatch("remote/reportById", this.id).then((res) => {
         this.remote = res.remote;
@@ -191,7 +169,7 @@ export default {
 .logo {
   /* width: 100px; */
 }
-.report{
+.report {
   max-width: 297mm;
   margin: 10 auto;
 }
@@ -199,5 +177,25 @@ export default {
   font-weight: 500;
   font-size: 32px;
   text-align: center;
+}
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
+<style>
+@media print {
+  .ant-layout-sider {
+    display: none;
+  }
+  .ant-layout-header {
+    display: none;
+  }
+  #oa-finish-nav {
+    display: none;
+  }
+  .report .toolbar {
+    display: none;
+  }
 }
 </style>
