@@ -188,14 +188,22 @@ export default {
   .ant-layout-sider {
     display: none;
   }
-  .ant-layout-header {
+  #components-layout-demo-custom-trigger .ant-layout-header {
     display: none;
   }
-  #oa-finish-nav {
-    display: none;
-  }
+
   .report .toolbar {
     display: none;
   }
+  .main-content {
+    margin: 0;
+    padding: 0;
+  }
+  .main-content #oa-finish-nav {
+    display: none;
+  }
+}
+@page {
+  margin: 0;
 }
 </style>

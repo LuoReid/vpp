@@ -1,11 +1,6 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider
-      v-model="collapsed"
-      :trigger="null"
-      style="min-height: 100vh;"
-      collapsible
-    >
+    <a-layout-sider v-model="collapsed" :trigger="null" style="min-height: 100vh;" collapsible>
       <div class="logo" />
       <a-menu mode="inline" theme="dark" :default-selected-keys="['1']" @click="toPage">
         <a-menu-item key="plant">
@@ -32,23 +27,13 @@
     </a-layout-sider>
     <a-layout>
       <a-layout-header class="header">
-        <span
-          ><a-icon
-            class="trigger"
-            :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-            @click="() => (collapsed = !collapsed)"
-          />Welcome, {{ user.name }} :)</span
-        >
+        <span>
+          <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="() => (collapsed = !collapsed)" />Welcome, {{ user.name }} :)
+        </span>
         <a-button type="link" @click="toLogout">Log out</a-button>
       </a-layout-header>
-      <a-layout-content
-        :style="{
-          margin: '16px 16px',
-          padding: '24px',
-          background: '#fff',
-          minHeight: '280px',
-        }"
-        ><router-view />
+      <a-layout-content class="main-content">
+        <router-view />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -112,5 +97,11 @@ export default {
   height: 32px;
   background: url(./../assets/logo.png) center/auto 100%;
   margin: 16px;
+}
+#components-layout-demo-custom-trigger .main-content {
+  margin: 16px;
+  padding: 24px;
+  background: #fff;
+  min-height: 280px;
 }
 </style>
