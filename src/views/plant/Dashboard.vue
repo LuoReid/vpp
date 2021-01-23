@@ -101,7 +101,7 @@
       <a-popover trigger="hover">
         <template slot="content">
           Plase use the standard template to add plants
-          <a href="/static/AddPlantTemplate.csv" download="AddPlantTemplate.csv"
+          <a href="/AddPlantTemplate.csv" download="AddPlantTemplate.csv"
             >Add plant template file</a
           >
         </template>

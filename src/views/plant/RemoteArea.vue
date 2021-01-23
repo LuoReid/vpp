@@ -39,7 +39,7 @@
           <template slot="content">
             Plase use the standard template to search plants
             <a
-              href="/static/QueryPlantsTemplate.csv"
+              href="/QueryPlantsTemplate.csv"
               download="QueryPlantsTemplate.csv"
               >Search template file</a
             >
