@@ -11,62 +11,24 @@
     <h4>Plant management</h4>
     <div class="filter">
       State:
-      <a-select
-        default-value=""
-        v-model="search.state"
-        style="width: 200px"
-        allow-clear
-        @change="fetchPlants()"
-      >
+      <a-select default-value="" v-model="search.state" style="width: 200px" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All areas </a-select-option>
         <a-select-option value="SA"> SA-South Australia </a-select-option>
         <a-select-option value="WA">WA-West Australia</a-select-option>
         <a-select-option value="VIC"> VIC-Victoria </a-select-option>
       </a-select>
-      Suburb:<a-input
-        style="width: 100px"
-        v-model="search.suburb"
-        allow-clear
-        @change="fetchPlants()"
-      ></a-input>
-      Postcode:<a-input
-        style="width: 100px"
-        v-model="search.postcode"
-        allow-clear
-        @change="fetchPlants()"
-      ></a-input>
-      Plant ID:<a-input
-        style="width: 100px"
-        v-model="search.plant_id"
-        allow-clear
-        @change="fetchPlants()"
-      ></a-input>
+      Suburb:<a-input style="width: 100px" v-model="search.suburb" allow-clear @change="fetchPlants()"></a-input>
+      Postcode:<a-input style="width: 100px" v-model="search.postcode" allow-clear @change="fetchPlants()"></a-input>
+      Plant ID:<a-input style="width: 100px" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
       Plant type:
-      <a-select
-        default-value=""
-        style="width: 120px"
-        v-model="search.plant_type"
-        allow-clear
-        @change="fetchPlants()"
-      >
+      <a-select default-value="" style="width: 120px" v-model="search.plant_type" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All </a-select-option>
         <a-select-option value="S"> Solar only </a-select-option>
         <a-select-option value="SB"> Solar+Battery </a-select-option>
       </a-select>
-      Inverter SN:<a-input
-        style="width: 100px"
-        v-model="search.inverter_sn"
-        allow-clear
-        @change="fetchPlants()"
-      ></a-input>
+      Inverter SN:<a-input style="width: 100px" v-model="search.inverter_sn" allow-clear @change="fetchPlants()"></a-input>
       Inverter status:
-      <a-select
-        default-value=""
-        style="width: 120px"
-        v-model="search.inverter_state"
-        allow-clear
-        @change="fetchPlants()"
-      >
+      <a-select default-value="" style="width: 120px" v-model="search.inverter_state" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Inverter </a-select-option>
         <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="1"> Online </a-select-option>
@@ -74,12 +36,7 @@
         <a-select-option value="3"> Abnormal </a-select-option>
       </a-select>
       <template v-if="false">
-        Status:<a-select
-          style="width: 120px"
-          v-model="search.state1"
-          allow-clear
-          @change="fetchPlants()"
-        >
+        Status:<a-select style="width: 120px" v-model="search.state1" allow-clear @change="fetchPlants()">
           <a-select-option value=""> All Batteries </a-select-option>
           <a-select-option value="sa"> Charging </a-select-option>
           <a-select-option value="wa" disabled> Discharging </a-select-option>
@@ -87,41 +44,21 @@
         </a-select>
       </template>
       <a-button type="link" v-if="false">More filters</a-button>
-      <a-button type="primary" icon="search" @click="fetchPlants()"
-        >Search</a-button
-      >
-      <a-button
-        type="danger"
-        title="Sync from Growatt"
-        :loading="loading"
-        @click="syncDevice()"
-        >Sync</a-button
-      >
+      <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
+      <a-button type="danger" title="Sync from Growatt" :loading="loading" @click="syncDevice()">Sync</a-button>
       <a-popover trigger="hover">
         <template slot="content">
           Plase use the standard template to add plants
-          <a href="/AddPlantTemplate.csv" download="AddPlantTemplate.csv"
-            >Add plant template file</a
-          >
+          <a href="/AddPlantTemplate.csv" download="AddPlantTemplate.csv">Add plant template file</a>
         </template>
-        <a-upload
-          :action="plantAdd"
-          :headers="header"
-          :data="plant"
-          :showUploadList="false"
-          @change="handleChange"
-        >
-          <a-button type="">Upload <a-icon type="upload" /></a-button>
+        <a-upload :action="plantAdd" :loading="loading" :headers="header" :data="plant" :showUploadList="false" @change="handleChange">
+          <a-button :loading="loading" type="">Upload
+            <a-icon type="upload" />
+          </a-button>
         </a-upload>
       </a-popover>
     </div>
-    <a-table
-      :data-source="plants"
-      row-key="id"
-      :pagination="false"
-      :loading="loading"
-      @change="handleTableChange"
-    >
+    <a-table :data-source="plants" row-key="id" :pagination="false" :loading="loading" @change="handleTableChange">
       <a-table-column data-index="plant_type" title="Plant type">
         <template slot-scope="text">{{ text | PT }}</template>
       </a-table-column>
@@ -130,18 +67,11 @@
       </a-table-column>
       <a-table-column data-index="status" title="Plant status">
         <template slot-scope="text">
-          <a-tag
-            style="margin-bottom: 10px"
-            :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'"
-            >{{ text | IS }}</a-tag
-          >
+          <a-tag style="margin-bottom: 10px" :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'">{{ text | IS }}</a-tag>
         </template>
       </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
-      <a-table-column
-        data-index="total_component_power"
-        title="System size(kW)"
-      />
+      <a-table-column data-index="total_component_power" title="System size(kW)" />
       <a-table-column data-index="postcode" title="Postcode" />
       <a-table-column data-index="suburb" title="Suburb" />
       <a-table-column data-index="address" title="Address" />
@@ -150,42 +80,26 @@
           <div v-for="i in record.devices" :key="i.id" style="min-width:150px;">
             <a-tag style="margin-bottom: 10px" :color="i.state | ISColor">{{
               i.device_sn
-            }}</a-tag
-            >{{ i.type | DT }}
+            }}</a-tag>{{ i.type | DT }}
           </div>
         </template>
       </a-table-column>
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-      <a-table-column
-        data-index="total_power"
-        title="Total generation(kW/h)"
-      />
+      <a-table-column data-index="total_power" title="Total generation(kW/h)" />
       <a-table-column data-index="action" title="Operations">
         <template slot-scope="text, record">
-          <a-button
-            type="link"
-            @click="
+          <a-button type="link" @click="
               $router.push({
                 name: 'plantDetail',
                 params: { id: record.id },
               })
-            "
-            >Detail</a-button
-          >
+            ">Detail</a-button>
         </template>
       </a-table-column>
     </a-table>
-    <a-pagination
-      :total="page.total"
-      :pageSizeOptions="['15', '30', '50', '70', '100']"
-      :show-total="(total) => `Total ${total} plants`"
-      @change="changePage"
-      @showSizeChange="changePage"
-      show-size-changer
-      show-quick-jumper
-    />
+    <a-pagination :total="page.total" :pageSizeOptions="['15', '30', '50', '70', '100']" :show-total="(total) => `Total ${total} plants`" @change="changePage" @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
@@ -226,6 +140,9 @@ export default {
       if (res && res.code == 200) {
         // console.log("log change:", res, file, event);
         this.$message.success(res.msg);
+        this.loading = false
+      }else{
+        this.loading = true
       }
     },
     syncDevice() {
@@ -234,7 +151,7 @@ export default {
         .dispatch("remote/syncDevice")
         .then((res) => {
           this.loading = false;
-          this.$message.success({ content: res.msg });
+          this.$message.success(res.msg);
           console.log("res:", res);
         })
         .catch(() => {
