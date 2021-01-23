@@ -41,18 +41,17 @@
         allow-clear
         @change="fetchPlants()"
       ></a-input>
-      Plants status:
+      Plant type:
       <a-select
         default-value=""
         style="width: 120px"
-        v-model="search.status"
+        v-model="search.plant_type"
         allow-clear
         @change="fetchPlants()"
       >
-        <a-select-option value=""> All Plants </a-select-option>
-        <a-select-option value="1"> Online </a-select-option>
-        <a-select-option value="0"> Offline </a-select-option>
-        <a-select-option value="2"> Unknown </a-select-option>
+        <a-select-option value=""> All </a-select-option>
+        <a-select-option value="S"> Solar only </a-select-option>
+        <a-select-option value="SB"> Solar+Battery </a-select-option>
       </a-select>
       Inverter SN:<a-input
         style="width: 100px"
@@ -269,8 +268,8 @@ export default {
       if (this.search.state) {
         param.state = this.search.state;
       }
-      if (this.search.status) {
-        param.status = this.search.status;
+      if (this.search.plant_type) {
+        param.plant_type = this.search.plant_type;
       }
       if (this.search.suburb) {
         param.suburb = this.search.suburb;
