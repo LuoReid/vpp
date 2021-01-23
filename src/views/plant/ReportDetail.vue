@@ -43,7 +43,9 @@
         {{ inverters.length }}</a-descriptions-item>
       <a-descriptions-item label="Online">
         {{ onlineCount }}</a-descriptions-item>
-      <a-descriptions-item label="Anomaly">
+      <a-descriptions-item label="Standby">
+        {{ standbyCount }}</a-descriptions-item>
+      <a-descriptions-item label="Abnormal">
         {{ abnormalCount }}</a-descriptions-item>
       <a-descriptions-item label="Offline">
         {{ offlineCount }}</a-descriptions-item>
@@ -68,9 +70,29 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions :title="`Anomaly(${inverterAnomaly.length})`" :column="1">
+    <a-descriptions :title="`Standby(${inverterStandby.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterAnomaly" row-key="id" :pagination="false" :loading="loading">
+        <a-table :data-source="inverterStandby" row-key="id" :pagination="false" :loading="loading">
+          <a-table-column data-index="id" title="#" />
+          <a-table-column data-index="location" title="Location" />
+          <a-table-column data-index="device_sn" title="Inverter SN" />
+          <a-table-column data-index="state" title="Pre-status">
+            <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+          <a-table-column data-index="status_remote" title="Execute Status">
+            <span slot-scope="text">{{
+              text == 0 ? "Successful" : "Failed"
+            }}</span>
+          </a-table-column>
+          <a-table-column data-index="state_remote" title="Current status">
+            <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+        </a-table>
+      </a-descriptions-item>
+    </a-descriptions>
+    <a-descriptions :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
+      <a-descriptions-item>
+        <a-table :data-source="inverterAbnormal" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -134,17 +156,23 @@ export default {
     offlineCount() {
       return this.inverters.filter((f) => f.state == 0).length;
     },
-    abnormalCount() {
+    standbyCount() {
       return this.inverters.filter((f) => f.state == 2).length;
+    }, 
+    abnormalCount() {
+      return this.inverters.filter((f) => f.state == 3).length;
     },
     inverterOnline() {
-      return this.inverters.filter((f) => f.state == 1);
+      return this.inverters.filter((f) => f.state_remote == 1);
     },
-    inverterAnomaly() {
-      return this.inverters.filter((f) => f.state == 0);
+    inverterStandby() {
+      return this.inverters.filter((f) => f.state_remote == 2);
+    },
+    inverterAbnormal() {
+      return this.inverters.filter((f) => f.state_remote == 3);
     },
     inverterOffline() {
-      return this.inverters.filter((f) => f.state == 2);
+      return this.inverters.filter((f) => f.state_remote == 0);
     },
   },
   created() {
