@@ -2,34 +2,17 @@
   <div class="report">
     <h3>Task Report</h3>
     <div class="toolbar">
-      Filter:<a-select
-        default-value=""
-        style="width: 120px"
-        v-model="search.param"
-        allow-clear
-        placeholder="call type"
-        @change="fetchReports()"
-      >
+      Filter:<a-select default-value="" style="width: 120px" v-model="search.param" allow-clear placeholder="call type" @change="fetchReports()">
         <a-select-option value="0"> query inveter </a-select-option>
         <a-select-option value="1"> set inverter </a-select-option>
         <!-- <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="2"> Unknown </a-select-option> -->
       </a-select>
-      <a-input
-        v-model="search.kind"
-        style="width: 150px"
-        placeholder="Postcode"
-        allow-clear
-      /><a-button type="primary" @click="fetchReports()">Search</a-button>
+      <a-input v-model="search.kind" style="width: 150px" placeholder="Postcode" allow-clear />
+      <a-button type="primary" @click="fetchReports()">Search</a-button>
     </div>
     <div>
-      <a-table
-        :data-source="data"
-        row-key="id"
-        :pagination="false"
-        :loading="loading"
-        @change="pageChange"
-      >
+      <a-table :data-source="data" row-key="id" :pagination="false" :loading="loading" @change="pageChange">
         <a-table-column data-index="id" title="Log ID" />
         <a-table-column data-index="kind" title="Kind" />
         <a-table-column data-index="param" title="Param" v-if="false">
@@ -44,15 +27,9 @@
           <template slot-scope="text">{{ (text * 1000) | time }}</template>
         </a-table-column>
       </a-table>
-      <a-pagination
-        :total="page.total"
-        :pageSizeOptions="['15', '30', '50', '70', '100']"
-        :show-total="(total) => `Total ${total} reports`"
-        @change="changePage"
-        @showSizeChange="changePage"
-        show-size-changer
-        show-quick-jumper
-      />
+      <a-pagination :total="page.total" :pageSizeOptions="['15', '30', '50', '70', '100']" 
+      :show-total="(total) => `Total ${total} reports`" :pageSize.sync="page.per_page" 
+      @change="changePage" @showSizeChange="changePage" show-size-changer show-quick-jumper />
     </div>
   </div>
 </template>
@@ -64,8 +41,8 @@ export default {
   data() {
     return {
       data: [],
-      page: { total: 0, pageSize: 15 },
-      search: {param:'1'},
+      page: { total: 0, per_page: 15 },
+      search: { param: "1" },
       loading: false,
     };
   },

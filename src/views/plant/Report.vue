@@ -33,7 +33,7 @@
         </template>
       </a-table-column>
     </a-table>
-    <a-pagination :total="page.total" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} reports`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
+    <a-pagination :total="page.total" :pageSize.sync="page.per_page" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} reports`" @change="changePage"  @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       data: [],
-      page: {total:0,pageSize:15},
+      page: {total:0, per_page: 15},
       search: {},
       loading: false,
     };
