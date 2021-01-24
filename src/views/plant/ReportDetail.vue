@@ -3,6 +3,7 @@
     <div class="logo"><img src="@/assets/logo.png" width="100" alt="Gosolar Logo" /></div>
     <div class="toolbar">
       <a-button @click="toDownload">Download</a-button>
+      <a-button @click="toDownload1" v-if="false">Download1</a-button>
     </div>
     <h4>Task No.{{ remote.id }} Execution Report</h4>
     <a-descriptions title="Access Declaration" :column="1">
@@ -41,16 +42,18 @@
         {{ inverters.length }}</a-descriptions-item>
       <a-descriptions-item label="Success Execution">
         {{ inverters.length }}</a-descriptions-item>
-      <a-descriptions-item label="Online">
-        {{ onlineCount }}</a-descriptions-item>
-      <a-descriptions-item label="Standby">
-        {{ standbyCount }}</a-descriptions-item>
-      <a-descriptions-item label="Abnormal">
-        {{ abnormalCount }}</a-descriptions-item>
-      <a-descriptions-item label="Offline">
-        {{ offlineCount }}</a-descriptions-item>
+      <template v-if="false">
+        <a-descriptions-item label="Online">
+          {{ onlineCount }}</a-descriptions-item>
+        <a-descriptions-item label="Standby">
+          {{ standbyCount }}</a-descriptions-item>
+        <a-descriptions-item label="Abnormal">
+          {{ abnormalCount }}</a-descriptions-item>
+        <a-descriptions-item label="Offline">
+          {{ offlineCount }}</a-descriptions-item>
+      </template>
     </a-descriptions>
-    <a-descriptions :title="`Success Execution(${inverterOnline.length})`" :column="1">
+    <a-descriptions v-if="inverterOnline.length > 0" :title="`Success Execution(${inverterOnline.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterOnline" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
@@ -70,7 +73,7 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions :title="`Standby(${inverterStandby.length})`" :column="1">
+    <a-descriptions v-if="inverterStandby.length > 0" :title="`Standby(${inverterStandby.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterStandby" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
@@ -90,7 +93,7 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
+    <a-descriptions v-if="inverterAbnormal.length > 0" :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterAbnormal" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
@@ -111,7 +114,7 @@
       </a-descriptions-item>
     </a-descriptions>
     <!-- Gosolar#20 vppadmin Gosolar+1-->
-    <a-descriptions :title="`Offline(${inverterOffline.length})`" :column="1">
+    <a-descriptions v-if="inverterOffline.length > 0" :title="`Offline(${inverterOffline.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterOffline" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" />
@@ -150,17 +153,20 @@ export default {
     };
   },
   computed: {
-    onlineCount() {
-      return this.inverters.filter((f) => f.state == 1).length;
-    },
     offlineCount() {
       return this.inverters.filter((f) => f.state == 0).length;
     },
+    onlineCount() {
+      return this.inverters.filter((f) => f.state == 1).length;
+    },
     standbyCount() {
       return this.inverters.filter((f) => f.state == 2).length;
-    }, 
+    },
     abnormalCount() {
       return this.inverters.filter((f) => f.state == 3).length;
+    },
+    inverterOffline() {
+      return this.inverters.filter((f) => f.state_remote == 0);
     },
     inverterOnline() {
       return this.inverters.filter((f) => f.state_remote == 1);
@@ -171,15 +177,19 @@ export default {
     inverterAbnormal() {
       return this.inverters.filter((f) => f.state_remote == 3);
     },
-    inverterOffline() {
-      return this.inverters.filter((f) => f.state_remote == 0);
-    },
   },
   created() {
     this.fetchRemote();
   },
   methods: {
+    toDownload1() {
+      window.open(
+        'mailto:long.read@qq.com?subject=Task report&attachment=""&body=<img src="data:image/png;base64,　iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAYAAABIdFAMAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHhJREFUeNo8zjsOxCAMBFB/　KEAUFFR0Cbng3nQPw68ArZdAlOZppPFIBhH5EAB8b+Tlt9MYQ6i1BuqFaq1CKSVcxZ2Acs6406KUgpt5/　LCKuVgz5BDCSb13ZO99ZOdcZGvt4mJjzMVKqcha68iIePB86GAiOv8CDADlIUQBs7MD3wAAAABJRU5ErkJggg%3D%3D" width="210mm">'
+      );
+    },
     toDownload() {
+      const today = "";
+      document.title = `${today}Task No.${this.remote.id} Execution Report`;
       window.print();
     },
     fetchRemote(param = {}) {
@@ -203,7 +213,7 @@ export default {
 }
 .report h4 {
   font-weight: 500;
-  font-size: 32px;
+  font-size: 20px;
   text-align: center;
 }
 .toolbar {

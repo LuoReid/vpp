@@ -21,14 +21,14 @@
       Postcode:<a-input style="width: 100px" v-model="search.postcode" allow-clear @change="fetchPlants()"></a-input>
       Plant ID:<a-input style="width: 100px" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
       Plant type:
-      <a-select default-value="" style="width: 120px" v-model="search.plant_type" allow-clear @change="fetchPlants()">
+      <a-select default-value="" style="width: 170px" v-model="search.plant_type" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All </a-select-option>
         <a-select-option value="S"> Solar only </a-select-option>
         <a-select-option value="SB"> Solar+Battery </a-select-option>
       </a-select>
       Inverter SN:<a-input style="width: 100px" v-model="search.inverter_sn" allow-clear @change="fetchPlants()"></a-input>
       Inverter status:
-      <a-select default-value="" style="width: 120px" v-model="search.inverter_state" allow-clear @change="fetchPlants()">
+      <a-select default-value="" style="width: 170px" v-model="search.inverter_state" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Inverter </a-select-option>
         <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="1"> Online </a-select-option>

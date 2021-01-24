@@ -19,6 +19,7 @@ export default {
       p0:require("@/assets/p0.png"),
       p1:require("@/assets/p1.png"),
       p2:require("@/assets/p2.png"),
+      p3:require("@/assets/p2.png"),
     };
   },
   mounted() {
