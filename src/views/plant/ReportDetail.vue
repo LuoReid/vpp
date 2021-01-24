@@ -37,7 +37,7 @@
       <a-descriptions-item :label="remote.scope">
         {{ remote[remote.scope] }}</a-descriptions-item>
     </a-descriptions>
-    <a-descriptions title="Executed Rresult" :column="2">
+    <a-descriptions class="table" title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
         {{ inverters.length }}</a-descriptions-item>
       <a-descriptions-item label="Success Execution">
@@ -53,10 +53,10 @@
           {{ offlineCount }}</a-descriptions-item>
       </template>
     </a-descriptions>
-    <a-descriptions v-if="inverterOnline.length > 0" :title="`Success Execution(${inverterOnline.length})`" :column="1">
+    <a-descriptions class="table" v-if="inverterOnline.length > 0" :title="`Success Execution(${inverterOnline.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterOnline" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" />
+          <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -73,10 +73,10 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions v-if="inverterStandby.length > 0" :title="`Standby(${inverterStandby.length})`" :column="1">
+    <a-descriptions class="table" v-if="inverterStandby.length > 0" :title="`Standby(${inverterStandby.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterStandby" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" />
+          <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -93,10 +93,10 @@
         </a-table>
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions v-if="inverterAbnormal.length > 0" :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
+    <a-descriptions class="table" v-if="inverterAbnormal.length > 0" :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterAbnormal" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" />
+          <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -114,10 +114,10 @@
       </a-descriptions-item>
     </a-descriptions>
     <!-- Gosolar#20 vppadmin Gosolar+1-->
-    <a-descriptions v-if="inverterOffline.length > 0" :title="`Offline(${inverterOffline.length})`" :column="1">
+    <a-descriptions class="table" v-if="inverterOffline.length > 0" :title="`Offline(${inverterOffline.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterOffline" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" />
+          <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -239,6 +239,9 @@ export default {
   }
   .main-content #oa-finish-nav {
     display: none;
+  }
+  .table{
+    page-break-inside: avoid;
   }
 }
 @page {
