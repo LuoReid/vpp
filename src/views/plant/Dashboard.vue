@@ -11,24 +11,24 @@
     <h4>Plant management</h4>
     <div class="filter">
       State:
-      <a-select default-value="" v-model="search.state" style="width: 200px;" allow-clear @change="fetchPlants()">
+      <a-select default-value="" v-model="search.state" style="width: 100px;" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All areas </a-select-option>
         <a-select-option value="SA"> SA-South Australia </a-select-option>
         <a-select-option value="WA">WA-West Australia</a-select-option>
         <a-select-option value="VIC"> VIC-Victoria </a-select-option>
       </a-select>
-      Suburb:<a-input style="width: 200px" v-model="search.suburb" allow-clear @pressEnter="fetchPlants()"></a-input>
-      Postcode:<a-input style="width: 200px" v-model="search.postcode" allow-clear @pressEnter="fetchPlants()"></a-input>
-      Plant ID:<a-input style="width: 200px" v-model="search.plant_id" allow-clear @pressEnter="fetchPlants()"></a-input>
+      Suburb:<a-input style="width: 100px" v-model="search.suburb" allow-clear @pressEnter="fetchPlants()"></a-input>
+      Postcode:<a-input style="width: 100px" v-model="search.postcode" allow-clear @pressEnter="fetchPlants()"></a-input>
+      Plant ID:<a-input style="width: 100px" v-model="search.plant_id" allow-clear @pressEnter="fetchPlants()"></a-input>
       Plant type:
-      <a-select default-value="" style="width: 200px;" v-model="search.plant_type" allow-clear @change="fetchPlants()">
+      <a-select default-value="" style="width: 100px;" v-model="search.plant_type" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All </a-select-option>
         <a-select-option value="S"> Solar only </a-select-option>
         <a-select-option value="SB"> Solar+Battery </a-select-option>
       </a-select>
-      Inverter SN:<a-input style="width: 200px" v-model="search.inverter_sn" allow-clear @pressEnter="fetchPlants()"></a-input>
+      Inverter SN:<a-input style="width: 100px" v-model="search.inverter_sn" allow-clear @pressEnter="fetchPlants()"></a-input>
       Inverter status:
-      <a-select default-value="" style="width: 200px;" v-model="search.inverter_state" allow-clear @change="fetchPlants()">
+      <a-select default-value="" style="width: 100px;" v-model="search.inverter_state" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All Inverter </a-select-option>
         <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="1"> Online </a-select-option>
@@ -36,7 +36,7 @@
         <a-select-option value="3"> Abnormal </a-select-option>
       </a-select>
       <template v-if="false">
-        Status:<a-select style="width: 170px" v-model="search.state1" allow-clear @change="fetchPlants()">
+        Status:<a-select style="width: 100px" v-model="search.state1" allow-clear @change="fetchPlants()">
           <a-select-option value=""> All Batteries </a-select-option>
           <a-select-option value="sa"> Charging </a-select-option>
           <a-select-option value="wa" disabled> Discharging </a-select-option>
@@ -219,6 +219,7 @@ export default {
   display: flex;
   align-items: center;
   white-space: nowrap;
+  flex-wrap: wrap;
 }
 .filter > * {
   margin: 0 10px;
