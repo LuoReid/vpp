@@ -3,9 +3,7 @@
     <h3>Plant Detail</h3>
     <a-descriptions title="Basic information" :column="2" bordered>
       <a-descriptions-item label="Plant type">
-        {{ plant.plant_type| PT}}</a-descriptions-item>
-      <a-descriptions-item label="Plant status">
-        {{ plant.status|DT }}</a-descriptions-item>
+        {{ plant.plant_type| PT}}</a-descriptions-item> 
       <a-descriptions-item label="Installation date">
         {{ plant.create_date | day }}</a-descriptions-item>
       <a-descriptions-item label="Plant Id">
@@ -22,6 +20,10 @@
         {{ plant.nmi }}</a-descriptions-item>
       <a-descriptions-item label="Installer">
         {{ plant.installer }}</a-descriptions-item>
+      <a-descriptions-item label="Retailer">
+        {{ plant.retailer }}</a-descriptions-item>
+      <a-descriptions-item label="Job-number">
+        {{ plant.job_number }}</a-descriptions-item>
     </a-descriptions>
     <h4>Devices</h4>
     <a-table :data-source="plant.devices" row-key="id" :pagination="false">
@@ -41,15 +43,16 @@
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-
       <a-table-column data-index="battery" title="Battery">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
     </a-table>
-    <div style="margin:20px">
+    <h4>Today power(kWh)</h4>
+    <div>
       <chart style="min-height:50vh;" :option="optionPower" />
     </div>
-    <div style="margin:20px">
+    <h4>Total power(kWh)</h4>
+    <div>
       <chart style="min-height:50vh;" :option="optionTotal" />
     </div>
   </div>
@@ -88,7 +91,7 @@ export default {
     },
     optionPower() {
       return {
-        title: { text: "Today power" },
+        // title: { text: "Today power" },
         color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
           source: this.powers.filter((f) => f.device_sn == m),
@@ -126,7 +129,7 @@ export default {
     },
     optionTotal() {
       return {
-        title: { text: "Total power" },
+        // title: { text: "Total power",visible:false },
         color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
           source: this.powers.filter((f) => f.device_sn == m),

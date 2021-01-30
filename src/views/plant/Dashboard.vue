@@ -65,16 +65,11 @@
       <a-table-column data-index="create_date" title="Installation date">
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
-      <a-table-column data-index="status" title="Plant status">
-        <template slot-scope="text">
-          <a-tag style="margin-bottom: 10px" :color="text == 1 ? 'green' : text == 2 ? 'orange' : 'gray'">{{ text | IS }}</a-tag>
-        </template>
-      </a-table-column>
       <a-table-column data-index="plant_id" title="Plant ID" />
       <a-table-column data-index="total_component_power" title="System size(kW)" />
       <a-table-column data-index="postcode" title="Postcode" />
       <a-table-column data-index="suburb" title="Suburb" />
-      <a-table-column data-index="address" title="Address" />
+      <a-table-column data-index="address" title="Address" v-if="false" />
       <a-table-column data-index="inverter_sn" title="Inverter SN">
         <template slot-scope="text, record">
           <div v-for="i in record.devices" :key="i.id" style="min-width:150px;">
@@ -87,7 +82,10 @@
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-      <a-table-column data-index="total_power" title="Total generation(kW/h)" />
+      <a-table-column data-index="battery" title="Battery">
+        <template slot-scope="text, record">{{ text | has }}</template>
+      </a-table-column>
+      <a-table-column data-index="total_power" title="Total generation(kWh)" />
       <a-table-column data-index="action" title="Operations">
         <template slot-scope="text, record">
           <a-button type="link" @click="
