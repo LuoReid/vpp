@@ -3,11 +3,15 @@ export default {
   namespaced: true,
   state() {
     return {
-
+      retailers: []
     }
   },
-  getters: {},
-  mutations: {},
+  getters: {
+    retailers: state => state.retailers,
+  },
+  mutations: {
+    retailers: (state, val) => state.retailers = val
+  },
   actions: {
     inverters({ }, param) {
       return remote.inverters(param)
@@ -18,14 +22,20 @@ export default {
     plants({ }, param) {
       return remote.plants(param)
     },
-    getPlant:({},id)=> remote.getPlant(id),
-    getPlantPowers:({},param)=> remote.getPlantPowers(param),
+    getPlant: ({ }, id) => remote.getPlant(id),
+    getPlantPowers: ({ }, param) => remote.getPlantPowers(param),
     reports({ }, param) {
       return remote.reports(param)
     },
     reportById: ({ }, id) => remote.reportById(id),
     inverterAlert: ({ }, param) => remote.inverterAlert(param),
-    syncDevice:({}) => remote.syncDevice(),
-    syncLogs:({},param) => remote.syncLogs(param)
+    syncDevice: ({ }) => remote.syncDevice(),
+    syncLogs: ({ }, param) => remote.syncLogs(param),
+    getPlantRetailers: ({ commit}, param) => {
+      return remote.getPlantRetailers().then(res => {
+        commit('retailers', res.data)
+        return res
+      }) 
+    },
   }
 }

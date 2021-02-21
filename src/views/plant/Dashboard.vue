@@ -35,12 +35,11 @@
         <a-select-option value="2"> Standby </a-select-option>
         <a-select-option value="3"> Abnormal </a-select-option>
       </a-select>
-      <template v-if="false">
-        Status:<a-select style="width: 100px" v-model="search.state1" allow-clear @change="fetchPlants()">
-          <a-select-option value=""> All Batteries </a-select-option>
-          <a-select-option value="sa"> Charging </a-select-option>
-          <a-select-option value="wa" disabled> Discharging </a-select-option>
-          <a-select-option value="vic"> Unclear </a-select-option>
+      <a-input style="width: 120px" placeholder="Job-number" v-model="search.job_number" allow-clear @pressEnter="fetchPlants()"></a-input>
+      <template>
+        <a-select style="width: 100px" placeholder="Retailer" v-model="search.retailer" allow-clear @change="fetchPlants()">
+          <a-select-option value=""> All Retailer </a-select-option>
+          <a-select-option v-for="r in retailers" :value="r" :key="r"> {{r}} </a-select-option>
         </a-select>
       </template>
       <a-button type="link" v-if="false">More filters</a-button>
@@ -86,14 +85,14 @@
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
       <a-table-column data-index="total_power" title="Total generation(kWh)" />
+      <a-table-column data-index="job_number" title="Job-number" />
+      <a-table-column data-index="retailer" title="Retailer" />
       <a-table-column data-index="action" title="Operations">
         <template slot-scope="text, record">
-          <a-button type="link" @click="
-              $router.push({
+          <router-link target="_blank" :to="{
                 name: 'plantDetail',
                 params: { id: record.id },
-              })
-            ">Detail</a-button>
+              }">Detail</router-link>
         </template>
       </a-table-column>
     </a-table>
@@ -104,6 +103,7 @@
 <script>
 import { day, DT, PT, has, IS, time, allIS, ISColor } from "@/util";
 import DashSummary from "./DashSummary";
+import { mapGetters } from "vuex";
 export default {
   filters: { day, DT, PT, has, IS, time, ISColor },
   components: { DashSummary },
@@ -129,8 +129,13 @@ export default {
       plant: {},
     };
   },
+  computed: {
+    ...mapGetters("remote", ["retailers"]),
+  },
   created() {
+    this.$store.dispatch("remote/getPlantRetailers");
     this.fetchPlants({ limit: 15 });
+    console.log('rea:',this.retailers)
   },
   methods: {
     handleChange({ file, event }) {
@@ -200,6 +205,12 @@ export default {
       }
       if (this.search.inverter_sn) {
         param.inverter_sn = this.search.inverter_sn;
+      }
+      if (this.search.job_number) {
+        param.job_number = this.search.job_number;
+      }
+      if (this.search.retailer) {
+        param.retailer = this.search.retailer;
       }
       this.$store.dispatch("remote/plants", param).then((res) => {
         this.loading = false;
