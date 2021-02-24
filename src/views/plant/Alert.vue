@@ -13,8 +13,10 @@
       PlantId:<a-input style="width: 100px" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
       <a-button type="link" v-if="false">More filters</a-button>
       <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
+      <a-button @click="exportInverters()">Export</a-button>
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="false" :loading="loading" @change="handleTableChange">
+      <a-table-column data-index="plant.job_number" title="Job-number" />
       <a-table-column data-index="plant_id" title="Plant ID" />
       <a-table-column data-index="state" title="Device SN">
         <template slot-scope="text, record">
@@ -25,21 +27,24 @@
         <template slot-scope="text">{{text|DT}}</template>
       </a-table-column>
       <a-table-column data-index="manufacturer" title="Manufacturer" />
-      <a-table-column data-index="last_update_time" title="Last upate time">
+      <a-table-column data-index="plant.create_date" title="Installation date">
+        <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
+      <a-table-column data-index="last_update_time" title="Last upate time" />
+      <a-table-column data-index="plant.retailer" title="Retailer" />
     </a-table>
     <a-pagination :total="page.total" :pageSize.sync="page.per_page" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} inverters`" @change="changePage" @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
 <script>
-import { time, DT, ISColor } from "@/util";
+import { time, DT, ISColor, day, downloadExcel } from "@/util";
 export default {
-  filters: { time, DT, ISColor },
+  filters: { time, DT, ISColor, day },
   data() {
     return {
       plants: [],
-      page: { total: 0,per_page:15 },
+      page: { total: 0, per_page: 15 },
       loading: false,
       search: {},
     };
@@ -49,6 +54,32 @@ export default {
   },
 
   methods: {
+    exportInverters(param = {}) {
+      param.kind = "export";
+      this.loading = true;
+      this.$store.dispatch("remote/inverterAlert", param).then((res) => {
+        this.loading = false;
+        const temp = {
+          job_number: "Job-number",
+          plant_id: "Plant ID",
+          device_sn: "Device SN",
+          type: "Type",
+          manufacturer: "Manufacturer",
+          create_date: "Installation date",
+          last_update_time: "Last upate time",
+          retailer: "Retailer",
+        };
+        const data = res.data.map((m) => ({
+          ...m,
+          job_number: m.plant.job_number,
+          create_date: day(m.plant.create_date),
+          retailer: m.plant.retailer,
+          type: DT(m.type),
+        }));
+        const title = `VPP-AlertInverters`;
+        downloadExcel({ temp, title, data });
+      });
+    },
     changePage(page, pageSize) {
       console.log("chage page:", page, pageSize);
       this.fetchPlants({ limit: pageSize || 15, page: page || 1 });
@@ -68,7 +99,7 @@ export default {
       // });
     },
     fetchPlants(param = {}) {
-      param.kind = "page";
+      param.kind = "alert";
       this.loading = true;
       if (!param.limit) {
         param.limit = 15;

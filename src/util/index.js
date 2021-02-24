@@ -64,4 +64,27 @@ function debounce(func, wait, immediate) {
   }
 }
 
+
+export function generateExcel(config = {}) {
+  return import('@/util/Export2Excel').then(excel => {
+    // excel.export_json_to_excel({
+    //   header: header,
+    //   data: data,
+    //   filename: fname,
+    //   autoWidth: true,
+    //   bookType: 'xlsx',
+    //   color: c
+    // })
+    excel.export_json_to_excel({ ...config })
+  })
+}
+export function downloadExcel(config) {
+  const { temp, title, data } = config
+  const keys = Object.keys(temp);
+  const header = Object.values(temp);
+  const filename = title || "SKCRM-下载文件";
+  const d = data.map((m) => keys.map((k) => m[k]));
+  generateExcel({ data: d, header, filename });
+}
+
 export { states, RS, allRS, IS, day, time, DT, PT, has, allIS, ISColor, debounce };
