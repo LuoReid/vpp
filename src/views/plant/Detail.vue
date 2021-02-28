@@ -47,13 +47,12 @@
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
     </a-table>
-    <h4>Today power(kWh)</h4>
+    <h4>Power Tracking</h4>
     <div>
       <chart style="min-height:50vh;" :option="optionPower" />
     </div>
-    <h4>Total power(kWh)</h4>
     <div>
-      <chart style="min-height:50vh;" :option="optionTotal" />
+      <chart style="min-height:50vh;" :option="optionEnergy" />
     </div>
   </div>
 </template>
@@ -91,7 +90,7 @@ export default {
     },
     optionPower() {
       return {
-        // title: { text: "Today power" },
+        title: { text: "Today Power Tracking" },
         color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
           source: this.powers.filter((f) => f.device_sn == m),
@@ -127,12 +126,12 @@ export default {
         })),
       };
     },
-    optionTotal() {
+    optionEnergy() {
       return {
-        // title: { text: "Total power",visible:false },
+        title: { text: "Today generation tracking", },
         color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
-          source: this.powers.filter((f) => f.device_sn == m),
+          source: this.genergy.filter((f) => f.device_sn == m),
         })),
         tooltip: {
           trigger: "axis",
@@ -157,8 +156,8 @@ export default {
           datasetIndex: i,
           encode: {
             x: "day",
-            y: "power_total",
-            tooltip: ["day", "power_total"],
+            y: "energy_today",
+            tooltip: ["day", "energy_today"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -174,6 +173,7 @@ export default {
       this.$store.dispatch("remote/getPlant", this.id).then((res) => {
         this.plant = res.plant;
         this.powers = res.plant.powers;
+        this.energy = res.plant.energy
       });
     },
   },
