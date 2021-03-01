@@ -62,6 +62,9 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
+          <a-table-column data-index="control_time" title="Operation time">
+            <span slot-scope="text">{{text | time }}</span>
+          </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
               text == 0 ? "Successful" : "Failed"
@@ -82,6 +85,9 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
+          <a-table-column data-index="control_time" title="Operation time">
+            <span slot-scope="text">{{text | time }}</span>
+          </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
               text == 0 ? "Successful" : "Failed"
@@ -101,6 +107,9 @@
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+          <a-table-column data-index="control_time" title="Operation time">
+            <span slot-scope="text">{{text | time }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
@@ -123,6 +132,9 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
+          <a-table-column data-index="control_time" title="Operation time">
+            <span slot-scope="text">{{text | time }}</span>
+          </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
               text == 0 ? "Successful" : "Failed"
@@ -137,11 +149,12 @@
   </div>
 </template>
 <script>
-import { RS, IS } from "@/util";
+import { RS, IS,time } from "@/util";
 export default {
   filters: {
     remoteStatus: RS,
     inverterState: IS,
+    datetime:time,
   },
   props: { id: [String, Number] },
   data() {
@@ -196,7 +209,15 @@ export default {
       this.$store.dispatch("remote/reportById", this.id).then((res) => {
         this.remote = res.remote;
         this.plants = res.remote_plants;
-        this.inverters = res.remote_inverters;
+        this.inverters = res.remote_inverters.sort((a,b) => {
+          if(a.control_time < b.control_time){
+            return 1
+          }else if(a.control_time > b.control_time){
+            return -1
+          }else{
+            return 0
+          }
+        });
       });
     },
   },

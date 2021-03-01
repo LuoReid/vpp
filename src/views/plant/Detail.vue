@@ -131,7 +131,7 @@ export default {
         title: { text: "Today generation tracking", },
         color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
-          source: this.genergy.filter((f) => f.device_sn == m),
+          source: this.powers.filter((f) => f.device_sn == m),
         })),
         tooltip: {
           trigger: "axis",

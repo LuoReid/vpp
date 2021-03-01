@@ -76,7 +76,7 @@ export default {
           retailer: m.plant.retailer,
           type: DT(m.type),
         }));
-        const title = `VPP-AlertInverters`;
+        const title = `GoSolarVPP-AlertInverters`;
         downloadExcel({ temp, title, data });
       });
     },

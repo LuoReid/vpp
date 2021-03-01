@@ -82,7 +82,7 @@ export function downloadExcel(config) {
   const { temp, title, data } = config
   const keys = Object.keys(temp);
   const header = Object.values(temp);
-  const filename = title || "SKCRM-下载文件";
+  const filename = title || "GoSolarVPP-下载文件";
   const d = data.map((m) => keys.map((k) => m[k]));
   generateExcel({ data: d, header, filename });
 }
