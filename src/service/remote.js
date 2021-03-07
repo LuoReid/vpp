@@ -11,7 +11,7 @@ const remote = {
     return request.get('/web/plants', { params: param })
   },
   getPlant: id => request.get(`/web/plants/${id}`),
-  getPlantPowers: param => request.get(`/web/plants`, { params: { ...param, kind: 'summary' } }),
+  getPlantPowers: param => request.get(`/web/plants`, { params: { ...param } }),
   reports: param => request.get(`/web/remotes`, { params: param }),
   reportById: id => request.get(`/web/remotes/${id}`),
   inverterAlert: param => request.get(`/web/inverters`, { params: param }),
