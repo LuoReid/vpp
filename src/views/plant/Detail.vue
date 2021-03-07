@@ -1,29 +1,35 @@
 <template>
   <div class="detail">
-    <h3>Plant Detail</h3>
+    <h3>{{plant.job_number}} Plant profile</h3>
     <a-descriptions title="Basic information" :column="2" bordered>
-      <a-descriptions-item label="Plant type">
-        {{ plant.plant_type| PT}}</a-descriptions-item> 
+      <a-descriptions-item label="Job-number">
+        {{ plant.job_number }}</a-descriptions-item>
       <a-descriptions-item label="Installation date">
         {{ plant.create_date | day }}</a-descriptions-item>
-      <a-descriptions-item label="Plant Id">
+      <a-descriptions-item label="Plant type">
+        {{ plant.plant_type| PT}}</a-descriptions-item>
+      <a-descriptions-item label="NMI">
+        {{ plant.nmi }}</a-descriptions-item>
+      <a-descriptions-item label="Smart Meter">
+        {{ plant.smart_meter|has }}</a-descriptions-item>
+      <a-descriptions-item label="Battery">
+        {{ plant.battery|has }}</a-descriptions-item>
+      <a-descriptions-item label="Plant id">
         {{ plant.plant_id }}</a-descriptions-item>
       <a-descriptions-item label="System size">
         {{ plant.total_component_power }}kW</a-descriptions-item>
-      <a-descriptions-item label="Postcode">
-        {{ plant.postcode }}</a-descriptions-item>
-      <a-descriptions-item label="Suburb">
-        {{ plant.suburb }}</a-descriptions-item>
-      <a-descriptions-item label="Address">
-        {{ plant.address }}</a-descriptions-item>
-      <a-descriptions-item label="NMI">
-        {{ plant.nmi }}</a-descriptions-item>
       <a-descriptions-item label="Installer">
         {{ plant.installer }}</a-descriptions-item>
       <a-descriptions-item label="Retailer">
         {{ plant.retailer }}</a-descriptions-item>
-      <a-descriptions-item label="Job-number">
-        {{ plant.job_number }}</a-descriptions-item>
+      <a-descriptions-item label="Suburb">
+        {{ plant.suburb }}</a-descriptions-item>
+      <a-descriptions-item label="Postcode">
+        {{ plant.postcode }}</a-descriptions-item>
+      <a-descriptions-item label="Address">
+        {{ plant.address }}</a-descriptions-item>
+      <a-descriptions-item label="Total Generation(kwh)">
+        {{ plant.total_energy }} (Updated by {{plant.updated_at*1000|atldTime}})</a-descriptions-item>
     </a-descriptions>
     <h4>Devices</h4>
     <a-table :data-source="plant.devices" row-key="id" :pagination="false">
@@ -39,6 +45,7 @@
       <a-table-column data-index="datalogger_sn" title="Datalogger SN" />
       <a-table-column data-index="manufacturer" title="Manufacturer" />
       <a-table-column data-index="last_update_time" title="Last upate time">
+        <template slot-scope="text">{{text|atldTime}}</template>
       </a-table-column>
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
@@ -58,16 +65,17 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS } from "@/util";
+import { day, DT, PT, has, IS, atldTime } from "@/util";
 import Chart from "../../components/Chart.vue";
 export default {
   components: { Chart },
-  filters: { day, DT, PT, has, IS },
+  filters: { day, DT, PT, has, IS, atldTime },
   props: { id: [String, Number] },
   data() {
     return {
       plant: {},
       powers: [],
+      energy: [],
       ds: [
         {
           name: "今日",
@@ -86,7 +94,7 @@ export default {
   },
   computed: {
     ds1() {
-      return [...new Set(this.powers.map((m) => m.device_sn))];
+      return [...new Set((this.plant.devices || []).map((m) => m.device_sn))];
     },
     optionPower() {
       return {
@@ -117,9 +125,9 @@ export default {
           name: m,
           datasetIndex: i,
           encode: {
-            x: "day",
+            x: "dayhour",
             y: "power_today",
-            tooltip: ["day", "power_today"],
+            tooltip: ["dayhour", "power_today"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -128,11 +136,9 @@ export default {
     },
     optionEnergy() {
       return {
-        title: { text: "Today generation tracking", },
-        color: ["#516FAD", "#29AFAF"],
-        dataset: this.ds1.map((m) => ({
-          source: this.powers.filter((f) => f.device_sn == m),
-        })),
+        title: { text: "Today generation tracking" },
+        // color: ["#516FAD", "#29AFAF"],
+        dataset: [{ source: this.energy }],
         tooltip: {
           trigger: "axis",
         },
@@ -155,9 +161,9 @@ export default {
           name: m,
           datasetIndex: i,
           encode: {
-            x: "day",
-            y: "energy_today",
-            tooltip: ["day", "energy_today"],
+            x: "dayhour",
+            y: "today_energy",
+            tooltip: ["today_energy"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -172,8 +178,14 @@ export default {
     fetchPlant(param = {}) {
       this.$store.dispatch("remote/getPlant", this.id).then((res) => {
         this.plant = res.plant;
-        this.powers = res.plant.powers;
-        this.energy = res.plant.energy
+        this.powers = res.plant.powers.map((m) => ({
+          ...m,
+          dayhour: atldTime(m.dayhour),
+        }));
+        this.energy = res.plant.energy.map((m) => ({
+          ...m,
+          dayhour: atldTime(m.dayhour),
+        }));
       });
     },
   },
@@ -181,7 +193,12 @@ export default {
 </script>
 
 <style scoped>
-.detail h4 {
+.detail {
+  padding: 0 15px;
+}
+.detail h4,
+.detail h3 {
+  text-align: center;
   margin-top: 20px;
 }
 </style>

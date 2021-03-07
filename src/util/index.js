@@ -18,6 +18,9 @@ function day(t) {
 function time(t) {
   return moment(t).format('YYYY-MM-DD HH:mm:ss')
 }
+function atldTime(t){
+  return moment(t).tz('Australia/Adelaide').format('lll') 
+}
 function DT(v) {
   return inverterType[v]
 }
@@ -25,7 +28,7 @@ function ISColor(v) {
   return isAllColor[v]
 }
 function PT(v) { return plantType[v] }
-function has(v) { return v ? 'yes' : 'not' }
+function has(v) { return v ? 'Yes' : 'No' }
 
 const allRS = () => Object.fromEntities(remoteStatus).map((k, v) => ({ value: k, label: v }))()
 const allIS = () => Object.fromEntities(inverterState).map((k, v) => ({ value: k, label: v }))()
@@ -87,4 +90,4 @@ export function downloadExcel(config) {
   generateExcel({ data: d, header, filename });
 }
 
-export { states, RS, allRS, IS, day, time, DT, PT, has, allIS, ISColor, debounce };
+export { states, RS, allRS, IS, day, time, DT, PT, has, allIS, ISColor, debounce,atldTime };

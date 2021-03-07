@@ -87,7 +87,7 @@
       <a-table-column data-index="battery" title="Battery">
         <template slot-scope="text, record">{{ text | has }}</template>
       </a-table-column>
-      <a-table-column data-index="total_power" title="Total generation(kWh)" />
+      <a-table-column data-index="total_energy" title="Total generation(kWh)" />
       <a-table-column data-index="job_number" title="Job-number" />
       <a-table-column data-index="retailer" title="Retailer" />
       <a-table-column data-index="action" title="Operations">
@@ -95,7 +95,7 @@
           <router-link target="_blank" :to="{
                 name: 'plantDetail',
                 params: { id: record.id },
-              }">Detail</router-link>
+              }">Profile</router-link>
         </template>
       </a-table-column>
     </a-table>
@@ -237,6 +237,7 @@ export default {
 }
 .filter {
   margin: 10px 0;
+  padding: 0 10px;
   display: flex;
   align-items: center;
   white-space: nowrap;
