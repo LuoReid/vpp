@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="dashboard">
     <a-row :gutter="30" v-if="false">
       <a-col :span="14">
         <DashSummary title="Daily Overview" :data="data" />
@@ -8,7 +8,21 @@
         <DashSummary title="Summary" :data="data1" />
       </a-col>
     </a-row>
-    <h4>Plant management</h4>
+    <h4 v-if="false">Plant management</h4>
+    <span class="upload">
+      <a-button type="danger" title="Sync from Growatt" :loading="loading" @click="syncDevice()">Sync</a-button>
+      <a-popover trigger="hover">
+        <template slot="content">
+          Plase use the standard template to add plants
+          <a href="/AddPlantTemplate.csv" download="AddPlantTemplate.csv">Add plant template file</a>
+        </template>
+        <a-upload :action="plantAdd" :loading="loading" :headers="header" :data="plant" :showUploadList="false" @change="handleChange">
+          <a-button :loading="loading" type="">Upload
+            <a-icon type="upload" />
+          </a-button>
+        </a-upload>
+      </a-popover>
+    </span>
     <div class="filter">
       State:
       <a-select default-value="" v-model="search.state" style="width: 100px;" allow-clear @change="fetchPlants()">
@@ -44,18 +58,7 @@
       </template>
       <a-button type="link" v-if="false">More filters</a-button>
       <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
-      <a-button type="danger" title="Sync from Growatt" :loading="loading" @click="syncDevice()">Sync</a-button>
-      <a-popover trigger="hover">
-        <template slot="content">
-          Plase use the standard template to add plants
-          <a href="/AddPlantTemplate.csv" download="AddPlantTemplate.csv">Add plant template file</a>
-        </template>
-        <a-upload :action="plantAdd" :loading="loading" :headers="header" :data="plant" :showUploadList="false" @change="handleChange">
-          <a-button :loading="loading" type="">Upload
-            <a-icon type="upload" />
-          </a-button>
-        </a-upload>
-      </a-popover>
+
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="false" :loading="loading" @change="handleTableChange">
       <a-table-column data-index="plant_type" title="Plant type">
@@ -135,7 +138,7 @@ export default {
   created() {
     this.$store.dispatch("remote/getPlantRetailers");
     this.fetchPlants({ limit: 15 });
-    console.log('rea:',this.retailers)
+    console.log("rea:", this.retailers);
   },
   methods: {
     handleChange({ file, event }) {
@@ -223,6 +226,15 @@ export default {
 </script>
 
 <style scoped>
+.dashboard {
+  position: relative;
+}
+.upload{
+  position: absolute;
+  z-index: 1;
+  top: -50px;
+  right: 0;
+}
 .filter {
   margin: 10px 0;
   display: flex;

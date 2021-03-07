@@ -100,7 +100,7 @@ export default {
 }
 #components-layout-demo-custom-trigger .main-content {
   margin: 16px;
-  padding: 24px;
+  /* padding: 24px; */
   background: #fff;
   min-height: 280px;
 }
