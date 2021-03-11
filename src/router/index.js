@@ -19,23 +19,23 @@ const createRouter = [
     path: '/', redirect: { name: 'plant' }, component: Layout, children: [
       {
         path: 'plant', name: 'plant', redirect: { name: 'plantDashboard' }, component: PlantLayout, children: [
-          { path: 'dashboard', name: 'plantDashboard', component: Dashboard },
-          { path: 'remote', name: 'plantControl', component: Control },
-          { path: 'alert', name: 'plantAlert', component: load('plant/Alert') },
-          { path: 'report', name: 'plantReport', component: Report },
-          { path: 'report/:id', name: 'plantReportDetail', props: true, component: ReportDetail },
-          { path: ':id', name: 'plantDetail', props: true, component: load('plant/Detail') },
+          { path: 'dashboard', name: 'plantDashboard', component:() => import(/* webpackChunkName: "plantdashboard" */ '../views/plant/Dashboard.vue')  },
+          { path: 'remote', name: 'plantControl', component:() => import(/* webpackChunkName: "plantcontrol" */ '../views/plant/RemoteControl.vue')  },
+          { path: 'alert', name: 'plantAlert', component: () => import(/* webpackChunkName: "plantalert" */ '../views/plant/Alert.vue')},
+          { path: 'report', name: 'plantReport', component:() => import(/* webpackChunkName: "plantreport" */ '../views/plant/Report.vue') },
+          { path: 'report/:id', name: 'plantReportDetail', props: true, component:() => import(/* webpackChunkName: "reprotdetail" */ '../views/plant/ReportDetail.vue')  },
+          { path: ':id', name: 'plantDetail', props: true, component: () => import(/* webpackChunkName: "plantdetail" */ '../views/plant/Detail.vue') },
         ]
       },
-      { path: 'plantMap', name: 'plantMap', component: load('plant/PlantMap') },
-      { path: 'data', name: 'data', component: load('dashboard/Index') },
-      { path: 'account', name: 'account', component: load('account/Index') },
-      { path: 'account/:id', name: 'accountEdit', component: load('account/Edit') },
-      { path: 'log', name: 'log', component: load('plant/Log') },
+      { path: 'plantMap', name: 'plantMap', component: () => import(/* webpackChunkName: "plantmap" */ '../views/plant/PlantMap.vue') },
+      { path: 'data', name: 'data', component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard/Index.vue') },
+      { path: 'account', name: 'account', component: () => import(/* webpackChunkName: "account" */ '../views/account/Index.vue') },
+      { path: 'account/:id', name: 'accountEdit', component:  () => import(/* webpackChunkName: "account-detail" */ '../views/account/Edit.vue') },
+      { path: 'log', name: 'log', component:  () => import(/* webpackChunkName: "log" */ '../views/plant/Log.vue') },
     ]
   },
-  { path: '/login', name: 'login', component: Login },
-  { path: '*', name: '404', component: NotFound }
+  { path: '/login', name: 'login', component:() => import(/* webpackChunkName: "cart" */ '../views/Login.vue')  },
+  { path: '*', name: '404', component:() => import(/* webpackChunkName: "cart" */ '../views/NotFound.vue')  }
 ]
 
 const r = () => new Router({ mode: 'history', routes: createRouter })

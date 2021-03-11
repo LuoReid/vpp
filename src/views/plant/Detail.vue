@@ -45,7 +45,7 @@
       <a-table-column data-index="datalogger_sn" title="Datalogger SN" />
       <a-table-column data-index="manufacturer" title="Manufacturer" />
       <a-table-column data-index="last_update_time" title="Last upate time">
-        <template slot-scope="text">{{text|atldTime}}</template>
+        <template slot-scope="text">{{text|atldTime1}}</template>
       </a-table-column>
       <a-table-column data-index="smart_meter" title="Smart meter">
         <template slot-scope="text, record">{{ text | has }}</template>
@@ -65,11 +65,11 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS, atldTime } from "@/util";
+import { day, DT, PT, has, IS, atldTime,atldTime1 } from "@/util";
 import Chart from "../../components/Chart.vue";
 export default {
   components: { Chart },
-  filters: { day, DT, PT, has, IS, atldTime },
+  filters: { day, DT, PT, has, IS, atldTime,atldTime1 },
   props: { id: [String, Number] },
   data() {
     return {
@@ -108,11 +108,12 @@ export default {
         },
         xAxis: {
           type: "category",
-          splitNumber: 13,
-          // boundaryGap: false,
+          splitNumber: 24,
+          boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          // data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
         },
         yAxis: {
           type: "value",
@@ -122,6 +123,7 @@ export default {
         },
         series: this.ds1.map((m, i) => ({
           type: "line",
+          smooth: true,
           name: m,
           datasetIndex: i,
           encode: {
@@ -149,6 +151,7 @@ export default {
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          // data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
         },
         yAxis: {
           type: "value",

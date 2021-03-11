@@ -98,6 +98,12 @@ export default {
 </script>
 
 <style scoped>
+.map{
+  padding: 0 15px;
+}
+.map h4{
+  margin: 15px 0;
+}
 .map-view {
   height: 80vh;
 }

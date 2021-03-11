@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="control">
     <div class="box">
       <a-radio-group v-model="kind" button-style="solid">
         <a-radio-button value="p"> Solar PV System Control </a-radio-button>
@@ -149,6 +149,9 @@ export default {
 </script>
 
 <style scoped>
+.control{
+  padding: 0 15px;
+}
 .box {
   margin: 20px 0;
 }

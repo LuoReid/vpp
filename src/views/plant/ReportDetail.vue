@@ -29,9 +29,9 @@
       <a-descriptions-item label="Status">
         {{ remote.status | remoteStatus }}</a-descriptions-item>
       <a-descriptions-item v-if="remote.start_time" label="Start time">
-        {{ remote.start_time }}</a-descriptions-item>
+        {{ remote.start_time | atldTime1}}</a-descriptions-item>
       <a-descriptions-item v-if="remote.end_time" label="End time">
-        {{ remote.end_time }}</a-descriptions-item>
+        {{ remote.end_time | atldTime1 }}</a-descriptions-item>
     </a-descriptions>
     <a-descriptions title="Task Scope" :column="1">
       <a-descriptions-item :label="remote.scope">
@@ -149,12 +149,13 @@
   </div>
 </template>
 <script>
-import { RS, IS,time } from "@/util";
+import { RS, IS, time, atldTime1 } from "@/util";
 export default {
   filters: {
     remoteStatus: RS,
     inverterState: IS,
-    datetime:time,
+    datetime: time,
+    atldTime1,
   },
   props: { id: [String, Number] },
   data() {
@@ -209,13 +210,13 @@ export default {
       this.$store.dispatch("remote/reportById", this.id).then((res) => {
         this.remote = res.remote;
         this.plants = res.remote_plants;
-        this.inverters = res.remote_inverters.sort((a,b) => {
-          if(a.control_time < b.control_time){
-            return 1
-          }else if(a.control_time > b.control_time){
-            return -1
-          }else{
-            return 0
+        this.inverters = res.remote_inverters.sort((a, b) => {
+          if (a.control_time < b.control_time) {
+            return 1;
+          } else if (a.control_time > b.control_time) {
+            return -1;
+          } else {
+            return 0;
           }
         });
       });
@@ -231,6 +232,7 @@ export default {
 .report {
   max-width: 297mm;
   margin: 10 auto;
+  padding: 0 15px;
 }
 .report h4 {
   font-weight: 500;
@@ -261,7 +263,7 @@ export default {
   .main-content #oa-finish-nav {
     display: none;
   }
-  .table{
+  .table {
     page-break-inside: avoid;
   }
 }

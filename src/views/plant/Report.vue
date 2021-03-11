@@ -1,6 +1,6 @@
 <template>
   <div class="report">
-    <h3>Task Report</h3>
+    <!-- <h3>Task Report</h3> -->
     <div class="toolbar">
       Filter
       <a-input v-model="search.postcode" style="width: 150px" placeholder="Postcode" allow-clear />

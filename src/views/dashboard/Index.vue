@@ -144,12 +144,12 @@ export default {
         },
         series: this.ds1.map((m, i) => ({
           type: "line",
-          name: "Today power",
+          name: "Day generation",
           datasetIndex: i,
           encode: {
             x: "today",
             y: "today_energy",
-            tooltip: ["today", "today_energy"],
+            tooltip: [ "today_energy"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -180,12 +180,12 @@ export default {
         },
         series: this.ds1.map((m, i) => ({
           type: "bar",
-          name: "Today total power",
+          name: "Month generation",
           datasetIndex: i,
           encode: {
             x: "today",
-            y: "power_total",
-            tooltip: ["day", "power_total"],
+            y: "today_energy",
+            tooltip: ["today_energy"],
           },
           symbol: "circle",
           symbolSize: 10,

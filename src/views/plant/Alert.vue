@@ -1,6 +1,6 @@
 <template>
   <div class="alet">
-    <h4>Alert inverters</h4>
+    <!-- <h4>Alert inverters</h4> -->
     <div class="filter">
       Filter Satate:
       <a-select default-value="" v-model="search.state" style="width: 120px" allow-clear @change="fetchPlants()">
@@ -30,7 +30,8 @@
       <a-table-column data-index="plant.create_date" title="Installation date">
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
-      <a-table-column data-index="last_update_time" title="Last upate time" />
+      <a-table-column data-index="last_update_time" title="Last upate time" > <template slot-scope="text">{{text|atldTime1}}</template>
+      </a-table-column>
       <a-table-column data-index="plant.retailer" title="Retailer" />
     </a-table>
     <a-pagination :total="page.total" :pageSize.sync="page.per_page" :pageSizeOptions="['15','30','50','70','100']" :show-total="total => `Total ${total} inverters`" @change="changePage" @showSizeChange="changePage" show-size-changer show-quick-jumper />
@@ -38,9 +39,9 @@
 </template>
 
 <script>
-import { time, DT, ISColor, day, downloadExcel } from "@/util";
+import { time, DT, ISColor, day, downloadExcel,atldTime1 } from "@/util";
 export default {
-  filters: { time, DT, ISColor, day },
+  filters: { time, DT, ISColor, day ,atldTime1},
   data() {
     return {
       plants: [],
@@ -130,6 +131,9 @@ export default {
 </script>
 
 <style scoped>
+.alet{
+  padding: 0 15px;
+}
 .filter {
   margin: 10px 0;
   display: flex;
