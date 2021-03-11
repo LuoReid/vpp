@@ -18,9 +18,12 @@ function day(t) {
 function time(t) {
   return moment(t).format('YYYY-MM-DD HH:mm:ss')
 }
-function atldTime1(t){
+function atldTime1(t) {
   // return moment(t).format('lll')
-  return t.substring(0,t.length-4)
+  if (t) {
+    return t.substring(0, t.length - 4)
+  }
+  return t || ''
 }
 function atldTime(t) {
   // return moment(t).clone().tz('Australia/Adelaide').format('lll')
@@ -95,4 +98,4 @@ export function downloadExcel(config) {
   generateExcel({ data: d, header, filename });
 }
 
-export { states, RS, allRS, IS, day, time, DT, PT, has, allIS, ISColor, debounce, atldTime,atldTime1 };
+export { states, RS, allRS, IS, day, time, DT, PT, has, allIS, ISColor, debounce, atldTime, atldTime1 };
