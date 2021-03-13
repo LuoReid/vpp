@@ -63,7 +63,7 @@
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | time }}</span>
+            <span slot-scope="text">{{text | atldTime1 }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
@@ -86,7 +86,7 @@
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | time }}</span>
+            <span slot-scope="text">{{text | atldTime1 }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
@@ -109,7 +109,7 @@
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
           <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | time }}</span>
+            <span slot-scope="text">{{text | atldTime1 }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
             <span slot-scope="text">{{
@@ -132,11 +132,11 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | time }}</span>
+          <a-table-column data-index="control_time" title="Operation time" width="190px">
+            <span slot-scope="text">{{text | atldTime1 }}</span>
           </a-table-column>
           <a-table-column data-index="status_remote" title="Execute Status">
-            <span slot-scope="text">{{
+            <span slot-scope="text" style="white-space: nowrap;">{{
               text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
@@ -230,6 +230,7 @@ export default {
   /* width: 100px; */
 }
 .report {
+  
   max-width: 297mm;
   margin: 10 auto;
   padding: 0 15px;
