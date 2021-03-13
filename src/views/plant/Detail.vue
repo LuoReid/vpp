@@ -65,11 +65,12 @@
 </template>
 
 <script>
-import { day, DT, PT, has, IS, atldTime,atldTime1 } from "@/util";
+import { day, DT, PT, has, IS, atldTime, atldTime1 } from "@/util";
 import Chart from "../../components/Chart.vue";
+
 export default {
   components: { Chart },
-  filters: { day, DT, PT, has, IS, atldTime,atldTime1 },
+  filters: { day, DT, PT, has, IS, atldTime, atldTime1 },
   props: { id: [String, Number] },
   data() {
     return {
@@ -93,6 +94,25 @@ export default {
     };
   },
   computed: {
+    todays() {
+      const d = [];
+      const today = new Date().toISOString().substring(0, 10);
+      for (let i = 0; i < 24; i++) {
+        const h = `${i}`.padStart(2, "0");
+        d.push(`${today} ${h}:00:00`);
+      }
+      return d;
+    },
+    anchor() {
+      const today = new Date().toISOString().substring(0, 10);
+      let tom = new Date();
+      tom.setDate(tom.getDate() + 1);
+      const tm1 = tom.toISOString().substring(0, 10);
+      return [
+        { name: `${today} 00:00:00`, value: [`${today} 00:00:00`, 0] },
+        { name: `${tm1} 00:00:00`, value: [`${tm1} 00:00:00`, 0] },
+      ];
+    },
     ds1() {
       return [...new Set((this.plant.devices || []).map((m) => m.device_sn))];
     },
@@ -107,13 +127,14 @@ export default {
           trigger: "axis",
         },
         xAxis: {
-          type: "category",
+          type: "time",
           splitNumber: 24,
           boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
-          // data: ['00:00', '01:15', '02:30', '03:45', '05:00', '06:15', '07:30', '08:45', '10:00', '11:15', '12:30', '13:45', '15:00', '16:15', '17:30', '18:45', '20:00', '21:15', '22:30', '23:45']
+          // interval:1000*3600,
+          // data: this.todays,
         },
         yAxis: {
           type: "value",
@@ -129,7 +150,7 @@ export default {
           encode: {
             x: "dayhour",
             y: "power_today",
-            tooltip: ["dayhour", "power_today"],
+            tooltip: ["power_today"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -145,9 +166,9 @@ export default {
           trigger: "axis",
         },
         xAxis: {
-          type: "category",
+          type: "time",
           splitNumber: 13,
-          // boundaryGap: false,
+          // boundaryGap: true,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
@@ -181,14 +202,8 @@ export default {
     fetchPlant(param = {}) {
       this.$store.dispatch("remote/getPlant", this.id).then((res) => {
         this.plant = res.plant;
-        this.powers = res.plant.powers.map((m) => ({
-          ...m,
-          dayhour: atldTime(m.dayhour),
-        }));
-        this.energy = res.plant.energy.map((m) => ({
-          ...m,
-          dayhour: atldTime(m.dayhour),
-        }));
+        this.powers = res.plant.powers;
+        this.energy = res.plant.energy;
       });
     },
   },

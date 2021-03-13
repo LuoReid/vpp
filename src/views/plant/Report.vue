@@ -21,10 +21,10 @@
         <a-tag slot-scope="text, record">{{ text | remoteStatus }}</a-tag>
       </a-table-column>
       <a-table-column data-index="start_time" title="Start time">
-        <template slot-scope="text">{{text|atldTime}}</template>
+        <template slot-scope="text">{{text|atldTime1}}</template>
       </a-table-column>
       <a-table-column data-index="end_time" title="End time">
-        <template slot-scope="text">{{text|atldTime}}</template>
+        <template slot-scope="text">{{text|atldTime1}}</template>
       </a-table-column>
       <a-table-column data-index="created_at" title="Operate time">
         <template slot-scope="text">{{text*1000|atldTime}}</template>
@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import { RS, allRS, atldTime } from "@/util";
+import { RS, allRS, atldTime,atldTime1 } from "@/util";
 export default {
-  filters: { remoteStatus: RS, atldTime },
+  filters: { remoteStatus: RS, atldTime,atldTime1 },
   data() {
     return {
       data: [],

@@ -53,7 +53,7 @@ export default {
           trigger: "axis",
         },
         xAxis: {
-          type: "category",
+          type: "time",
           splitNumber: 13,
           // boundaryGap: false,
           axisTick: { show: false },
@@ -73,7 +73,7 @@ export default {
           encode: {
             x: "dayhour",
             y: "power_today",
-            tooltip: ["dayhour", "power_today"],
+            tooltip: ["power_today"],
           },
           symbol: "circle",
           symbolSize: 10,
@@ -91,7 +91,7 @@ export default {
           trigger: "axis",
         },
         xAxis: {
-          type: "category",
+          type: "time",
           splitNumber: 13,
           // boundaryGap: false,
           axisTick: { show: false },
@@ -111,7 +111,7 @@ export default {
           encode: {
             x: "today",
             y: "today_energy",
-            tooltip: ["today", "today_energy"],
+            tooltip: [ "today_energy"],
           },
           symbol: "circle",
           symbolSize: 10,
