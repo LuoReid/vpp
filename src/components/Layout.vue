@@ -50,6 +50,9 @@ export default {
   computed: {
     ...mapGetters(["user"]),
   },
+  created() {
+    console.log("layout user:", this.user);
+  },
   methods: {
     ...mapActions(["logout"]),
     toPage({ item, key, keyPath }) {

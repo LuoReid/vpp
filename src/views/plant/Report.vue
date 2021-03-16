@@ -1,8 +1,7 @@
 <template>
   <div class="report">
     <!-- <h3>Task Report</h3> -->
-    <div class="toolbar">
-      Filter
+    <div class="filter">
       <a-input v-model="search.postcode" style="width: 150px" placeholder="Postcode" allow-clear />
       <a-input v-model="search.id" style="width: 150px" placeholder="Task ID" allow-clear />
       <a-select default-value="" v-model="search.operate" placeholder="Command" style="width: 120px;" allow-clear @change="fetchReports()">
@@ -91,4 +90,16 @@ export default {
 .report {
   padding: 0 15px;
 }
+.filter {
+  margin: 10px 0;
+  /* padding: 0 10px; */
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-wrap: wrap;
+}
+.filter > * {
+  margin: 0 10px 10px 0;
+}
+
 </style>

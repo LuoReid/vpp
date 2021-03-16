@@ -2,15 +2,19 @@
   <div class="alet">
     <!-- <h4>Alert inverters</h4> -->
     <div class="filter">
-      Filter Satate:
-      <a-select default-value="" v-model="search.state" style="width: 120px" allow-clear @change="fetchPlants()">
+      <a-select default-value="" placeholder="State" v-model="search.state" style="width: 120px" allow-clear @change="fetchPlants()">
         <a-select-option value=""> All states </a-select-option>
         <a-select-option value="0"> Offline </a-select-option>
         <a-select-option value="1">Online</a-select-option>
         <a-select-option value="2"> Standby </a-select-option>
         <a-select-option value="3"> Abnormal </a-select-option>
       </a-select>
-      PlantId:<a-input style="width: 100px" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
+      <a-input style="width: 100px" placeholder="PlantId" v-model="search.plant_id" allow-clear @change="fetchPlants()"></a-input>
+      <a-input style="width: 120px" placeholder="Job-number" v-model="search.job_number" allow-clear @pressEnter="fetchPlants()"></a-input>
+      <a-select style="width: 100px" placeholder="Retailer" v-model="search.retailer" allow-clear @change="fetchPlants()">
+        <a-select-option value=""> All Retailer </a-select-option>
+        <a-select-option v-for="r in retailers" :value="r" :key="r"> {{r}} </a-select-option>
+      </a-select>
       <a-button type="link" v-if="false">More filters</a-button>
       <a-button type="primary" icon="search" @click="fetchPlants()">Search</a-button>
       <a-button @click="exportInverters()">Export</a-button>
@@ -30,7 +34,7 @@
       <a-table-column data-index="plant.create_date" title="Installation date">
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
-      <a-table-column data-index="last_update_time" title="Last upate time" > <template slot-scope="text">{{text|atldTime1}}</template>
+      <a-table-column data-index="last_update_time" title="Last upate time"> <template slot-scope="text">{{text|atldTime1}}</template>
       </a-table-column>
       <a-table-column data-index="plant.retailer" title="Retailer" />
     </a-table>
@@ -39,9 +43,10 @@
 </template>
 
 <script>
-import { time, DT, ISColor, day, downloadExcel,atldTime1 } from "@/util";
+import { mapGetters } from "vuex";
+import { time, DT, ISColor, day, downloadExcel, atldTime1 } from "@/util";
 export default {
-  filters: { time, DT, ISColor, day ,atldTime1},
+  filters: { time, DT, ISColor, day, atldTime1 },
   data() {
     return {
       plants: [],
@@ -52,8 +57,11 @@ export default {
   },
   created() {
     this.fetchPlants({ limit: 15 });
+    this.$store.dispatch("remote/getPlantRetailers");
   },
-
+  computed: {
+    ...mapGetters("remote", ["retailers"]),
+  },
   methods: {
     exportInverters(param = {}) {
       param.kind = "export";
@@ -120,6 +128,12 @@ export default {
       if (this.search.plant_id) {
         param.plant_id = this.search.plant_id;
       }
+      if (this.search.job_number) {
+        param.job_number = this.search.job_number;
+      }
+      if (this.search.retailer) {
+        param.retailer = this.search.retailer;
+      }
       this.$store.dispatch("remote/inverterAlert", param).then((res) => {
         this.loading = false;
         this.plants = res.data;
@@ -131,7 +145,7 @@ export default {
 </script>
 
 <style scoped>
-.alet{
+.alet {
   padding: 0 15px;
 }
 .filter {
@@ -140,6 +154,6 @@ export default {
   align-items: center;
 }
 .filter > * {
-  margin: 0 10px;
+  margin: 0 10px 10px 0;
 }
 </style>

@@ -66,7 +66,9 @@ export default {
       handler(newVal, oldVal) {
         // console.log("watch option:", this.mychart, newVal, oldVal);
         if (this.mychart && newVal) {
-          this.mychart.setOption(newVal, true);
+          this.$nextTick(() => {
+            this.mychart.setOption(newVal, true);
+          });
         }
       },
       immediate: true,
@@ -74,52 +76,54 @@ export default {
     },
   },
   mounted() {
-    this.mychart = echarts.init(this.$refs.mymap);
-    // this.showEcharts();
-    // this.registerMap(this.map);
-    if (this.mychart) {
-      const initOption = Object.assign(
-        this.optionDefault,
-        this.initOption,
-        this.option
-      );
-      this.mychart.setOption(initOption);
-      if (this.events) {
-        this.events.forEach((e) => {
-          // console.log("demo events:", e);
-          if (e.query) {
-            this.mychart.on(e.event, e.query, (params) => {
-              // this.$emit(e.event || "click", params, e.query);
-              // console.log("demo:", e, params);
-              e.fn && e.fn(params, e);
-            });
-          } else {
-            this.mychart.on(e.event, (params) => {
-              e.fn && e.fn(params, e);
-            });
-          }
-        });
-      }
-      this.mychart.on("finished", (e) => {
-        const series = this.mychart.getOption().series[0];
-        if (series && series.name === "projectDetail" && series.data) {
-          const data = series.data;
-          (data || []).forEach((ei) => {
-            if (ei.highlight) {
-              this.chartAction(this.mychart, "highlight", {
-                seriesName: series.name,
-                name: ei.name,
+    this.$nextTick(() => {
+      this.mychart = echarts.init(this.$refs.mymap);
+      // this.showEcharts();
+      // this.registerMap(this.map);
+      if (this.mychart) {
+        const initOption = Object.assign(
+          this.optionDefault,
+          this.initOption,
+          this.option
+        );
+        this.mychart.setOption(initOption);
+        if (this.events) {
+          this.events.forEach((e) => {
+            // console.log("demo events:", e);
+            if (e.query) {
+              this.mychart.on(e.event, e.query, (params) => {
+                // this.$emit(e.event || "click", params, e.query);
+                // console.log("demo:", e, params);
+                e.fn && e.fn(params, e);
+              });
+            } else {
+              this.mychart.on(e.event, (params) => {
+                e.fn && e.fn(params, e);
               });
             }
           });
         }
-      });
-      window.onresize = () => {
-        if (this.mychart) {
-          this.mychart.resize();
-        }
-      };
-    }
+        this.mychart.on("finished", (e) => {
+          const series = this.mychart.getOption().series[0];
+          if (series && series.name === "projectDetail" && series.data) {
+            const data = series.data;
+            (data || []).forEach((ei) => {
+              if (ei.highlight) {
+                this.chartAction(this.mychart, "highlight", {
+                  seriesName: series.name,
+                  name: ei.name,
+                });
+              }
+            });
+          }
+        });
+        window.onresize = () => {
+          if (this.mychart) {
+            this.mychart.resize();
+          }
+        };
+      }
+    });
   },
   beforeDestroy() {
     // window.onresize = null;
@@ -159,6 +163,7 @@ export default {
 .mymap {
   min-width: 375px;
   width: 100%;
+  max-width: 100%;
   min-height: 200px;
   height: 100%;
 }

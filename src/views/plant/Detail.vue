@@ -56,7 +56,7 @@
     </a-table>
     <h4>Power Tracking</h4>
     <div>
-      <chart style="min-height:50vh;" :option="optionPower" />
+      <chart style="min-height:50vh;max-width:100%;" :option="optionPower" />
     </div>
     <div>
       <chart style="min-height:50vh;" :option="optionEnergy" />
@@ -119,7 +119,7 @@ export default {
     optionPower() {
       return {
         title: { text: "Today Power Tracking" },
-        color: ["#516FAD", "#29AFAF"],
+        // color: ["#516FAD", "#29AFAF"],
         dataset: this.ds1.map((m) => ({
           source: this.powers.filter((f) => f.device_sn == m),
         })),

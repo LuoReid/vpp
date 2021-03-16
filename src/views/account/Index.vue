@@ -4,12 +4,7 @@
     <div class="filter">
       <a-button type="primary" @click="addAccount">Add user</a-button>
     </div>
-    <a-table
-      :data-source="data"
-      row-key="id"
-      :pagination="false"
-      :loading="loading"
-    >
+    <a-table :data-source="data" row-key="id" :pagination="false" :loading="loading">
       <a-table-column data-index="name" title="Name"> </a-table-column>
       <a-table-column data-index="login_name" title="Login name">
       </a-table-column>
@@ -20,20 +15,12 @@
         </template>
       </a-table-column>
     </a-table>
-    <a-pagination
-      :total="page.total"
-      :pageSizeOptions="['15', '30', '50', '70', '100']"
-      :show-total="(total) => `Total ${total} users`"
-      @change="changePage"
-      @showSizeChange="changePage"
-      show-size-changer
-      show-quick-jumper
-    />
+    <a-pagination :total="page.total" :pageSizeOptions="['15', '30', '50', '70', '100']" :show-total="(total) => `Total ${total} users`" @change="changePage" @showSizeChange="changePage" show-size-changer show-quick-jumper />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -42,8 +29,8 @@ export default {
       loading: false,
     };
   },
-  computed:{
-    ...mapGetters(['user'])
+  computed: {
+    ...mapGetters(["user"]),
   },
   created() {
     this.fetchUsers();
@@ -77,4 +64,15 @@ export default {
 </script>
 
 <style scoped>
+.user {
+  padding: 0 15px;
+}
+.filter {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+}
+.filter > * {
+  margin: 0 10px 10px 0;
+}
 </style>

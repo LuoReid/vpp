@@ -16,7 +16,7 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
   modules[moduleName] = value.default
   return modules
 }, {})
-
+const user1 = JSON.parse(localStorage.getItem("user") || '{"name":""}')
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
   state() {
@@ -43,9 +43,10 @@ export default new Vuex.Store({
   },
   getters: {
     user: state => {
+      console.log(' getters :', state.user, state.token)
       return state.user
     },
-    hasToken: state => state.token != 'null'&&!!state.token,
+    hasToken: state => state.token != 'null' && !!state.token,
     sideOpen: state => state.sideOpen,
     roles: state => state.roles,
     token: state => state.token
@@ -55,7 +56,10 @@ export default new Vuex.Store({
       commit('sideOpen', value)
     },
     setUser({ commit }, user) {
-      commit('user', user)
+      if (!user) {
+        user = JSON.parse(localStorage.getItem("user") || '{"name":""}')
+        commit('user', { user: user, token: '' })
+      }
     },
     login({ commit }, user) {
       return api.login(user).then(res => {

@@ -39,69 +39,13 @@
     </a-descriptions>
     <a-descriptions class="table" title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
-        {{ inverters.length }}</a-descriptions-item>
+        {{ inverterCount }}</a-descriptions-item>
       <a-descriptions-item label="Success Execution">
-        {{ inverters.length }}</a-descriptions-item>
-      <template v-if="false">
-        <a-descriptions-item label="Online">
-          {{ onlineCount }}</a-descriptions-item>
-        <a-descriptions-item label="Standby">
-          {{ standbyCount }}</a-descriptions-item>
-        <a-descriptions-item label="Abnormal">
-          {{ abnormalCount }}</a-descriptions-item>
-        <a-descriptions-item label="Offline">
-          {{ offlineCount }}</a-descriptions-item>
-      </template>
+        {{ successCount }}</a-descriptions-item>
     </a-descriptions>
-    <a-descriptions class="table" v-if="inverterOnline.length > 0" :title="`Success Execution(${inverterOnline.length})`" :column="1">
+    <a-descriptions class="table" :title="`Success Execution(${inverterSuccess.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterOnline" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" :width="70" />
-          <a-table-column data-index="location" title="Location" />
-          <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="state" title="Pre-status">
-            <span slot-scope="text">{{text | inverterState }}</span>
-          </a-table-column>
-          <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | atldTime1 }}</span>
-          </a-table-column>
-          <a-table-column data-index="status_remote" title="Execute Status">
-            <span slot-scope="text">{{
-              text == 0 ? "Successful" : "Failed"
-            }}</span>
-          </a-table-column>
-          <a-table-column data-index="state_remote" title="Current status">
-            <span slot-scope="text">{{text | inverterState }}</span>
-          </a-table-column>
-        </a-table>
-      </a-descriptions-item>
-    </a-descriptions>
-    <a-descriptions class="table" v-if="inverterStandby.length > 0" :title="`Standby(${inverterStandby.length})`" :column="1">
-      <a-descriptions-item>
-        <a-table :data-source="inverterStandby" row-key="id" :pagination="false" :loading="loading">
-          <a-table-column data-index="id" title="#" :width="70" />
-          <a-table-column data-index="location" title="Location" />
-          <a-table-column data-index="device_sn" title="Inverter SN" />
-          <a-table-column data-index="state" title="Pre-status">
-            <span slot-scope="text">{{text | inverterState }}</span>
-          </a-table-column>
-          <a-table-column data-index="control_time" title="Operation time">
-            <span slot-scope="text">{{text | atldTime1 }}</span>
-          </a-table-column>
-          <a-table-column data-index="status_remote" title="Execute Status">
-            <span slot-scope="text">{{
-              text == 0 ? "Successful" : "Failed"
-            }}</span>
-          </a-table-column>
-          <a-table-column data-index="state_remote" title="Current status">
-            <span slot-scope="text">{{text | inverterState }}</span>
-          </a-table-column>
-        </a-table>
-      </a-descriptions-item>
-    </a-descriptions>
-    <a-descriptions class="table" v-if="inverterAbnormal.length > 0" :title="`Abnormal(${inverterAbnormal.length})`" :column="1">
-      <a-descriptions-item>
-        <a-table :data-source="inverterAbnormal" row-key="id" :pagination="false" :loading="loading">
+        <a-table :data-source="inverterSuccess" row-key="id" :pagination="false" :loading="loading">
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -123,9 +67,10 @@
       </a-descriptions-item>
     </a-descriptions>
     <!-- Gosolar#20 vppadmin Gosolar+1-->
-    <a-descriptions class="table" v-if="inverterOffline.length > 0" :title="`Offline(${inverterOffline.length})`" :column="1">
+    <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterOffline" row-key="id" :pagination="false" :loading="loading">
+        <a-table :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading">
+          <a-table-column data-index="id1" title="" :width="70" />
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -167,11 +112,17 @@ export default {
     };
   },
   computed: {
-    offlineCount() {
-      return this.inverters.filter((f) => f.state == 0).length;
+    inverterCount() {
+      return [...new Set(this.inverters.map((m) => m.device_sn))].length;
     },
-    onlineCount() {
-      return this.inverters.filter((f) => f.state == 1).length;
+    successCount() {
+      return [
+        ...new Set(
+          this.inverters
+            .filter((f) => f.status_remote == 0)
+            .map((m) => m.device_sn)
+        ),
+      ].length;
     },
     standbyCount() {
       return this.inverters.filter((f) => f.state == 2).length;
@@ -179,11 +130,23 @@ export default {
     abnormalCount() {
       return this.inverters.filter((f) => f.state == 3).length;
     },
-    inverterOffline() {
-      return this.inverters.filter((f) => f.state_remote == 0);
+    inverterSuccess() {
+      return this.inverters.filter((f) => f.status_remote == 0);
     },
-    inverterOnline() {
-      return this.inverters.filter((f) => f.state_remote == 1);
+    inverterFail() {
+      const data = [];
+      this.inverters
+        .filter((f) => f.status_remote != 0)
+        .sort((a, b) => b.id - a.id)
+        .forEach((e) => {
+          const temp = data.find((f) => f.device_sn == e.device_sn);
+          if (temp) {
+            temp.children = [...(temp.children||[]), e];
+          } else {
+            data.push(e);
+          }
+        });
+      return data;
     },
     inverterStandby() {
       return this.inverters.filter((f) => f.state_remote == 2);
@@ -230,7 +193,6 @@ export default {
   /* width: 100px; */
 }
 .report {
-  
   max-width: 297mm;
   margin: 10 auto;
   padding: 0 15px;
