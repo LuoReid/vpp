@@ -7,9 +7,9 @@ import './util/permission'
 
 Vue.config.productionTip = false;
 
-import moment from 'moment'
+import moment from 'moment-timezone'
 import 'moment/locale/en-au'
-// moment.tz.setDefault("Australia/Adelaide")
+moment.tz.setDefault("Australia/Adelaide")
 moment.locale('en-au');
 
 import Antd from 'ant-design-vue';

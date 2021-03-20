@@ -19,14 +19,14 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
 const user1 = JSON.parse(localStorage.getItem("user") || '{"name":""}')
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
-  state() {
-    return {
+  state: () => ({
+    // return {
       user: JSON.parse(localStorage.getItem("user") || '{"name":""}'),
       token: localStorage.getItem('token'),
       sideOpen: false,
       roles: []
-    }
-  },
+    // }
+  }),
   mutations: {
     user: (state, res) => {
       state.user = res.user
@@ -42,7 +42,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    user: state => {
+    user: (state) => {
       console.log(' getters :', state.user, state.token)
       return state.user
     },

@@ -12,11 +12,7 @@
     </div>
     <div class="box" v-if="false && form.action == 'limit'">
       Export to Capacity:
-      <a-input
-        v-model="form.capacity"
-        placeholder="Enter kWh (Max.)"
-        style="width: 350px"
-      />
+      <a-input v-model="form.capacity" placeholder="Enter kWh (Max.)" style="width: 350px" />
       <p>
         Instructions: When the electricity that exports to the grid reaches the
         maximum, the plant will stop exporting.
@@ -24,27 +20,17 @@
     </div>
     <div class="box">
       Start time:
-      <a-date-picker
-        v-model="form.start_time"
-        showTime
-        :disabled-date="disabledDate"
-        format="YYYY-MM-DD HH:mm:ss"
-      />
+      <a-date-picker v-model="form.start_time" showTime :disabled-date="disabledDate" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss" />
     </div>
     <div class="box">
       End time:
-      <a-date-picker
-        v-model="form.end_time"
-        showTime
-        :disabled-date="disabledDate"
-        format="YYYY-MM-DD HH:mm:ss"
-      />
+      <a-date-picker v-model="form.end_time" showTime :disabled-date="disabledDate" value-format="YYYY-MM-DD HH:mm:ss" format="YYYY-MM-DD HH:mm:ss" />
     </div>
     <div class="box">
       <a-button @click="$emit('next', { step: 0 })">Back to select</a-button>
-      <a-button type="primary" @click="toExcute" :loading="loading"
-        >Execute <a-icon type="right-circle"
-      /></a-button>
+      <a-button type="primary" @click="toExcute" :loading="loading">Execute
+        <a-icon type="right-circle" />
+      </a-button>
     </div>
   </div>
 </template>
@@ -85,7 +71,7 @@ export default {
           kind: "remote",
           ...this.data,
           ...this.form,
-          pids:[...new Set(this.plants.map(m => m.plant_id))].join(','),
+          pids: [...new Set(this.plants.map((m) => m.plant_id))].join(","),
           data: JSON.stringify(
             this.plants.map((m) => ({
               id: m.id,
@@ -96,11 +82,13 @@ export default {
           ),
           kind: "remote",
         };
-        if (data.start_time) {
-          data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
+        if (!data.start_time || data.start_time =='null') {
+          // data.start_time = data.start_time.format("YYYY-MM-DD HH:mm:ss");
+          delete data.start_time
         }
-        if (data.end_time) {
-          data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
+        if (!data.end_time || data.end_time == 'null') {
+          // data.end_time = data.end_time.format("YYYY-MM-DD HH:mm:ss");
+          delete data.end_time
         }
         if (!this.plants || this.plants.length < 1) {
           this.$message.error({
@@ -108,6 +96,8 @@ export default {
           });
           return;
         }
+        console.log("log data:", data);
+        // return; // for test
         this.$emit("next", { step: 2, remote: data });
       }
     },

@@ -58,13 +58,13 @@
 
     </div>
     <a-table :data-source="plants" row-key="id" :pagination="false" :loading="loading" @change="handleTableChange">
-      <a-table-column data-index="plant_type" title="Plant type">
+      <a-table-column data-index="plant_type" title="Plant type" fixed='left'>
         <template slot-scope="text">{{ text | PT }}</template>
       </a-table-column>
-      <a-table-column data-index="create_date" title="Installation date">
+      <a-table-column data-index="create_date" title="Installation date" fixed='left'>
         <template slot-scope="text, record">{{ text | day }}</template>
       </a-table-column>
-      <a-table-column data-index="plant_id" title="Plant ID" />
+      <a-table-column data-index="plant_id" title="Plant ID" fixed='left' />
       <a-table-column data-index="total_component_power" title="System size(kW)" />
       <a-table-column data-index="postcode" title="Postcode" />
       <a-table-column data-index="suburb" title="Suburb" />

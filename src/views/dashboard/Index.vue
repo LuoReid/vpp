@@ -26,6 +26,7 @@
 
 <script>
 import Chart from "../../components/Chart.vue";
+import { atldTime } from "@/util";
 export default {
   components: { Chart },
   data() {
@@ -39,26 +40,47 @@ export default {
     };
   },
   computed: {
-    ds1() {
-      return ["power"];
+    maxYear() {
+      return atldTime(Math.max(...this.energyYear.map((m) => m.dayhour)));
     },
+    maxMonth() {
+      return atldTime(Math.max(...this.energyMonth.map((m) => m.dayhour)));
+    },
+    maxDayPower() {
+      return atldTime(Math.max(...this.energy.map((m) => m.dayhour)));
+    },
+    maxDayEnergy() {
+      return atldTime(Math.max(...this.energy.map((m) => m.dayhour)));
+    },
+    year() {
+      return this.month.substring(0, 4);
+    },
+    today() {
+      return this.day;
+    },
+    month1() {
+      const ym = this.month.split("-");
+      const last = new Date(ym[0], ym[1], 1);
+      return [`${this.month}-01 00:00:00`, last.toISOString().substring(0, 10)];
+    }, 
     optionPower() {
       return {
         title: {
-          text: "Real-time power tracking(w,updated by ever 15 minutes)",
+          text: `Real-time power tracking(w,updated by ${this.maxDayPower})`,
         },
-        color: ["#516FAD", "#29AFAF"],
-        dataset: this.ds1.map((m) => ({ source: this.powers })),
+        dataset: [{ source: this.powers }],
         tooltip: {
           trigger: "axis",
         },
         xAxis: {
           type: "time",
-          splitNumber: 13,
           // boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          splitNumber: 24,
+          min: `${this.day} 00:00:00`,
+          max: `${this.day} 23:59:59`,
         },
         yAxis: {
           type: "value",
@@ -66,75 +88,84 @@ export default {
           axisLine: { show: false },
           saplitLine: { lineStyle: { color: "#E6E6E6" } },
         },
-        series: this.ds1.map((m, i) => ({
-          type: "line",
-          name: "Today power",
-          datasetIndex: i,
-          encode: {
-            x: "dayhour",
-            y: "power_today",
-            tooltip: ["power_today"],
+        series: [
+          {
+            type: "line",
+            name: "Today power",
+            smooth: true,
+            datasetIndex: 0,
+            encode: {
+              x: "today",
+              y: "power_today",
+              tooltip: ["power_today"],
+            },
+            symbol: "circle",
+            symbolSize: 10,
           },
-          symbol: "circle",
-          symbolSize: 10,
-        })),
+        ],
       };
     },
     optionTotal() {
       return {
         title: {
-          text: "Daily generation tracking(kwh,updated by ever 15 minutes)",
+          text: `Daily generation tracking(kwh,updated by ${this.maxDayEnergy})`,
         },
-        color: ["#516FAD", "#29AFAF"],
-        dataset: this.ds1.map((m) => ({ source: this.energy })),
+        dataset: [{ source: this.energy }],
         tooltip: {
           trigger: "axis",
         },
         xAxis: {
           type: "time",
-          splitNumber: 13,
-          // boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          splitNumber: 24,
+          min: `${this.day} 00:00:00`,
+          max: `${this.day} 23:59:59`,
         },
         yAxis: {
           type: "value",
           axisTick: { show: false },
           axisLine: { show: false },
           saplitLine: { lineStyle: { color: "#E6E6E6" } },
+          scale: true,
         },
-        series: this.ds1.map((m, i) => ({
-          type: "bar",
-          name: "Today total energy",
-          datasetIndex: i,
-          encode: {
-            x: "today",
-            y: "today_energy",
-            tooltip: [ "today_energy"],
+        series: [
+          {
+            type: "bar",
+            name: "Today total energy",
+            smooth: true,
+            datasetIndex: 0,
+            encode: {
+              x: "today",
+              y: "today_energy",
+              tooltip: ["today_energy"],
+            },
+            symbol: "circle",
+            symbolSize: 10,
           },
-          symbol: "circle",
-          symbolSize: 10,
-        })),
+        ],
       };
     },
     optionMonth() {
       return {
         title: {
-          text: "Monthly generation tracking (kwh,updated by ever month)",
+          text: `Monthly generation tracking (kwh,updated by ${this.maxMonth})`,
         },
-        color: ["#516FAD", "#29AFAF"],
-        dataset: this.ds1.map((m) => ({ source: this.energyMonth })),
+        dataset: [{ source: this.energyMonth }],
         tooltip: {
           trigger: "axis",
         },
         xAxis: {
-          type: "category",
-          splitNumber: 13,
+          type: "time",
+          splitNumber: 31,
           // boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          interval: 3600 * 24,
+          min: this.month1[0],
+          max: this.month1[1],
         },
         yAxis: {
           type: "value",
@@ -142,35 +173,38 @@ export default {
           axisLine: { show: false },
           saplitLine: { lineStyle: { color: "#E6E6E6" } },
         },
-        series: this.ds1.map((m, i) => ({
-          type: "line",
-          name: "Day generation",
-          datasetIndex: i,
-          encode: {
-            x: "today",
-            y: "today_energy",
-            tooltip: [ "today_energy"],
+        series: [
+          {
+            type: "line",
+            name: "Day generation",
+            smooth: true,
+            datasetIndex: 0,
+            encode: {
+              x: "today",
+              y: "today_energy",
+              tooltip: ["today_energy"],
+            },
+            symbol: "circle",
+            symbolSize: 10,
           },
-          symbol: "circle",
-          symbolSize: 10,
-        })),
+        ],
       };
     },
     optionYear() {
       return {
-        title: { text: "Year generation tracking (kwh,updated by ever year)" },
-        color: ["#516FAD", "#29AFAF"],
-        dataset: this.ds1.map((m) => ({ source: this.energyYear })),
+        title: {
+          text: `Year generation tracking (kwh,updated by ${this.maxYear})`,
+        },
+        dataset: [{ source: this.energyYear }],
         tooltip: {
           trigger: "axis",
         },
         xAxis: {
           type: "category",
-          splitNumber: 13,
-          // boundaryGap: false,
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
+          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         },
         yAxis: {
           type: "value",
@@ -178,18 +212,21 @@ export default {
           axisLine: { show: false },
           saplitLine: { lineStyle: { color: "#E6E6E6" } },
         },
-        series: this.ds1.map((m, i) => ({
-          type: "bar",
-          name: "Month generation",
-          datasetIndex: i,
-          encode: {
-            x: "today",
-            y: "today_energy",
-            tooltip: ["today_energy"],
+        series: [
+          {
+            type: "bar",
+            name: "Month generation",
+            datasetIndex: 0,
+            smooth: true,
+            encode: {
+              x: "today",
+              y: "today_energy",
+              tooltip: ["today_energy"],
+            },
+            symbol: "circle",
+            symbolSize: 10,
           },
-          symbol: "circle",
-          symbolSize: 10,
-        })),
+        ],
       };
     },
   },

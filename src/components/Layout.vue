@@ -8,7 +8,7 @@
           <span>Plant</span>
         </a-menu-item>
         <a-menu-item key="plantMap">
-          <a-icon type="home" />
+          <a-icon :component="mapSvg" />
           <span>Map</span>
         </a-menu-item>
         <a-menu-item key="data">
@@ -40,18 +40,21 @@
 </template>
 
 <script>
+import mapSvg from '@/assets/map.svg'
 import { mapActions, mapGetters } from "vuex";
 export default {
   data() {
     return {
+      mapSvg,
       collapsed: false,
     };
   },
   computed: {
-    ...mapGetters(["user"]),
+    ...mapGetters({ user1: "user" }),
+    ...mapGetters("user", ["user"]),
   },
   created() {
-    console.log("layout user:", this.user);
+    console.log("layout user:", this.user1, this.user);
   },
   methods: {
     ...mapActions(["logout"]),
@@ -67,7 +70,7 @@ export default {
       this.$confirm({
         title: "Do you want to logout the site?",
         onOk: () => {
-          this.logout().then((res) => {
+          this.$store.dispatch("logout").then((res) => {
             this.$router.push({ name: "login" });
           });
         },
