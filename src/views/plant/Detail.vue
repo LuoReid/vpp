@@ -256,8 +256,8 @@ export default {
             datasetIndex: 0,
             encode: {
               x: "today",
-              y: "today_energy",
-              tooltip: ["today_energy"],
+              y: "monthly_energy",
+              tooltip: ["monthly_energy"],
             },
             symbol: "circle",
             symbolSize: 10,
@@ -295,8 +295,8 @@ export default {
             smooth: true,
             encode: {
               x: "today",
-              y: "today_energy",
-              tooltip: ["today_energy"],
+              y: "yearly_energy",
+              tooltip: ["yearly_energy"],
             },
             symbol: "circle",
             symbolSize: 10,
