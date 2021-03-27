@@ -64,7 +64,7 @@
         <chart style="min-height:50vh;max-width:100%;" :option="optionPower" />
       </div>
       <div style="margin:20px">
-        <chart style="min-height:50vh;max-width:100%;" :option="optionTotal" />
+        <chart style="min-height:50vh;max-width:100%;" :option="optionEnergy" />
       </div>
       <div class="toolbar">
         Month
@@ -92,6 +92,7 @@ export default {
     return {
       plant: {},
       powers: [],
+      devices: [],
       energy: [],
       ds: [
         {
@@ -142,7 +143,9 @@ export default {
         title: {
           text: `Real-time power tracking(w,updated by ${this.maxDayPower})`,
         },
-        dataset: [{ source: this.powers }],
+        dataset: this.devices.map((m) => ({
+          source: this.powers.filter((f) => f.device_sn == m.device_sn),
+        })),
         tooltip: {
           trigger: "axis",
         },
@@ -162,24 +165,22 @@ export default {
           axisLine: { show: false },
           saplitLine: { lineStyle: { color: "#E6E6E6" } },
         },
-        series: [
-          {
-            type: "line",
-            name: "Today power",
-            smooth: true,
-            datasetIndex: 0,
-            encode: {
-              x: "today",
-              y: "power_today",
-              tooltip: ["power_today"],
-            },
-            symbol: "circle",
-            symbolSize: 10,
+        series: this.devices.map((m, i) => ({
+          type: "line",
+          name: `Today power(${m.device_sn})`,
+          smooth: true,
+          datasetIndex: i,
+          encode: {
+            x: "today",
+            y: "power_today",
+            tooltip: ["power_today"],
           },
-        ],
+          symbol: "circle",
+          symbolSize: 10,
+        })),
       };
     },
-    optionTotal() {
+    optionEnergy() {
       return {
         title: {
           text: `Daily generation tracking(kwh,updated by ${this.maxDayEnergy})`,
@@ -212,8 +213,8 @@ export default {
             datasetIndex: 0,
             encode: {
               x: "today",
-              y: "today_energy",
-              tooltip: ["today_energy"],
+              y: "energy_today",
+              tooltip: ["energy_today"],
             },
             symbol: "circle",
             symbolSize: 10,
@@ -278,7 +279,7 @@ export default {
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
-          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          data: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
         },
         yAxis: {
           type: "value",
@@ -326,7 +327,7 @@ export default {
       param.plant_id = this.plant.plant_id;
       this.$store.dispatch("remote/getPlantPowers", param).then((res) => {
         this.energyMonth = res.energy;
-        this.energyYear = res.year;
+        this.energyYear = res.year.map((m) => ({ ...m, today: m.today + "" }));
       });
     },
     onChange(date, dateString) {
@@ -342,8 +343,9 @@ export default {
     fetchPlant(param = {}) {
       return this.$store.dispatch("remote/getPlant", this.id).then((res) => {
         this.plant = res.plant;
-        this.powers = res.plant.powers;
-        this.energy = res.plant.energy;
+        // this.powers = res.plant.powers;
+        // this.energy = res.plant.energy;
+        this.devices = res.plant.devices;
         return;
       });
     },

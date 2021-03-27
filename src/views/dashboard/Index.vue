@@ -9,7 +9,7 @@
       <chart style="min-height:50vh;" :option="optionPower" />
     </div>
     <div style="margin:20px">
-      <chart style="min-height:50vh;" :option="optionTotal" />
+      <chart style="min-height:50vh;" :option="optionEnergy" />
     </div>
     <div class="toolbar">
       Month
@@ -62,7 +62,7 @@ export default {
       const ym = this.month.split("-");
       const last = new Date(ym[0], ym[1], 1);
       return [`${this.month}-01 00:00:00`, last.toISOString().substring(0, 10)];
-    }, 
+    },
     optionPower() {
       return {
         title: {
@@ -105,7 +105,7 @@ export default {
         ],
       };
     },
-    optionTotal() {
+    optionEnergy() {
       return {
         title: {
           text: `Daily generation tracking(kwh,updated by ${this.maxDayEnergy})`,
@@ -138,8 +138,8 @@ export default {
             datasetIndex: 0,
             encode: {
               x: "today",
-              y: "today_energy",
-              tooltip: ["today_energy"],
+              y: "energy_today",
+              tooltip: ["energy_today"],
             },
             symbol: "circle",
             symbolSize: 10,
@@ -204,7 +204,7 @@ export default {
           axisTick: { show: false },
           axisLine: { show: false },
           axisLabel: { interval: 0 },
-          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          data: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
         },
         yAxis: {
           type: "value",
@@ -258,7 +258,8 @@ export default {
       param.kind = "sumamry_month";
       this.$store.dispatch("remote/getPlantPowers", param).then((res) => {
         this.energyMonth = res.energy;
-        this.energyYear = res.year;
+        this.energyYear = res.year.map((m) => ({ ...m, today: m.today + "" }));
+        console.log('log year:',this.energyYear)
       });
     },
   },

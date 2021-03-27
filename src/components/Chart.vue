@@ -65,7 +65,7 @@ export default {
   watch: {
     option: {
       handler(newVal, oldVal) {
-        // console.log("watch option:", this.mychart, newVal, oldVal);
+        console.log("watch option:", this.mychart, newVal, oldVal);
         if (this.mychart && newVal) {
           this.mychart.setOption(newVal, true);
           this.$nextTick(() => {
