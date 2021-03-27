@@ -22,7 +22,7 @@
       </a-descriptions-item>
     </a-descriptions>
     <a-descriptions title="Task Description" :column="1">
-      <a-descriptions-item label="Operation">
+      <a-descriptions-item label="Command">
         {{ remote.action }}</a-descriptions-item>
       <a-descriptions-item v-if="false" label="Export limit:">
         {{ remote.capacity }}</a-descriptions-item>
@@ -52,7 +52,7 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="action" title="Operation" >
+          <a-table-column data-index="action" title="Command" >
             <template slot-scope="text">
               <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
               <a-tag color="red" v-else>{{text}}</a-tag>
@@ -83,7 +83,7 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="action" title="Operation" >
+          <a-table-column data-index="action" title="Command" >
             <template slot-scope="text">
               <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
               <a-tag color="red" v-else>{{text}}</a-tag>
