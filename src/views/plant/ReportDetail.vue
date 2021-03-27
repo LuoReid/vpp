@@ -45,12 +45,18 @@
     </a-descriptions>
     <a-descriptions class="table" :title="`Success Execution(${inverterSuccess.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterSuccess" row-key="id" :pagination="false" :loading="loading">
+        <a-table :data-source="inverterSuccess" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+          <a-table-column data-index="action" title="Operation" >
+            <template slot-scope="text">
+              <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
+              <a-tag color="red" v-else>{{text}}</a-tag>
+            </template>
           </a-table-column>
           <a-table-column data-index="control_time" title="Operation time">
             <span slot-scope="text">{{text | atldTime1 }}</span>
@@ -69,13 +75,19 @@
     <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading">
+        <a-table :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <a-table-column data-index="id1" title="" :width="70" />
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+          <a-table-column data-index="action" title="Operation" >
+            <template slot-scope="text">
+              <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
+              <a-tag color="red" v-else>{{text}}</a-tag>
+            </template>
           </a-table-column>
           <a-table-column data-index="control_time" title="Operation time" width="190px">
             <span slot-scope="text">{{text | atldTime1 }}</span>
@@ -105,6 +117,13 @@ export default {
   props: { id: [String, Number] },
   data() {
     return {
+      rowClassName: (record, index) => {
+        // console.log("log :", record, index);
+        let className = "dark-row";
+        if (index % 2 === 1) className = "light-row";
+        // console.log(className);
+        return className;
+      },
       remote: {},
       plants: [],
       inverters: [],
@@ -208,6 +227,16 @@ export default {
 }
 </style>
 <style>
+
+.ant-table-tbody .light-row {
+  color: #000;
+  background: white;
+}
+
+.ant-table-tbody .dark-row {
+  color: #000;
+  background: #e6f0fa;
+}
 @media print {
   .ant-layout-sider {
     display: none;
