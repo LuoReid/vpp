@@ -52,7 +52,7 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="action" title="Command" >
+          <a-table-column data-index="action" title="Command">
             <template slot-scope="text">
               <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
               <a-tag color="red" v-else>{{text}}</a-tag>
@@ -66,7 +66,7 @@
               text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
-          <a-table-column data-index="state_remote" title="Current status">
+          <a-table-column data-index="state_remote" title="Current status" v-if="showCurrent">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
@@ -83,7 +83,7 @@
           <a-table-column data-index="state" title="Pre-status">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
-          <a-table-column data-index="action" title="Command" >
+          <a-table-column data-index="action" title="Command">
             <template slot-scope="text">
               <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
               <a-tag color="red" v-else>{{text}}</a-tag>
@@ -97,7 +97,7 @@
               text == 0 ? "Successful" : "Failed"
             }}</span>
           </a-table-column>
-          <a-table-column data-index="state_remote" title="Current status">
+          <a-table-column data-index="state_remote" title="Current status" v-if="showCurrent">
             <span slot-scope="text">{{text | inverterState }}</span>
           </a-table-column>
         </a-table>
@@ -128,6 +128,7 @@ export default {
       plants: [],
       inverters: [],
       loading: false,
+      showCurrent: true,
     };
   },
   computed: {
@@ -152,15 +153,18 @@ export default {
     inverterSuccess() {
       return this.inverters.filter((f) => f.status_remote == 0);
     },
+    successSn(){
+      return this.inverters.filter(f => f.status_remote == 0).map(m => `${m.device_sn}_${m.action}`)
+    },
     inverterFail() {
       const data = [];
       this.inverters
-        .filter((f) => f.status_remote != 0)
+        .filter((f) => f.status_remote != 0 && !this.successSn.includes(`${f.device_sn}_${f.action}`))
         .sort((a, b) => b.id - a.id)
         .forEach((e) => {
           const temp = data.find((f) => f.device_sn == e.device_sn);
           if (temp) {
-            temp.children = [...(temp.children||[]), e];
+            temp.children = [...(temp.children || []), e];
           } else {
             data.push(e);
           }
@@ -177,6 +181,15 @@ export default {
   created() {
     this.fetchRemote();
   },
+  mounted() {
+    window.onafterprint = function () {
+      console.log("log print after:");
+      this.showCurrent = true;
+    };
+  },
+  beforeDestroy() {
+    window.onafterprint = null;
+  },
   methods: {
     toDownload1() {
       window.open(
@@ -186,7 +199,10 @@ export default {
     toDownload() {
       const today = "";
       document.title = `${today}Task No.${this.remote.id} Execution Report`;
-      window.print();
+      this.showCurrent = false;
+      this.$nextTick(() => {
+        window.print();
+      });
     },
     fetchRemote(param = {}) {
       this.$store.dispatch("remote/reportById", this.id).then((res) => {
@@ -227,7 +243,6 @@ export default {
 }
 </style>
 <style>
-
 .ant-table-tbody .light-row {
   color: #000;
   background: white;
@@ -253,6 +268,9 @@ export default {
     padding: 0;
   }
   .main-content #oa-finish-nav {
+    display: none;
+  }
+  .main-content .oa-finish-nav {
     display: none;
   }
   .table {
