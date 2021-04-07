@@ -74,8 +74,8 @@
     </a-descriptions>
     <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
-      <a-descriptions-item>
-        <a-table :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
+      <a-descriptions-item >
+        <a-table :data-source="showCurrent?inverterFail:inverterFailPrint" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <a-table-column data-index="id1" title="" :width="70" />
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
@@ -169,16 +169,32 @@ export default {
         .sort((a, b) => b.id - a.id)
         .forEach((e) => {
           const temp = data.find((f) => f.device_sn == e.device_sn);
-          if (temp && this.showCurrent) {
+          if (temp) {
             temp.children = [...(temp.children || []), e];
           } else {
-            data.push(e);
+            data.push({ ...e });
           }
         });
       return data;
     },
-    inverterStandby() {
-      return this.inverters.filter((f) => f.state_remote == 2);
+    inverterFailPrint() {
+      const data = [];
+      this.inverters
+        .slice()
+        .filter(
+          (f) =>
+            f.status_remote != 0 &&
+            !this.successSn.includes(`${f.device_sn}_${f.action}`)
+        )
+        .sort((a, b) => b.id - a.id)
+        .forEach((e) => {
+          const temp = data.find((f) => f.device_sn == e.device_sn);
+          if (!temp) {
+            data.push({ ...e });
+          }
+        });
+      console.log("inp:", data);
+      return data;
     },
     inverterAbnormal() {
       return this.inverters.filter((f) => f.state_remote == 3);
