@@ -35,7 +35,7 @@
     </a-descriptions>
     <a-descriptions title="Task Scope" :column="1">
       <a-descriptions-item :label="remote.scope">
-        {{ remote[remote.scope] }}</a-descriptions-item>
+        By {{ remote[remote.scope]||'all' }}</a-descriptions-item>
     </a-descriptions>
     <a-descriptions class="table" title="Executed Rresult" :column="2">
       <a-descriptions-item label="Total">
@@ -153,17 +153,23 @@ export default {
     inverterSuccess() {
       return this.inverters.filter((f) => f.status_remote == 0);
     },
-    successSn(){
-      return this.inverters.filter(f => f.status_remote == 0).map(m => `${m.device_sn}_${m.action}`)
+    successSn() {
+      return this.inverters
+        .filter((f) => f.status_remote == 0)
+        .map((m) => `${m.device_sn}_${m.action}`);
     },
     inverterFail() {
       const data = [];
       this.inverters
-        .filter((f) => f.status_remote != 0 && !this.successSn.includes(`${f.device_sn}_${f.action}`))
+        .filter(
+          (f) =>
+            f.status_remote != 0 &&
+            !this.successSn.includes(`${f.device_sn}_${f.action}`)
+        )
         .sort((a, b) => b.id - a.id)
         .forEach((e) => {
           const temp = data.find((f) => f.device_sn == e.device_sn);
-          if (temp) {
+          if (temp && this.showCurrent) {
             temp.children = [...(temp.children || []), e];
           } else {
             data.push(e);
@@ -274,10 +280,25 @@ export default {
     display: none;
   }
   .table {
+    /* page-break-inside: avoid; */
+    /* margin: 50px 0; */
+    orphans: 2;
+    widows: 2;
+  }
+  .ant-table-tbody {
+    orphans: 2;
+    widows: 2;
+  }
+  .ant-table-row {
     page-break-inside: avoid;
+    orphans: 2;
+    widows: 2;
   }
 }
 @page {
   margin: 0;
+  /* padding: 50px 0; */
+  /* orphans: 3;
+  widows: 2; */
 }
 </style>

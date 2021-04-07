@@ -14,7 +14,7 @@
       <a-table-column data-index="id" title="Task ID" />
       <a-table-column data-index="action" title="Command" />
       <a-table-column data-index="scope" title="Scope">
-        <template slot-scope="text, record"> By {{ text }} </template>
+        <template slot-scope="text, record"> By {{ text||'all' }} </template>
       </a-table-column>
       <a-table-column data-index="status" title="Task status">
         <a-tag slot-scope="text, record">{{ text | remoteStatus }}</a-tag>
