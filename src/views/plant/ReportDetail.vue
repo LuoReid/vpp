@@ -74,7 +74,7 @@
     </a-descriptions>
     <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
-      <a-descriptions-item >
+      <a-descriptions-item>
         <a-table :data-source="showCurrent?inverterFail:inverterFailPrint" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <a-table-column data-index="id1" title="" :width="70" />
           <a-table-column data-index="id" title="#" :width="70" />
@@ -295,17 +295,7 @@ export default {
   .main-content .oa-finish-nav {
     display: none;
   }
-  .table {
-    /* page-break-inside: avoid; */
-    /* margin: 50px 0; */
-    orphans: 2;
-    widows: 2;
-  }
-  .ant-table-tbody {
-    orphans: 2;
-    widows: 2;
-  }
-  .ant-table-row {
+  .ant-table-tbody .ant-table-row {
     page-break-inside: avoid;
     orphans: 2;
     widows: 2;
