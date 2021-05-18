@@ -30,7 +30,7 @@
       </a-table-column>
       <a-table-column data-index="action1" title="Action">
         <template slot-scope="text, record">
-          <a-button type="link" @click="$router.push({name:'plantReportDetail',params:{id:record.id}})">Task report</a-button>
+          <a-button type="link" @click="$router.push({name:'taskReport',params:{id:record.id}})">Task report</a-button>
         </template>
       </a-table-column>
     </a-table>

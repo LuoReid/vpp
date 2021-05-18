@@ -75,8 +75,34 @@
     <!-- Gosolar#20 vppadmin Gosolar+1-->
     <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
       <a-descriptions-item>
-        <a-table :data-source="showCurrent?inverterFail:inverterFailPrint" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
+        <a-table v-if="showCurrent" key="dt-fail" :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <a-table-column data-index="id1" title="" :width="70" />
+          <a-table-column data-index="id" title="#" :width="70" />
+          <a-table-column data-index="location" title="Location" />
+          <a-table-column data-index="device_sn" title="Inverter SN" />
+          <a-table-column data-index="state" title="Pre-status">
+            <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+          <a-table-column data-index="action" title="Command">
+            <template slot-scope="text">
+              <a-tag color="green" v-if="text=='on'">{{text}}</a-tag>
+              <a-tag color="red" v-else>{{text}}</a-tag>
+            </template>
+          </a-table-column>
+          <a-table-column data-index="control_time" title="Operation time" width="190px">
+            <span slot-scope="text">{{text | atldTime1 }}</span>
+          </a-table-column>
+          <a-table-column data-index="status_remote" title="Execute Status">
+            <span slot-scope="text" style="white-space: nowrap;">{{
+              text == 0 ? "Successful" : "Failed"
+            }}</span>
+          </a-table-column>
+          <a-table-column data-index="state_remote" title="Current status" v-if="showCurrent">
+            <span slot-scope="text">{{text | inverterState }}</span>
+          </a-table-column>
+        </a-table>
+        <a-table v-else :data-source="inverterFailPrint" key="dt-fail-print" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
+          <!-- <a-table-column data-index="id1" title="" :width="70" /> -->
           <a-table-column data-index="id" title="#" :width="70" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
@@ -179,33 +205,34 @@ export default {
     },
     inverterFailPrint() {
       const data = [];
-      this.inverters
+      return this.inverters
         .slice()
         .filter(
           (f) =>
             f.status_remote != 0 &&
             !this.successSn.includes(`${f.device_sn}_${f.action}`)
         )
-        .sort((a, b) => b.id - a.id)
-        .forEach((e) => {
-          const temp = data.find((f) => f.device_sn == e.device_sn);
-          if (!temp) {
-            data.push({ ...e });
-          }
-        });
-      console.log("inp:", data);
-      return data;
+        .sort((a, b) => b.id - a.id);
+      // .forEach((e) => {
+      //   const temp = data.find((f) => f.device_sn == e.device_sn);
+      //   if (!temp) {
+      //     data.push({ ...e });
+      //   }
+      // });
+      // console.log("inp:", data);
+      // return data;
     },
     inverterAbnormal() {
       return this.inverters.filter((f) => f.state_remote == 3);
     },
   },
   created() {
+    console.log("report id:", this.id);
     this.fetchRemote();
   },
   mounted() {
-    window.onafterprint = function () {
-      console.log("log print after:");
+    window.onafterprint = () => {
+      console.log("log print after:", this);
       this.showCurrent = true;
     };
   },
