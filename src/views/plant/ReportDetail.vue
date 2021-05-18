@@ -46,7 +46,7 @@
     <a-descriptions class="table" :title="`Success Execution(${inverterSuccess.length})`" :column="1">
       <a-descriptions-item>
         <a-table :data-source="inverterSuccess" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
-          <a-table-column data-index="id" title="#" :width="70" />
+          <a-table-column data-index="id" title="#" :width="80" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -76,8 +76,8 @@
     <a-descriptions class="table" :title="`Fail Execution(${inverterFail.length})`" :column="1">
       <a-descriptions-item>
         <a-table v-if="showCurrent" key="dt-fail" :data-source="inverterFail" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
-          <a-table-column data-index="id1" title="" :width="70" />
-          <a-table-column data-index="id" title="#" :width="70" />
+          <!-- <a-table-column data-index="id1" title="" :width="70" /> -->
+          <a-table-column data-index="id" title="#" :width="80" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
@@ -103,7 +103,7 @@
         </a-table>
         <a-table v-else :data-source="inverterFailPrint" key="dt-fail-print" row-key="id" :pagination="false" :loading="loading" :rowClassName='rowClassName'>
           <!-- <a-table-column data-index="id1" title="" :width="70" /> -->
-          <a-table-column data-index="id" title="#" :width="70" />
+          <a-table-column data-index="id" title="#" :width="80" />
           <a-table-column data-index="location" title="Location" />
           <a-table-column data-index="device_sn" title="Inverter SN" />
           <a-table-column data-index="state" title="Pre-status">
